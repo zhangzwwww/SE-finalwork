@@ -1,0 +1,122 @@
+swagger: "2.0"
+info: 
+  version: "1.0.0"
+  description: "This is the OAuth server"
+  title: "OAuth"
+basePath: "/v1/auth"
+tags:
+- name: "token"
+- name: "user"
+paths:
+  /tokens:
+    post:
+      tags:
+        - "token"
+      summary: "get a new token"
+      description: ""
+      operationId: "RequestToken"
+      parameters:
+        - in: "body"
+          name: "user"
+          description: "user authenticate information"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "OK"
+          headers:
+            X-Auth-Token:
+              type: string
+        "400":
+          description: "Bad Request"
+    head:
+      tags:
+        - "token"
+      summary: "validate token"
+      description: ""
+      operationId: "ValidateToken"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthorized"
+    get:
+      tags:
+        - "token"
+      summary: "get user"
+      description: ""
+      operationId: "getUser"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Unauthorized"
+    delete:
+      tags:
+        - "token"
+      summary: "revoke user token"
+      description: ""
+      operationId: "RevokeToken"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthorized"
+  /register:
+    post:
+      tags:
+        - "user"
+      summary: "register user"
+      description: ""
+      operationId: "RegisterUser"
+      parameters:
+        - in: "body"
+          name: "user"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "201":
+          description: "Created"
+          headers:
+            X-Auth-Token:
+              type: string
+        "400":
+          description: "Bad Request"
+  
+
+definitions:
+  User:
+    type: "object"  
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+      ctime:
+        type: "string"
+        format: "date"
+      role:
+        type: "string"
+      password:
+        type: "string"
+        
