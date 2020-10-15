@@ -1,0 +1,142 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  description: "This is the patients server"
+  title: "Patient"
+basePath: "/v1"
+tags:
+  - name: "patient"
+paths:
+  /patient:
+    get:
+      tags:
+        - "patient"
+      summary: "get all patients info"
+      operationId: "GetAllPatients"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: true
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Patient"
+        "401":
+          description: "Unauthorized"
+    post:
+      tags:
+        - "patient"
+      summary: "create new patient"
+      operationId: "CreatePatient"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: true
+        - in: body
+          name: "patient"
+          required: true
+          schema:
+            $ref: "#/definitions/Patient"
+      responses:
+        "201":
+          description: "Created"
+        "401":
+          description: "Unauthorized"
+        "400":
+          description: "Bad Request"
+  /patient/{patientId}:
+    get:
+      tags:
+        - "patient"
+      summary: "get patient by id"
+      operationId: "getPatientById"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: true
+        - in: "path"
+          name: "patientId"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Patient"
+        "401":
+          description: "Unauthorized"
+        "400":
+          description: "Bad Request"
+    put:
+      tags:
+        - "patient"
+      summary: "modify patient by id"
+      operationId: "ModifyPatientById"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: true
+        - in: "body"
+          name: "patient"
+          required: true
+          schema:
+            $ref: "#/definitions/Patient"
+        - in: "path"
+          name: "patientId"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthorized"
+        "400":
+          description: "Bad Request"
+    delete:
+      tags:
+        - "patient"
+      summary: "delete patient by id"
+      operationId: "DeletePatientById"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: true
+        - in: "path"
+          name: "patientId"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthorized"
+        "400":
+          description: "Bad Request"
+definitions:
+  Patient:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      gender:
+        type: "boolean"
+      birth:
+        type: "string"
+        format: "date"
+      age:
+        type: "integer"
+
