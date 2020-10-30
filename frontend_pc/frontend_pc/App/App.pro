@@ -26,31 +26,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        communhttp.cpp \
+        commu/communhttp.cpp \
+        commu/patient.cpp \
+        commu/userinfo.cpp \
         loginchecker.cpp \
         loginform.cpp \
         main.cpp \
         mainwindow.cpp \
-        patient.cpp \
-        test_window.cpp \
-        userinfo.cpp
 
 HEADERS += \
-        communhttp.h \
+        commu/communhttp.h \
+        commu/patient.h \
+        commu/urlbase.h \
+        commu/userinfo.h \
         errorcode.h \
         loginchecker.h \
         loginform.h \
         mainwindow.h \
-        patient.h \
-        test_window.h \
-        urlbase.h \
-        userinfo.h
+        struct_define.h \
         struct_define.h
 
 FORMS += \
         loginform.ui \
-        mainwindow.ui \
-        test_window.ui
+        mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
