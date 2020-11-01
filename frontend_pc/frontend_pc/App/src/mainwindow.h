@@ -3,6 +3,12 @@
 
 #include <QMainWindow>
 
+
+#include "vtkSmartPointer.h"
+
+class vtkImageViewer2;
+class vtkImageData;
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,7 +21,13 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    void init_VTKView();
+    void showImage();
+
 private slots:
+    void on_loadImage_clicked();
+
     void on_pushButton_4_clicked();
 
     void on_in_fusion_2_opacity_valueChanged(int value);
@@ -27,6 +39,11 @@ private slots:
     void on_pushButton_6_clicked();
 
     void on_pushButton_clicked();
+
+private:
+    vtkSmartPointer<vtkImageViewer2> riw_[3];
+    vtkSmartPointer<vtkImageData> image_;
+    int dims[3];
 
 private:
     Ui::MainWindow *ui;
