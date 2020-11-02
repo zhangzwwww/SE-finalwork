@@ -57,10 +57,14 @@ bool userinfo::register_user_info(communhttp *requester){
     // construct the data needed to post
     QJsonObject json_content;
     QJsonDocument json_doc;
+
+    /* these info handled by server
     json_content.insert("id", this->id);
-    json_content.insert("email", this->email);
     json_content.insert("ctime", this->ctime);
     json_content.insert("role", this->role);
+    */
+
+    json_content.insert("email", this->email);
     json_content.insert("password", this->password);
     json_doc.setObject(json_content);
     QByteArray data = json_doc.toJson(QJsonDocument::Compact);
