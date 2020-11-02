@@ -570,16 +570,16 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QVTKWidget" name="view2" native="true"/>
+     <widget class="QVTKOpenGLNativeWidget" name="view2" native="true"/>
     </item>
     <item row="1" column="0">
-     <widget class="QVTKWidget" name="view3" native="true"/>
+     <widget class="QVTKOpenGLNativeWidget" name="view3" native="true"/>
     </item>
     <item row="1" column="1">
-     <widget class="QVTKWidget" name="view4" native="true"/>
+     <widget class="QVTKOpenGLNativeWidget" name="view4" native="true"/>
     </item>
     <item row="0" column="0">
-     <widget class="QVTKWidget" name="view1" native="true"/>
+     <widget class="QVTKOpenGLNativeWidget" name="view1" native="true"/>
     </item>
    </layout>
   </widget>
@@ -619,9 +619,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QVTKWidget</class>
+   <class>QVTKOpenGLNativeWidget</class>
    <extends>QWidget</extends>
-   <header location="global">QVTKWidget</header>
+   <header location="global">QVTKOpenGLNativeWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

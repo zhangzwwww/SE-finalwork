@@ -92,15 +92,16 @@ void MainWindow::init_VTKView()
 
 	//viewer本身自带renderwindow但是没有interactor，因此使用ui->QVTKWidget自带的interactor赋值给viewer
 	//初始化时并没有为每个riw设置背景颜色，也没有设置view1->show()，但在程序运行时会自动show三个视图
-	this->ui->view1->SetRenderWindow(riw_[0]->GetRenderWindow());
+	//this->ui->view1->SetRenderWindow(riw_[0]->GetRenderWindow());
+	riw_[0]->SetRenderWindow(this->ui->view1->GetRenderWindow());
 	riw_[0]->SetupInteractor(
 		this->ui->view1->GetRenderWindow()->GetInteractor());
 
-	this->ui->view2->SetRenderWindow(riw_[1]->GetRenderWindow());
+	riw_[1]->SetRenderWindow(this->ui->view2->GetRenderWindow());
 	riw_[1]->SetupInteractor(
 		this->ui->view2->GetRenderWindow()->GetInteractor());
 
-	this->ui->view3->SetRenderWindow(riw_[2]->GetRenderWindow());
+	riw_[2]->SetRenderWindow(this->ui->view3->GetRenderWindow());
 	riw_[2]->SetupInteractor(
 		this->ui->view3->GetRenderWindow()->GetInteractor());
 
@@ -120,8 +121,8 @@ void MainWindow::init_VTKView()
 
 void MainWindow::on_loadImage_clicked()
 {
-	QString path = "D:/";
-	QString fileName = QFileDialog::getExistingDirectory(this, QString(tr("Open DICOM Image")), path);
+	//QString path = "D:/";
+	QString fileName = QFileDialog::getExistingDirectory(this, QString(tr("Open DICOM Image")));
 	//QString fileName = QFileDialog::getOpenFileName(this, QString(tr("Open DICOM Image")), path);
 
 	if (fileName.isEmpty() == true)
