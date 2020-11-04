@@ -1,0 +1,23 @@
+#include <QTest>
+#include <QCoreApplication>
+
+#include "../App/commu/communhttp.h"
+#include "../App/commu/userinfo.h"
+
+class TestCommun : public QObject
+{
+    Q_OBJECT
+
+public:
+    TestCommun();
+    ~TestCommun();
+
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+    void test_case1();
+
+private:
+    communhttp requester;
+    userinfo usr;
+};

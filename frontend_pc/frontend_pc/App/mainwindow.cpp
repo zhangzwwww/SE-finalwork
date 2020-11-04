@@ -4,6 +4,10 @@
 #include <QFileDialog>
 
 // VTK
+#include "vtkAutoInit.h"
+VTK_MODULE_INIT(vtkRenderingOpenGL2); // VTK was built with vtkRenderingOpenGL2
+VTK_MODULE_INIT(vtkInteractionStyle);
+
 #include "vtkSmartPointer.h"
 #include "vtkDICOMImageReader.h"
 #include "vtkImageViewer2.h"

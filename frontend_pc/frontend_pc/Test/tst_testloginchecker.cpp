@@ -1,7 +1,7 @@
 #include <QtTest>
 #include <QCoreApplication>
 
-#include "../App/loginchecker.h"
+#include "../App/Login/loginchecker.h"
 
 // add necessary includes here
 
@@ -47,6 +47,6 @@ void TestLoginChecker::test_case1()
     QVERIFY(m_login_checker.SignIn("1", "1") == OK);
 }
 
-QTEST_MAIN(TestLoginChecker)
+// QTEST_MAIN(TestLoginChecker)
 
-#include "tst_testloginchecker.moc"
+// #include "tst_testloginchecker.moc"
