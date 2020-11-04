@@ -27,14 +27,14 @@ void LoginForm::on_sign_in_button_clicked()
     if (ret == OK) {
         accept();
     } else if (ret == LOGIN_ID_NOT_FOUND) {
-        QMessageBox::warning(this, tr("警告！"), tr("用户名不存在！"), QMessageBox::Yes);
+        QMessageBox::warning(this, tr("w"), tr("b"), QMessageBox::Yes);
 
         ui->id_input->clear();
         ui->pwd_input->clear();
 
         ui->id_input->setFocus();
     } else if (ret == LOGIN_ERROR_PWD) {
-        QMessageBox::warning(this, tr("警告！"), tr("密码错误！"), QMessageBox::Yes);
+        QMessageBox::warning(this, tr("1"), tr("1"), QMessageBox::Yes);
 
         ui->pwd_input->clear();
         ui->pwd_input->setFocus();

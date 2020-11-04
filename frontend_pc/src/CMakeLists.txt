@@ -18,7 +18,6 @@ else(VTK_FOUND)
   message(FATAL_ERROR "VTK not found. Please set VTK_DIR.")
 endif(VTK_FOUND)
 
-
 # QT
 find_package(Qt5Widgets)
 find_package(Qt5WebEngineWidgets)
@@ -28,9 +27,12 @@ include_directories(
   ${VTK_DIR}
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/App
-  ${PROJECT_SOURCE_DIR}/App/Registration
-  ${PROJECT_SOURCE_DIR}/App/Segmentation
-  ${PROJECT_SOURCE_DIR}/App/Visualization
+  ${PROJECT_SOURCE_DIR}/App/registration
+  ${PROJECT_SOURCE_DIR}/App/segmentation
+  ${PROJECT_SOURCE_DIR}/App/visualization
+  ${PROJECT_SOURCE_DIR}/App/processing
+  ${PROJECT_SOURCE_DIR}/App/commu
+  ${PROJECT_SOURCE_DIR}/App/login
   ${CMAKE_CURRENT_BINARY_DIR})
 
 # SRC
@@ -40,13 +42,16 @@ file(GLOB
      ${PROJECT_SOURCE_DIR}/App
      ${PROJECT_SOURCE_DIR}/App/*.cpp
      ${PROJECT_SOURCE_DIR}/App/*.cxx
-     ${PROJECT_SOURCE_DIR}/App/*.h)
+     ${PROJECT_SOURCE_DIR}/App/*.h
+     ${PROJECT_SOURCE_DIR}/App/login/*.cpp
+     ${PROJECT_SOURCE_DIR}/App/login/*.h
+)
 
 # QRC
-# set(PROJECT_QRCS App/.qrc)
+# set(PROJECT_QRCS src/.qrc)
 
 # UI
-set(PROJECT_UIS App/mainwindow.ui  App/Login/loginform.ui)
+set(PROJECT_UIS App/mainwindow.ui  App/login/loginform.ui)
 
 # 链接库文件
 #link_directories(${PROJECT_SOURCE_DIR}/lib)
@@ -67,6 +72,6 @@ target_link_libraries(MedPlatform
 set_target_properties(${PROJECT_NAME}
                       PROPERTIES LINK_FLAGS_RELEASE
                                  "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-								 
+						 
 # 添加子目录
 add_subdirectory(App)

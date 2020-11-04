@@ -9,6 +9,7 @@ QT       += network
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 TARGET = App
 TEMPLATE = app
 
@@ -26,8 +27,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        Login/loginchecker.cpp \
-        Login/loginform.cpp \
+        login/loginchecker.cpp \
+        login/loginform.cpp \
         commu/communhttp.cpp \
         commu/patient.cpp \
         commu/userinfo.cpp \
@@ -35,18 +36,18 @@ SOURCES += \
         mainwindow.cpp \
 
 HEADERS += \
-        Login/errorcode.h \
-        Login/loginchecker.h \
-        Login/loginform.h \
+        login/loginchecker.h \
+        login/loginform.h \
         commu/communhttp.h \
         commu/patient.h \
         commu/urlbase.h \
         commu/userinfo.h \
         mainwindow.h \
+        errorcode.h \
         struct_define.h
 
 FORMS += \
-        Login/loginform.ui \
+        login/loginform.ui \
         mainwindow.ui
 
 INCLUDEPATH += /usr/local/include \
