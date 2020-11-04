@@ -19,4 +19,6 @@ HEADERS += ../App/Login/loginchecker.h \
     ../App/commu/communhttp.h \
     ../App/commu/patient.h \
     ../App/commu/urlbase.h \
-    ../App/commu/userinfo.h
+    ../App/commu/userinfo.h \
+    tst_testcommun.h \
+    tst_testloginchecker.h

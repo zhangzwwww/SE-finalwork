@@ -5,6 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QEventLoop>
 
 class communhttp : public QObject{
     Q_OBJECT

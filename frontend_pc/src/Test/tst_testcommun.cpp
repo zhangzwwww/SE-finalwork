@@ -1,23 +1,28 @@
-#include <QTest>
-#include <QCoreApplication>
+#include "tst_testcommun.h"
 
-#include "../App/commu/communhttp.h"
-#include "../App/commu/userinfo.h"
+TestCommun::TestCommun(){
 
-class TestCommun : public QObject
-{
-    Q_OBJECT
+}
 
-public:
-    TestCommun();
-    ~TestCommun();
+TestCommun::~TestCommun(){
 
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void test_case1();
+}
 
-private:
-    communhttp requester;
-    userinfo usr;
-};
+void TestCommun::initTestCase(){
+
+}
+
+void TestCommun::cleanupTestCase(){
+
+}
+
+void TestCommun::test_case1(){
+    // construct the request
+    QNetworkRequest request;
+    QString url = "https://www.baidu.com";
+    request.setUrl(QUrl(url));
+    // send request
+    QNetworkReply* reply = requester.http_get(request);
+    qDebug() << reply->readAll();
+    reply->deleteLater();
+}

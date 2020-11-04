@@ -10,31 +10,74 @@
 communhttp::communhttp(QObject *parent) : QObject (parent)
 {
     manager = new QNetworkAccessManager();
-    connect(manager, &QNetworkAccessManager::finished,
-            this, &communhttp::replyfinished);
+    //QMetaObject::Connection connn = connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+
+//    Debug part
+//    QNetworkRequest request;
+//    request.setUrl(QUrl("https://www.baidu.com"));
+//    QNetworkReply* reply = manager->get(request);
+//    QEventLoop eventloop;
+//    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+//    eventloop.exec();
+//    if (reply->error() == QNetworkReply::NoError)
+//        qDebug() << "request no error";
+//    else{
+//        qDebug() << "request error";
+//    }
+//    QByteArray result = reply->readAll();
+//    qDebug() << result;
+
 }
 
 void communhttp::replyfinished(QNetworkReply *reply){
+    // this slot function for debugging if error happens
+    qDebug("reply finished");
     if (reply->error()){
         qDebug() << reply->errorString();
         return;
     }
-    QString answer = reply->readAll();
-    qDebug() << answer;
 }
 
 QNetworkReply* communhttp::http_get(QNetworkRequest request){
-    return manager->get(request);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+    QNetworkReply* reply = manager->get(request);
+    // loop until get request
+    QEventLoop eventloop;
+    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+    eventloop.exec();
+    // request got
+    return reply;
 }
 
 QNetworkReply* communhttp::http_post(QNetworkRequest request, QByteArray data){
-    return manager->post(request, data);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+    QNetworkReply* reply = manager->post(request, data);
+    // loop until get request
+    QEventLoop eventloop;
+    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+    eventloop.exec();
+    // request got
+    return reply;
 }
 
 QNetworkReply* communhttp::http_head(QNetworkRequest request){
-    return manager->head(request);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+    QNetworkReply* reply = manager->head(request);
+    // loop until get request
+    QEventLoop eventloop;
+    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+    eventloop.exec();
+    // request got
+    return reply;
 }
 
 QNetworkReply* communhttp::http_delete(QNetworkRequest request){
-    return manager->deleteResource(request);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+    QNetworkReply* reply = manager->deleteResource(request);
+    // loop until get request
+    QEventLoop eventloop;
+    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+    eventloop.exec();
+    // request got
+    return reply;
 }

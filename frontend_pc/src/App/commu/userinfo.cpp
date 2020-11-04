@@ -31,6 +31,10 @@ void userinfo::update_login(bool status){
     is_login = status;
 }
 
+bool userinfo::log_user_in(communhttp *requester, QString email, QString pw){
+    return true;
+}
+
 bool userinfo::get_user_info(communhttp* requester){
     QString url = urlbase["auth"] + "/tokens";
     // construct the request
@@ -47,7 +51,7 @@ bool userinfo::get_user_info(communhttp* requester){
     return true;
 }
 
-bool userinfo::register_user_info(communhttp *requester){
+bool userinfo::register_user_info(communhttp *requester, QString email, QString pw){
     QString url = urlbase["auth"] + "/register";
     // construct the request
     QNetworkRequest request;
@@ -64,8 +68,8 @@ bool userinfo::register_user_info(communhttp *requester){
     json_content.insert("role", this->role);
     */
 
-    json_content.insert("email", this->email);
-    json_content.insert("password", this->password);
+    json_content.insert("email", email);
+    json_content.insert("password", pw);
     json_doc.setObject(json_content);
     QByteArray data = json_doc.toJson(QJsonDocument::Compact);
 
@@ -79,7 +83,7 @@ bool userinfo::register_user_info(communhttp *requester){
     return true;
 }
 
-bool userinfo::get_user_token(communhttp *requester){
+bool userinfo::get_user_token(communhttp *requester, QString email, QString pw){
     QString url = urlbase["auth"] + "/tokens";
     // construct the request
     QNetworkRequest request;
@@ -89,11 +93,15 @@ bool userinfo::get_user_token(communhttp *requester){
     // construct the data needed to post
     QJsonObject json_content;
     QJsonDocument json_doc;
+
+    /* these info handled by server
     json_content.insert("id", this->id);
-    json_content.insert("email", this->email);
     json_content.insert("ctime", this->ctime);
     json_content.insert("role", this->role);
-    json_content.insert("password", this->password);
+    */
+
+    json_content.insert("email", email);
+    json_content.insert("password", pw);
     json_doc.setObject(json_content);
     QByteArray data = json_doc.toJson(QJsonDocument::Compact);
 
