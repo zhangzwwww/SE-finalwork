@@ -37,9 +37,9 @@ void TestCommun::test_case1(){
     request.setRawHeader("X-Auth-Token", token.toUtf8());
     QNetworkReply* reply = requester.http_get(request);
     QByteArray result = reply->readAll();
-    QString answer = result;
-    qDebug() << answer;
-    QVERIFY(answer == "\"token unavailable\"\n");
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QVERIFY(status == 401);
+    reply->deleteLater();
 }
 
 void TestCommun::test_case2(){
@@ -60,9 +60,31 @@ void TestCommun::test_case2(){
     QByteArray data = json_doc.toJson(QJsonDocument::Compact);
     // send request
     QNetworkReply* reply = requester.http_post(request, data);
-    QString result = reply->readAll();
-    qDebug() << result;
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QString header = reply->rawHeader("X-Auth-Token");
+    QVERIFY(status == 200);
+    reply->deleteLater();
 
+    // then get info with true token
+    QNetworkRequest request2;
+    request2.setUrl(QUrl(url));
+    request2.setRawHeader("X-Auth-Token", header.toUtf8());
+    QNetworkReply* reply2 = requester.http_get(request2);
+    status = reply2->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    // check reply has no error
+    QVERIFY(reply2->error() == false);
+    QVERIFY(status == 200);
+
+    QByteArray answer = reply2->readAll();
+    // get the json format answer
+    QJsonParseError jerror;
+    QJsonDocument json = QJsonDocument::fromJson(answer, &jerror);
+    // check json parser has no problem
+    QVERIFY(jerror.error == QJsonParseError::NoError);
+    QVERIFY(json.isObject());
+    // check user info align with what we got
+    QVERIFY(json.object()["email"].toString() == email);
+    reply2->deleteLater();
 }
 
 void TestCommun::test_case3(){
@@ -85,4 +107,8 @@ void TestCommun::test_case3(){
     QNetworkReply* reply = requester.http_post(request, data);
     QString answer = reply->readAll();
     qDebug() << answer;
+}
+
+void TestCommun::test_case4(){
+
 }

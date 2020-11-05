@@ -30,7 +30,7 @@ communhttp::communhttp(QObject *parent) : QObject (parent)
 
 void communhttp::replyfinished(QNetworkReply *reply){
     // this slot function for debugging if error happens
-    qDebug("reply finished");
+    // qDebug("reply finished");
     if (reply->error()){
         qDebug() << reply->errorString();
         return;
@@ -38,7 +38,6 @@ void communhttp::replyfinished(QNetworkReply *reply){
 }
 
 QNetworkReply* communhttp::http_get(QNetworkRequest request){
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
     QNetworkReply* reply = manager->get(request);
     // loop until get request
     QEventLoop eventloop;
@@ -49,7 +48,6 @@ QNetworkReply* communhttp::http_get(QNetworkRequest request){
 }
 
 QNetworkReply* communhttp::http_post(QNetworkRequest request, QByteArray data){
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
     QNetworkReply* reply = manager->post(request, data);
     // loop until get request
     QEventLoop eventloop;
@@ -60,7 +58,6 @@ QNetworkReply* communhttp::http_post(QNetworkRequest request, QByteArray data){
 }
 
 QNetworkReply* communhttp::http_head(QNetworkRequest request){
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
     QNetworkReply* reply = manager->head(request);
     // loop until get request
     QEventLoop eventloop;
@@ -71,7 +68,6 @@ QNetworkReply* communhttp::http_head(QNetworkRequest request){
 }
 
 QNetworkReply* communhttp::http_delete(QNetworkRequest request){
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
     QNetworkReply* reply = manager->deleteResource(request);
     // loop until get request
     QEventLoop eventloop;

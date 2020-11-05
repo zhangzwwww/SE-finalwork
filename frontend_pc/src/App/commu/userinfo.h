@@ -17,7 +17,7 @@ private:
 
     // Content of the user information
     // TODO: decide content of a user
-    int id;
+    QString id;
     QString email;
     QString ctime;
     QString role;
