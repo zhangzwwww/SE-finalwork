@@ -5,9 +5,8 @@
 
 // VTK
 #include "vtkAutoInit.h"
-VTK_MODULE_INIT(vtkRenderingOpenGL2); // VTK was built with vtkRenderingOpenGL2
+VTK_MODULE_INIT(vtkRenderingOpenGL2);
 VTK_MODULE_INIT(vtkInteractionStyle);
-
 #include "vtkSmartPointer.h"
 #include "vtkDICOMImageReader.h"
 #include "vtkImageViewer2.h"
@@ -91,11 +90,11 @@ void MainWindow::init_VTKView()
 	{
 		riw_[i] = vtkSmartPointer< vtkImageViewer2 >::New();
 		//riw[i]->SetLookupTable(riw[0]->GetLookupTable());
-		//Ä¿Ç°»¹ÎÞ·¨ÊµÏÖÍ¬²½¸üÐÂ´°¿í´°Î»
+		//Ä¿Ç°ï¿½ï¿½ï¿½Þ·ï¿½Êµï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½ï¿½ï¿½Î»
 	}
 
-	//viewer±¾Éí×Ô´ørenderwindowµ«ÊÇÃ»ÓÐinteractor£¬Òò´ËÊ¹ÓÃui->QVTKWidget×Ô´øµÄinteractor¸³Öµ¸øviewer
-	//³õÊ¼»¯Ê±²¢Ã»ÓÐÎªÃ¿¸öriwÉèÖÃ±³¾°ÑÕÉ«£¬Ò²Ã»ÓÐÉèÖÃview1->show()£¬µ«ÔÚ³ÌÐòÔËÐÐÊ±»á×Ô¶¯showÈý¸öÊÓÍ¼
+	//viewerï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½renderwindowï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½interactorï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ui->QVTKWidgetï¿½Ô´ï¿½ï¿½ï¿½interactorï¿½ï¿½Öµï¿½ï¿½viewer
+	//ï¿½ï¿½Ê¼ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½ï¿½ÎªÃ¿ï¿½ï¿½riwï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Ò²Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½view1->show()ï¿½ï¿½ï¿½ï¿½ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ô¶ï¿½showï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
 	//this->ui->view1->SetRenderWindow(riw_[0]->GetRenderWindow());
 	riw_[0]->SetRenderWindow(this->ui->view1->GetRenderWindow());
 	riw_[0]->SetupInteractor(
@@ -143,7 +142,7 @@ void MainWindow::on_loadImage_clicked()
 	reader->Update();
 	image_ = reader->GetOutput();
 
-	//Çå³ýÖ®Ç°µÄrenderer£¬²¢ÖØÐÂÉú³ÉÒ»¸ö½¥±äÉ«±³¾°µÄrenderer
+	//ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½rendererï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½renderer
 	//this->cleanReconstruction();
 
 	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
@@ -154,7 +153,7 @@ void MainWindow::on_loadImage_clicked()
 
 	reader->GetOutput()->GetDimensions(this->dims);
 
-	//µ÷ÓÃ×Ô¶¨Òåº¯ÊýÏÔÊ¾ÈýÊÓÍ¼
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Í¼
 	this->showImage();
 	//dataReady = true;
 }
@@ -162,7 +161,7 @@ void MainWindow::on_loadImage_clicked()
 
 void MainWindow::showImage()
 {
-	//ui´°¿ÚÓÐinteractor,RenderWindowÃ»ÓÐinteractor
+	//uiï¿½ï¿½ï¿½ï¿½ï¿½ï¿½interactor,RenderWindowÃ»ï¿½ï¿½interactor
 	//vtkSmartPointer< vtkCamera > camera = vtkSmartPointer< vtkCamera >::New();
 	//vtkSmartPointer<vtkFourViewerCallback> cbk =
 	//	vtkSmartPointer<vtkFourViewerCallback>::New();
@@ -190,13 +189,13 @@ void MainWindow::showImage()
 
 		//cbk->view[i] = riw_[i];
 		//riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::WindowLevelEvent, cbk);
-		//¼ÓÈëÏÂ¾äÎªºÎ²»Æð×÷ÓÃ£¿
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Â¾ï¿½Îªï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
 		//riw[i]->GetWindowLevel()->SetLookupTable(riw[0]->GetWindowLevel()->GetLookupTable());
 
 		riw_[i]->Render();
-		//Ä¬ÈÏ´ò¿ª
+		//Ä¬ï¿½Ï´ï¿½ï¿½ï¿½
 		//riw[i]->GetRenderer()->EraseOn();
-		riw_[i]->GetRenderer()->ResetCamera();   //ÓÐÄ¬ÈÏµÄrender 
+		riw_[i]->GetRenderer()->ResetCamera();   //ï¿½ï¿½Ä¬ï¿½Ïµï¿½render
 		//riw[i]->UpdateDisplayExtent();
 	}
 

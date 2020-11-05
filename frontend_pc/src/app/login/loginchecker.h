@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../App/errorcode.h"
+#include "../errorcode.h"
 
 using std::string;
 
