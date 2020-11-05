@@ -6,7 +6,7 @@
 #include <QtTest>
 #include <QCoreApplication>
 
-#include "../App/login/loginchecker.h"
+#include "../app/login/loginchecker.h"
 
 class TestLoginChecker : public QObject
 {

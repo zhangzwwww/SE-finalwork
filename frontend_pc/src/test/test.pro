@@ -8,17 +8,17 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  tst_testloginchecker.cpp \
-            ../App/Login/loginchecker.cpp \
-            ../App/commu/communhttp.cpp \
-            ../App/commu/patient.cpp \
-            ../App/commu/userinfo.cpp \
+            ../app/Login/loginchecker.cpp \
+            ../app/commu/communhttp.cpp \
+            ../app/commu/patient.cpp \
+            ../app/commu/userinfo.cpp \
             tst_all.cpp \
             tst_testcommun.cpp
 
-HEADERS += ../App/Login/loginchecker.h \
-    ../App/commu/communhttp.h \
-    ../App/commu/patient.h \
-    ../App/commu/urlbase.h \
-    ../App/commu/userinfo.h \
+HEADERS += ../app/Login/loginchecker.h \
+    ../app/commu/communhttp.h \
+    ../app/commu/patient.h \
+    ../app/commu/urlbase.h \
+    ../app/commu/userinfo.h \
     tst_testcommun.h \
     tst_testloginchecker.h

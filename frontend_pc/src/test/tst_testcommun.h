@@ -8,8 +8,8 @@
 #include <QNetworkAccessManager>
 #include <QJsonArray>
 
-#include "../App/commu/communhttp.h"
-#include "../App/commu/userinfo.h"
+#include "../app/commu/communhttp.h"
+#include "../app/commu/userinfo.h"
 
 class TestCommun : public QObject
 {
