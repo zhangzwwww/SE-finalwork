@@ -88,11 +88,11 @@ void TestCommun::test_case2(){
 }
 
 void TestCommun::test_case3(){
-    QString email = "lch@test.com";
+    // test the head token
+    QString email = "test@test.com";
     QString pw = "hello123";
-
-    // test register a user into server
-    QString url = urlbase["base"] + urlbase["auth"] + "/register";
+    QString url = urlbase["base"] + urlbase["auth"] + "/token";
+    // first get the token
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
@@ -105,10 +105,47 @@ void TestCommun::test_case3(){
     QByteArray data = json_doc.toJson(QJsonDocument::Compact);
     // send request
     QNetworkReply* reply = requester.http_post(request, data);
-    QString answer = reply->readAll();
-    qDebug() << answer;
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QString token = reply->rawHeader("X-Auth-Token");
+    QVERIFY(status == 200);
+    reply->deleteLater();
+
+    // send head request -- validate token
+    QNetworkRequest request2;
+    request2.setUrl(QUrl(url));
+    request2.setRawHeader("X-Auth-Token", token.toUtf8());
+    QNetworkReply* reply2 = requester.http_head(request2);
+    status = reply2->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QVERIFY(status == 200);
+
+    // delete the test user
+    QNetworkRequest req3;
+    req3.setUrl(QUrl(url));
+    req3.setRawHeader("X-Auth-Token", token.toUtf8());
+    QNetworkReply* rep3 = requester.http_delete(req3);
+    status = rep3->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QVERIFY(status == 204);
 }
 
 void TestCommun::test_case4(){
+//    QString email = "lch@test.com";
+//    QString pw = "hello123";
 
+//    // first delete
+
+//    // test register a user into server
+//    QString url = urlbase["base"] + urlbase["auth"] + "/register";
+//    QNetworkRequest request;
+//    request.setUrl(QUrl(url));
+//    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+//    // construct data
+//    QJsonObject json_content;
+//    QJsonDocument json_doc;
+//    json_content.insert("email", email);
+//    json_content.insert("password", pw);
+//    json_doc.setObject(json_content);
+//    QByteArray data = json_doc.toJson(QJsonDocument::Compact);
+//    // send request
+//    QNetworkReply* reply = requester.http_post(request, data);
+//    QString answer = reply->readAll();
 }

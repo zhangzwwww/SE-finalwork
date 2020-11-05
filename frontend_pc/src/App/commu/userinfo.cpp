@@ -180,9 +180,23 @@ bool userinfo::delete_user_token(communhttp *requester){
 
     // send the request
     QNetworkReply* reply = requester->http_delete(request);
-    // TODO: handle the reply given by the server
-
-
+    // Handle the reply given by the server
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    // Handle error cases
+    if (status == 405){
+        qDebug() << "405 Not Allowed";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 401){
+        qDebug() << "Token unauthorized";
+        reply->deleteLater();
+        return false;
+    }
+    // Handle normal case
+    if (status == 204){
+        // do nothing -- just return ture
+    }
     // free the reply object
     reply->deleteLater();
     return true;
@@ -197,9 +211,23 @@ bool userinfo::head_token(communhttp *requester){
 
     // send the request
     QNetworkReply* reply = requester->http_head(request);
-    // handle the reply given by the server
-
-
+    // Handle the reply given by the server
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    // Handle error cases
+    if (status == 404){
+        qDebug() << "404 Not found";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 401){
+        qDebug() << "Token unauthorized";
+        reply->deleteLater();
+        return false;
+    }
+    // Handle normal case
+    if (status == 200){
+        // do nothing -- just return true
+    }
     // free the reply object
     reply->deleteLater();
     return true;
