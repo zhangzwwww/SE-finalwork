@@ -10,9 +10,8 @@
 communhttp::communhttp(QObject *parent) : QObject (parent)
 {
     manager = new QNetworkAccessManager();
-    //QMetaObject::Connection connn = connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
-
-//    Debug part
+    QMetaObject::Connection connn = connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyfinished(QNetworkReply*)));
+    //    Debug part
 //    QNetworkRequest request;
 //    request.setUrl(QUrl("https://www.baidu.com"));
 //    QNetworkReply* reply = manager->get(request);

@@ -32,11 +32,19 @@ void userinfo::update_login(bool status){
 }
 
 bool userinfo::log_user_in(communhttp *requester, QString email, QString pw){
+    // TODO: send request to server to verify
+
+
+    // If the response passes, log the usr in
+    this->email = email;
+    this->password = pw;
+    update_login(true);
+
     return true;
 }
 
 bool userinfo::get_user_info(communhttp* requester){
-    QString url = urlbase["auth"] + "/tokens";
+    QString url = urlbase["base"] + urlbase["auth"] + "/token";
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -52,7 +60,7 @@ bool userinfo::get_user_info(communhttp* requester){
 }
 
 bool userinfo::register_user_info(communhttp *requester, QString email, QString pw){
-    QString url = urlbase["auth"] + "/register";
+    QString url = urlbase["base"] + urlbase["auth"] + "/register";
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -84,7 +92,7 @@ bool userinfo::register_user_info(communhttp *requester, QString email, QString 
 }
 
 bool userinfo::get_user_token(communhttp *requester, QString email, QString pw){
-    QString url = urlbase["auth"] + "/tokens";
+    QString url = urlbase["base"] + urlbase["auth"] + "/token";
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -116,7 +124,7 @@ bool userinfo::get_user_token(communhttp *requester, QString email, QString pw){
 }
 
 bool userinfo::delete_user_token(communhttp *requester){
-    QString url = urlbase["auth"] + "/tokens";
+    QString url = urlbase["base"] + urlbase["auth"] + "/token";
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -133,7 +141,7 @@ bool userinfo::delete_user_token(communhttp *requester){
 }
 
 bool userinfo::head_token(communhttp *requester){
-    QString url = urlbase["auth"] + "/tokens";
+    QString url = urlbase["base"] + urlbase["auth"] + "/token";
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
