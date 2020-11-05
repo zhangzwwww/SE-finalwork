@@ -35,6 +35,11 @@ public:
     // update the logged in status
     void update_login(bool status);
 
+    // get token of user locally
+    QString _token();
+    // get email of user locally
+    QString _email();
+
     // handle user log in
     // input: email, password
     // return true if success

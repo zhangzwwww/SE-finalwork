@@ -17,15 +17,6 @@ void TestCommun::cleanupTestCase(){
 }
 
 void TestCommun::test_case1(){
-    // construct the request
-//    QNetworkRequest request;
-//    QString url = "https://www.baidu.com";
-//    request.setUrl(QUrl(url));
-//    // send request
-//    QNetworkReply* reply = requester.http_get(request);
-//    qDebug() << reply->readAll();
-//    reply->deleteLater();
-
     // check user initialization state
     QVERIFY(usr.is_logged_in() == false);
 
@@ -128,24 +119,63 @@ void TestCommun::test_case3(){
 }
 
 void TestCommun::test_case4(){
-//    QString email = "lch@test.com";
-//    QString pw = "hello123";
+    // Test register user into system
 
-//    // first delete
+    QString email = "lch@test.com";
+    QString pw = "hello123";
 
-//    // test register a user into server
-//    QString url = urlbase["base"] + urlbase["auth"] + "/register";
-//    QNetworkRequest request;
-//    request.setUrl(QUrl(url));
-//    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-//    // construct data
-//    QJsonObject json_content;
-//    QJsonDocument json_doc;
-//    json_content.insert("email", email);
-//    json_content.insert("password", pw);
-//    json_doc.setObject(json_content);
-//    QByteArray data = json_doc.toJson(QJsonDocument::Compact);
-//    // send request
-//    QNetworkReply* reply = requester.http_post(request, data);
-//    QString answer = reply->readAll();
+    // first delete
+
+    // test register a user into server
+    QString url = urlbase["base"] + urlbase["auth"] + "/register";
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    // construct data
+    QJsonObject json_content;
+    QJsonDocument json_doc;
+    json_content.insert("email", email);
+    json_content.insert("password", pw);
+    json_doc.setObject(json_content);
+    QByteArray data = json_doc.toJson(QJsonDocument::Compact);
+    // send request
+    QNetworkReply* reply = requester.http_post(request, data);
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QVERIFY(status == 400);
+    // QString token = reply->rawHeader("X-Auth-Token");
+}
+
+void TestCommun::test_case5(){
+    // test the userinfo class
+    // test register
+    QString email = "test@test.com";
+    QString password = "hello123";
+//    bool result = usr.register_user_info(&requester, email, password);
+//    QVERIFY(result == true);
+
+    // test log in
+    bool result = usr.log_user_in(&requester, email, password);
+    QVERIFY(result == true);
+    QVERIFY(usr.is_logged_in() == true);
+    QVERIFY(usr._email() == email);
+
+    // get the info of user and check
+    bool getInfo = usr.get_user_info(&requester);
+    QVERIFY(getInfo == true);
+    QVERIFY(usr._email() == email);
+
+    // head the token
+    bool valiTok = usr.head_token(&requester);
+    QVERIFY(valiTok == true);
+
+    // delete the token
+    bool delTok = usr.delete_user_token(&requester);
+    QVERIFY(delTok == true);
+    QVERIFY(usr._token() == "");
+
+    // get a new token
+    bool getTok = usr.get_user_token(&requester, email, password);
+    QVERIFY(getTok == true);
+    QVERIFY(usr._token() != "");
+
 }

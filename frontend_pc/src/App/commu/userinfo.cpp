@@ -23,6 +23,14 @@ userinfo::userinfo()
     token = "";
 }
 
+QString userinfo::_email(){
+    return email;
+}
+
+QString userinfo::_token(){
+    return token;
+}
+
 bool userinfo::is_logged_in(){
     return is_login;
 }
@@ -195,7 +203,8 @@ bool userinfo::delete_user_token(communhttp *requester){
     }
     // Handle normal case
     if (status == 204){
-        // do nothing -- just return ture
+        // clear the local token
+        this->token = "";
     }
     // free the reply object
     reply->deleteLater();
