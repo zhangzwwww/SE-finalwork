@@ -18,6 +18,14 @@ else(VTK_FOUND)
   message(FATAL_ERROR "VTK not found. Please set VTK_DIR.")
 endif(VTK_FOUND)
 
+# ITK
+find_package(ITK)
+if(ITK_FOUND)
+  include(${ITK_USE_FILE})
+else(ITK_FOUND)
+  message(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
+endif(ITK_FOUND)
+
 # QT
 find_package(Qt5Widgets)
 find_package(Qt5WebEngineWidgets)
@@ -66,6 +74,8 @@ add_executable(MedPlatform ${PROJECT_SRCS} ${PROJECT_UIS} ${PROJECT_QRCS})
 # 链接库
 target_link_libraries(MedPlatform
                       ${VTK_LIBRARIES}
+                      ${ITK_LIBRARIES}
+                      Registration
                       Qt5::Widgets)
 
 # 屏蔽Release运行时的控制台窗口

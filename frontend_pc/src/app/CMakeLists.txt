@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.0)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # 添加子目录
-#add_subdirectory(registration)
+add_subdirectory(registration)
 #add_subdirectory(processing)
 #add_subdirectory(segmentation)
 #add_subdirectory(visualization)
