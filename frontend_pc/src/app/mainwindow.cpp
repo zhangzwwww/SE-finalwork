@@ -7,6 +7,9 @@
 #include "vtkAutoInit.h"
 VTK_MODULE_INIT(vtkRenderingOpenGL2);
 VTK_MODULE_INIT(vtkInteractionStyle);
+VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
+
+
 #include "vtkSmartPointer.h"
 #include "vtkDICOMImageReader.h"
 #include "vtkImageViewer2.h"
@@ -68,7 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
     init_VTKView();
 
     connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(on_loadImage_clicked()));
-//    TODO: make sure the number of spinbox/lineedit is legal
+	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(on_Volume_clicked()));
+
+	
+	//    TODO: make sure the number of spinbox/lineedit is legal
 //    AlgorithmParams
 //    FusionParams
 //    RegistrationParams
@@ -204,6 +210,69 @@ void MainWindow::showImage()
 	//this->ui->view1->show();
 	//this->ui->view2->show();
 	//this->ui->view3->show();
+}
+
+void MainWindow::on_Volume_clicked() 
+{
+	vtkSmartPointer<vtkFixedPointVolumeRayCastMapper> volumeMapper =
+		vtkSmartPointer<vtkFixedPointVolumeRayCastMapper>::New();
+	volumeMapper->SetInputData(image_);
+
+	//设置光线采样距离
+	volumeMapper->SetSampleDistance(volumeMapper->GetSampleDistance() / 4);
+	//设置图像采样步长
+	volumeMapper->SetAutoAdjustSampleDistances(0);
+	volumeMapper->SetImageSampleDistance(2);
+
+	vtkSmartPointer<vtkVolumeProperty> volumeProperty =
+		vtkSmartPointer<vtkVolumeProperty>::New();
+	volumeProperty->SetInterpolationTypeToLinear();
+	volumeProperty->ShadeOn();  //打开或者关闭阴影测试
+	volumeProperty->SetAmbient(.1);
+	volumeProperty->SetDiffuse(.9);
+	volumeProperty->SetSpecular(.2);
+	volumeProperty->SetSpecularPower(10);
+
+	vtkSmartPointer<vtkPiecewiseFunction> compositeOpacity =
+		vtkSmartPointer<vtkPiecewiseFunction>::New();
+	vtkSmartPointer<vtkColorTransferFunction> colorFun =
+		vtkSmartPointer<vtkColorTransferFunction>::New();
+
+	compositeOpacity->AddPoint(-3024, 0, 0.5, 0.0);
+	compositeOpacity->AddPoint(-16, 0, .49, .61);
+	compositeOpacity->AddPoint(641, .72, .5, 0.0);
+	compositeOpacity->AddPoint(3071, .71, 0.5, 0.0);
+
+	colorFun->AddRGBPoint(-3024, 0, 0, 0, 0.5, 0.0);
+	colorFun->AddRGBPoint(-16, 0.73, 0.25, 0.30, 0.49, .61);
+	colorFun->AddRGBPoint(641, .90, .82, .56, .5, 0.0);
+	colorFun->AddRGBPoint(3071, 1, 1, 1, .5, 0.0);
+
+	volumeProperty->SetScalarOpacity(compositeOpacity); //设置不透明度传输函数
+	volumeProperty->SetColor(colorFun);
+
+
+
+	vtkSmartPointer<vtkVolume> volume =
+		vtkSmartPointer<vtkVolume>::New();
+	volume->SetMapper(volumeMapper);
+	volume->SetProperty(volumeProperty);
+
+	////这样每次的actor都不会被清除，会叠在一起
+	//vtkSmartPointer<vtkRenderer> ren = 
+	//     this->ui->view4->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+	//ren->AddVolume(volume);
+
+
+	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
+	ren->SetBackground(1, 1, 1);
+	ren->SetBackground2(0.5, 0.5, 0.5);
+	ren->SetGradientBackground(1);
+	ren->AddVolume(volume);
+	this->ui->view4->GetRenderWindow()->AddRenderer(ren);
+	ren->ResetCamera();
+	this->ui->view4->GetRenderWindow()->Render();
+
 }
 
 

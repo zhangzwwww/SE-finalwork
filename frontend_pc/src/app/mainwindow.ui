@@ -570,16 +570,16 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QVTKOpenGLNativeWidget" name="view2" native="true"/>
+     <widget class="QVTKWidget" name="view2" native="true"/>
     </item>
     <item row="1" column="0">
-     <widget class="QVTKOpenGLNativeWidget" name="view3" native="true"/>
+     <widget class="QVTKWidget" name="view3" native="true"/>
     </item>
     <item row="1" column="1">
-     <widget class="QVTKOpenGLNativeWidget" name="view4" native="true"/>
+     <widget class="QVTKWidget" name="view4" native="true"/>
     </item>
     <item row="0" column="0">
-     <widget class="QVTKOpenGLNativeWidget" name="view1" native="true"/>
+     <widget class="QVTKWidget" name="view1" native="true"/>
     </item>
    </layout>
   </widget>
@@ -608,6 +608,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionLoadImage"/>
+   <addaction name="actionVolume_Rendering"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionLoadImage">
@@ -615,13 +616,18 @@
     <string>Load Image</string>
    </property>
   </action>
+  <action name="actionVolume_Rendering">
+   <property name="text">
+    <string>Volume Rendering</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QVTKOpenGLNativeWidget</class>
+   <class>QVTKWidget</class>
    <extends>QWidget</extends>
-   <header location="global">QVTKOpenGLNativeWidget.h</header>
+   <header location="global">QVTKWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

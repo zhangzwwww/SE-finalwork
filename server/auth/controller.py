@@ -13,6 +13,10 @@ def register_routes(api, app):
     api.add_resource(AuthUser, '/v1/auth/register')
 
 
+    # need to be deleted only for test
+    api.add_resource(DeleteUser, '/v1/auth/deleteUser')
+
+
 class AuthToken(Resource):
     def get(self):
         token = request.headers.get('X-Auth-Token')
@@ -48,11 +52,19 @@ class AuthToken(Resource):
         token = request.headers.get('X-Auth-Token')
         if existsToken(token):
             return "ok", 200
-        return "Invalid token", 400
+        return "Invalid token", 401
 
     def delete(self):
         token = request.headers['X-Auth-Token']
         revokeToken(token)
+        return "deleted successfully", 204
+
+# only for test need to be deleted
+class DeleteUser(Resource):
+    def delete(self):
+        args = request.args
+        email = args['email']
+        UserService.deleteUserByEmail(email)
         return "deleted successfully", 204
 
 
@@ -80,7 +92,7 @@ class AuthUser(Resource):
         else:
             print("user already registered!")
 
-            resp = Response(status=400)
+            resp = Response(status=409)
 
             return resp
 

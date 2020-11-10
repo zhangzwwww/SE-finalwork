@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 
-
 #include "vtkSmartPointer.h"
 
 class vtkImageViewer2;
@@ -27,6 +26,7 @@ private:
 
 private slots:
     void on_loadImage_clicked();
+    void on_Volume_clicked();
 
     void on_pushButton_4_clicked();
 

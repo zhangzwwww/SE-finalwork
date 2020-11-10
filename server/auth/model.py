@@ -18,6 +18,7 @@ class User(db.Model):
             'role': self.role,
         }
 
+
 class UserService:
 
     def createUser(user):
@@ -32,3 +33,10 @@ class UserService:
     def getUserByEmailAndPassword(email, password):
         user = User.query.filter_by(email=email, password=password).first()
         return user
+
+    def deleteUserByEmail(email):
+        user = User.query.filter_by(email=email).first()
+        print(user.id)
+        db.session.delete(user)
+        db.session.commit()
+        return True

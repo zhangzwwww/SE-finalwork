@@ -26,32 +26,32 @@ find_package(Qt5WebEngineWidgets)
 include_directories(
   ${VTK_DIR}
   ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/App
-  ${PROJECT_SOURCE_DIR}/App/registration
-  ${PROJECT_SOURCE_DIR}/App/segmentation
-  ${PROJECT_SOURCE_DIR}/App/visualization
-  ${PROJECT_SOURCE_DIR}/App/processing
-  ${PROJECT_SOURCE_DIR}/App/commu
-  ${PROJECT_SOURCE_DIR}/App/login
+  ${PROJECT_SOURCE_DIR}/app
+  ${PROJECT_SOURCE_DIR}/app/registration
+  ${PROJECT_SOURCE_DIR}/app/segmentation
+  ${PROJECT_SOURCE_DIR}/app/visualization
+  ${PROJECT_SOURCE_DIR}/app/processing
+  ${PROJECT_SOURCE_DIR}/app/commu
+  ${PROJECT_SOURCE_DIR}/app/login
   ${CMAKE_CURRENT_BINARY_DIR})
 
 # SRC
 # GLOB将所有匹配<globbing-expressions>的文件挑选出来
 file(GLOB
      PROJECT_SRCS
-     ${PROJECT_SOURCE_DIR}/App
-     ${PROJECT_SOURCE_DIR}/App/*.cpp
-     ${PROJECT_SOURCE_DIR}/App/*.cxx
-     ${PROJECT_SOURCE_DIR}/App/*.h
-     ${PROJECT_SOURCE_DIR}/App/login/*.cpp
-     ${PROJECT_SOURCE_DIR}/App/login/*.h
+     ${PROJECT_SOURCE_DIR}/app
+     ${PROJECT_SOURCE_DIR}/app/*.cpp
+     ${PROJECT_SOURCE_DIR}/app/*.cxx
+     ${PROJECT_SOURCE_DIR}/app/*.h
+     ${PROJECT_SOURCE_DIR}/app/login/*.cpp
+     ${PROJECT_SOURCE_DIR}/app/login/*.h
 )
 
 # QRC
 # set(PROJECT_QRCS src/.qrc)
 
 # UI
-set(PROJECT_UIS App/mainwindow.ui  App/login/loginform.ui)
+set(PROJECT_UIS app/mainwindow.ui  app/login/loginform.ui)
 
 # 链接库文件
 #link_directories(${PROJECT_SOURCE_DIR}/lib)
@@ -74,4 +74,4 @@ set_target_properties(${PROJECT_NAME}
                                  "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 						 
 # 添加子目录
-add_subdirectory(App)
+add_subdirectory(app)

@@ -11,7 +11,7 @@ ENV REDIS_HOST=
 ENV REDIS_PORT=
 
 COPY requirement.txt ./
-RUN pip install -r requirement.txt
+RUN pip install -r requirement.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY . .
 
