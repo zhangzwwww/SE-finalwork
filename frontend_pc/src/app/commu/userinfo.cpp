@@ -117,7 +117,7 @@ bool userinfo::register_user_info(communhttp *requester, QString email, QString 
         reply->deleteLater();
         return false;
     }
-    if (status == 400){
+    if (status == 400 || status == 409){
         qDebug() << "Bad Request";
         reply->deleteLater();
         return false;
@@ -163,9 +163,9 @@ bool userinfo::get_user_token(communhttp *requester, QString email, QString pw){
         return false;
     }
     int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
-    if (status == 400){
+    if (status == 401){
         // bad request
-        qDebug() << "Bad request";
+        qDebug() << "Email or password unauthorized";
         reply->deleteLater();
         return false;
     }

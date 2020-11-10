@@ -56,6 +56,21 @@ void TestCommun::test_case2(){
     QVERIFY(status == 200);
     reply->deleteLater();
 
+    // test get fake user info
+    QNetworkRequest req3;
+    req3.setUrl(QUrl(url));
+    req3.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    QJsonObject json_content3;
+    QJsonDocument json_doc3;
+    json_content3.insert("email", email);
+    json_content3.insert("password", "aaaa");
+    json_doc3.setObject(json_content3);
+    QByteArray data3 = json_doc3.toJson(QJsonDocument::Compact);
+    QNetworkReply* rep3 = requester.http_post(req3, data3);
+    status = rep3->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    QVERIFY(status == 401);
+    rep3->deleteLater();
+
     // then get info with true token
     QNetworkRequest request2;
     request2.setUrl(QUrl(url));
@@ -121,7 +136,7 @@ void TestCommun::test_case3(){
 void TestCommun::test_case4(){
     // Test register user into system
 
-    QString email = "lch@test.com";
+    QString email = "test@test.com";
     QString pw = "hello123";
 
     // first delete
