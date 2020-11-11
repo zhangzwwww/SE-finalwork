@@ -40,6 +40,12 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_start_smoothing_button_clicked();
+
+    void on_detect_edge_button_clicked();
+
+    void on_start_thresholding_button_clicked();
+
 private:
     vtkSmartPointer<vtkImageViewer2> riw_[3];
     vtkSmartPointer<vtkImageData> image_;

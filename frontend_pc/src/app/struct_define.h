@@ -61,4 +61,21 @@ struct PolygonSmoothingParams {
     double relaxation_factor;
 };
 
+struct SmoothingParams {
+    int smooth_type;
+    int kernel_size;
+    double sigma_x; // specially for gaussian blur
+};
+
+struct EdgeDetectParams {
+    double threshold_1;
+    double threshold_2;
+};
+
+struct ThresholdingParams {
+    double thresh_value;
+    double max_value;
+    int thresh_type;
+};
+
 #endif // STRUCT_DEFINE_H

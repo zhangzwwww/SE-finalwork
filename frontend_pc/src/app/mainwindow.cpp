@@ -331,3 +331,41 @@ void MainWindow::on_pushButton_clicked()
     process_params.isosurface_value = ui->in_gray_1_isosurface_value->value();
     process_params.surface_name = ui->in_gray_2_surface_name->text().toStdString();
 }
+
+void MainWindow::on_start_smoothing_button_clicked()
+{
+    SmoothingParams params;
+    params.smooth_type = ui->smoothing_toolBox->currentIndex();
+    switch (params.smooth_type) {
+    case 0:
+        params.kernel_size = ui->in_smooth_gaussian_0_kernel_size->value();
+        params.sigma_x = ui->in_smooth_gaussian_1_sigma_x->value();
+        break;
+    case 1:
+        params.kernel_size = ui->in_smooth_mean_0_kernel_size->value();
+        break;
+    case 2:
+        params.kernel_size = ui->in_smooth_median_0_kernel_size->value();
+        break;
+    default:
+        break;
+    }
+//    TODO
+}
+
+void MainWindow::on_detect_edge_button_clicked()
+{
+    EdgeDetectParams params;
+    params.threshold_1 = ui->in_edge_0_thresh_1->value();
+    params.threshold_2 = ui->in_edge_0_thresh_2->value();
+//    TODO
+}
+
+void MainWindow::on_start_thresholding_button_clicked()
+{
+    ThresholdingParams params;
+    params.thresh_value = ui->in_thresh_0_value->value();
+    params.max_value = ui->in_thresh_1_max_value->value();
+    params.thresh_type = ui->in_thresh_2_type->currentIndex();
+//    TODO
+}

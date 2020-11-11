@@ -33,7 +33,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_fusion">
        <attribute name="title">
@@ -187,6 +187,19 @@
            <string>Start Fusion</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -356,6 +369,19 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -565,21 +591,316 @@
           </layout>
          </widget>
         </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QGroupBox" name="groupBox_9">
+          <property name="title">
+           <string>Smoothing</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QToolBox" name="smoothing_toolBox">
+             <property name="currentIndex">
+              <number>2</number>
+             </property>
+             <widget class="QWidget" name="page">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>208</width>
+                <height>76</height>
+               </rect>
+              </property>
+              <attribute name="label">
+               <string>Gaussian</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_12">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_25">
+                 <property name="text">
+                  <string>kernel_size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="in_smooth_gaussian_0_kernel_size">
+                 <property name="prefix">
+                  <string/>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>9999</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>2</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_29">
+                 <property name="text">
+                  <string>standard_deviation</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QDoubleSpinBox" name="in_smooth_gaussian_1_sigma_x"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>157</width>
+                <height>45</height>
+               </rect>
+              </property>
+              <attribute name="label">
+               <string>Mean</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_8">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_19">
+                 <property name="text">
+                  <string>kernel_size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="in_smooth_mean_0_kernel_size">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>9999</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>2</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_3">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>298</width>
+                <height>72</height>
+               </rect>
+              </property>
+              <attribute name="label">
+               <string>Median</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_11">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_30">
+                 <property name="text">
+                  <string>kernel_size</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="in_smooth_median_0_kernel_size">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>9999</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>2</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="start_smoothing_button">
+             <property name="text">
+              <string>start smoothing</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_10">
+          <property name="title">
+           <string>Edge detector</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="in_edge_0_thresh_2"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="in_edge_0_thresh_1"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_32">
+             <property name="text">
+              <string>threshold_2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_31">
+             <property name="text">
+              <string>threshold_1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QPushButton" name="detect_edge_button">
+             <property name="text">
+              <string>detect edge</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_11">
+          <property name="title">
+           <string>Thresholding</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_35">
+             <property name="text">
+              <string>thresh_type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_34">
+             <property name="text">
+              <string>max_value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="in_thresh_2_type">
+             <item>
+              <property name="text">
+               <string>THRESH_BINARY</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>THRESH_BINARY_INV</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>THRESH_TRUNC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>THRESH_TOZERO</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>THRESH_OTSU</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>THRESH_TRIANGLE</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>thresh_value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QPushButton" name="start_thresholding_button">
+             <property name="text">
+              <string>start thresholding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="in_thresh_0_value">
+             <property name="maximum">
+              <double>255.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="in_thresh_1_max_value">
+             <property name="maximum">
+              <double>255.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QVTKWidget" name="view2" native="true"/>
+     <widget class="QVTKWidget" name="view2"/>
     </item>
     <item row="1" column="0">
-     <widget class="QVTKWidget" name="view3" native="true"/>
+     <widget class="QVTKWidget" name="view3"/>
     </item>
     <item row="1" column="1">
-     <widget class="QVTKWidget" name="view4" native="true"/>
+     <widget class="QVTKWidget" name="view4"/>
     </item>
     <item row="0" column="0">
-     <widget class="QVTKWidget" name="view1" native="true"/>
+     <widget class="QVTKWidget" name="view1"/>
     </item>
    </layout>
   </widget>
@@ -589,7 +910,7 @@
      <x>0</x>
      <y>0</y>
      <width>989</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTool">
@@ -627,7 +948,7 @@
   <customwidget>
    <class>QVTKWidget</class>
    <extends>QWidget</extends>
-   <header location="global">QVTKWidget.h</header>
+   <header>QVTKWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

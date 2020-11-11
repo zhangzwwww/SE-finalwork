@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        general_processing/general_processing.cpp \
         login/loginchecker.cpp \
         login/loginform.cpp \
         commu/communhttp.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
         mainwindow.cpp \
 
 HEADERS += \
+        general_processing/general_processing.h \
         login/loginchecker.h \
         login/loginform.h \
         commu/communhttp.h \
@@ -75,7 +77,14 @@ LIBS += -L/usr/local/lib \
 -lvtkdoubleconversion-8.2 -lvtkexodusII-8.2 -lvtkexpat-8.2 -lvtkfreetype-8.2 -lvtkgl2ps-8.2 -lvtkglew-8.2 -lvtkhdf5-8.2 -lvtkhdf5_hl-8.2 \
 -lvtkjpeg-8.2 -lvtkjsoncpp-8.2 -lvtklibharu-8.2 -lvtklibxml2-8.2 -lvtklz4-8.2 -lvtklzma-8.2 -lvtkmetaio-8.2 -lvtkogg-8.2 -lvtkpng-8.2 \
 -lvtkproj-8.2 -lvtkpugixml-8.2 -lvtksqlite-8.2 -lvtksys-8.2 -lvtktheora-8.2 -lvtktiff-8.2 -lvtkverdict-8.2 -lvtkzlib-8.2 \
+<<<<<<< HEAD
 # -framework OpenGL -framework glut \
+=======
+#-lopencv_dnn -lopencv_ml -lopencv_objdetect -lopencv_shape \
+#-lopencv_stitching -lopencv_superres -lopencv_videostab \
+#-lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio \
+#-lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_imgproc -lopencv_flann -lopencv_core
+>>>>>>> 02b5c528f8dd67c94f071462810aeaa968b70ae0
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
