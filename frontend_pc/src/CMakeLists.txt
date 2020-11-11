@@ -36,11 +36,9 @@ include_directories(
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/app
   ${PROJECT_SOURCE_DIR}/app/registration
-  ${PROJECT_SOURCE_DIR}/app/segmentation
-  ${PROJECT_SOURCE_DIR}/app/visualization
-  ${PROJECT_SOURCE_DIR}/app/processing
   ${PROJECT_SOURCE_DIR}/app/commu
   ${PROJECT_SOURCE_DIR}/app/login
+  ${PROJECT_SOURCE_DIR}/app/general_processing
   ${CMAKE_CURRENT_BINARY_DIR})
 
 # SRC
@@ -49,10 +47,11 @@ file(GLOB
      PROJECT_SRCS
      ${PROJECT_SOURCE_DIR}/app
      ${PROJECT_SOURCE_DIR}/app/*.cpp
-     ${PROJECT_SOURCE_DIR}/app/*.cxx
      ${PROJECT_SOURCE_DIR}/app/*.h
      ${PROJECT_SOURCE_DIR}/app/login/*.cpp
      ${PROJECT_SOURCE_DIR}/app/login/*.h
+     ${PROJECT_SOURCE_DIR}/app/general_processing/*.cpp
+     ${PROJECT_SOURCE_DIR}/app/general_processing/*.h
 )
 
 # QRC
