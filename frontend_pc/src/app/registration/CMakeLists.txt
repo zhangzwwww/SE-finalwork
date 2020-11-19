@@ -10,7 +10,7 @@ file(GLOB MODULE_SRCS1 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
            
 
 foreach(source IN LISTS MODULE_SRCS1)
-    source_group("\\IGT" FILES "${source}")
+    source_group("\\Registration" FILES "${source}")
 endforeach()
 
 

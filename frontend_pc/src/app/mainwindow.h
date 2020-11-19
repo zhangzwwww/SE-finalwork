@@ -1,9 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "struct_define.h"
+
 #include <QMainWindow>
 
-#include "vtkSmartPointer.h"
+#include <vtkSmartPointer.h>
+#include <itkImage.h>
 
 class vtkImageViewer2;
 class vtkImageData;
@@ -28,6 +31,8 @@ private slots:
     void on_loadImage_clicked();
     void on_Volume_clicked();
 
+    void image_threshold(vtkImageData* input_image, vtkImageData* output_image, ThresholdingParams params);
+
     void on_pushButton_4_clicked();
 
     void on_in_fusion_2_opacity_valueChanged(int value);
@@ -48,8 +53,12 @@ private slots:
 
 private:
     vtkSmartPointer<vtkImageViewer2> riw_[3];
-    vtkSmartPointer<vtkImageData> image_;
-    int dims[3];
+
+
+    itk::Image<float, 3>::Pointer image_itk_;
+    vtkSmartPointer<vtkImageData> image_vtk_;
+
+    int dims_[3];
 
 private:
     Ui::MainWindow *ui;

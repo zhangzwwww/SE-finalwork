@@ -73,9 +73,8 @@ struct EdgeDetectParams {
 };
 
 struct ThresholdingParams {
-    double thresh_value;
-    double max_value;
-    int thresh_type;
+    double lower_value;
+    double upper_value;
 };
 
 #endif // STRUCT_DEFINE_H

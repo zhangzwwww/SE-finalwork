@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+// QT
 #include <QFileDialog>
+#include <QMessageBox>
 
 // VTK
 #include "vtkAutoInit.h"
@@ -59,13 +61,24 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include "vtkPointHandleRepresentation3D.h"
 #include "vtkPointHandleRepresentation2D.h"
 
+#include <vtkImageThreshold.h>
+
 
 #include "struct_define.h"
+
+#include "RegistrationWorker.h"
+
+
+// ITK
+#include <itkImage.h>
+#include <itkImageToVTKImageFilter.h> 
+#include <itkVTKImageToImageFilter.h> 
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-	image_(nullptr)
+	image_itk_(nullptr)
 {
     ui->setupUi(this);
     init_VTKView();
@@ -73,8 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(on_loadImage_clicked()));
 	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(on_Volume_clicked()));
 
-	
-	//    TODO: make sure the number of spinbox/lineedit is legal
+//    TODO: make sure the number of spinbox/lineedit is legal
 //    AlgorithmParams
 //    FusionParams
 //    RegistrationParams
@@ -91,17 +103,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::init_VTKView()
 {
-
 	for (int i = 0; i < 3; i++)
 	{
 		riw_[i] = vtkSmartPointer< vtkImageViewer2 >::New();
 		//riw[i]->SetLookupTable(riw[0]->GetLookupTable());
-		//Ä¿Ç°ï¿½ï¿½ï¿½Þ·ï¿½Êµï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½ï¿½ï¿½Î»
 	}
 
-	//viewerï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½renderwindowï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½interactorï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ui->QVTKWidgetï¿½Ô´ï¿½ï¿½ï¿½interactorï¿½ï¿½Öµï¿½ï¿½viewer
-	//ï¿½ï¿½Ê¼ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½ï¿½ÎªÃ¿ï¿½ï¿½riwï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Ò²Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½view1->show()ï¿½ï¿½ï¿½ï¿½ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ô¶ï¿½showï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
-	//this->ui->view1->SetRenderWindow(riw_[0]->GetRenderWindow());
 	riw_[0]->SetRenderWindow(this->ui->view1->GetRenderWindow());
 	riw_[0]->SetupInteractor(
 		this->ui->view1->GetRenderWindow()->GetInteractor());
@@ -116,50 +123,57 @@ void MainWindow::init_VTKView()
 
 	//this->ui->view1->setVisible(true);
 
-
 	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
 	ren->SetBackground(1, 1, 1);
 	ren->SetBackground2(0.5, 0.5, 0.5);
 	ren->SetGradientBackground(1);
 
 	this->ui->view4->GetRenderWindow()->AddRenderer(ren);
-
-
 
 }
 
 void MainWindow::on_loadImage_clicked()
 {
-	//QString path = "D:/";
 	QString fileName = QFileDialog::getExistingDirectory(this, QString(tr("Open DICOM Image")));
-	//QString fileName = QFileDialog::getOpenFileName(this, QString(tr("Open DICOM Image")), path);
 
 	if (fileName.isEmpty() == true)
 		return;
 
-	image_ = NULL;
-
 	QByteArray ba = fileName.toLocal8Bit();
 	const char* fileName_str = ba.data();
 
-	vtkSmartPointer< vtkDICOMImageReader > reader =
-		vtkSmartPointer< vtkDICOMImageReader >::New();
-	reader->SetDirectoryName(fileName_str);
-	reader->Update();
-	image_ = reader->GetOutput();
+	RegistrationWorker worker;
+	image_itk_ = worker.readImageDICOM(fileName_str);
 
-	//ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½rendererï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½renderer
-	//this->cleanReconstruction();
+	if (image_itk_ == nullptr)
+	{
+		QMessageBox::warning(nullptr,
+			tr("Read Image Error"),
+			tr("Read Image Error."),
+			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 
-	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
-	ren->SetBackground(1, 1, 1);
-	ren->SetBackground2(0.5, 0.5, 0.5);
-	ren->SetGradientBackground(1);
-	this->ui->view4->GetRenderWindow()->AddRenderer(ren);
+		return;
+	}
 
-	reader->GetOutput()->GetDimensions(this->dims);
+	using FilterType = itk::ImageToVTKImageFilter<itk::Image<float, 3>>;
+	FilterType::Pointer filter = FilterType::New();
+	filter->SetInput(image_itk_);
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Í¼
+	try
+	{
+		filter->Update();
+	}
+	catch (itk::ExceptionObject & error)
+	{
+		QMessageBox::warning(nullptr,
+			tr("Read Image Error"),
+			tr("Read Image Error"),
+			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+
+	}
+
+	image_vtk_ = filter->GetOutput();
+
 	this->showImage();
 	//dataReady = true;
 }
@@ -173,7 +187,7 @@ void MainWindow::showImage()
 	//	vtkSmartPointer<vtkFourViewerCallback>::New();
 
 	double range[2];
-	image_->GetScalarRange(range);
+	image_vtk_->GetScalarRange(range);
 
 	//riw[0]->SetSliceOrientationToXY();
 	//riw[1]->SetSliceOrientationToYZ();
@@ -181,11 +195,11 @@ void MainWindow::showImage()
 
 	for (int i = 0; i < 3; i++)
 	{
-		riw_[i]->SetSlice(this->dims[i] / 2);
+		riw_[i]->SetSlice(this->dims_[i] / 2);
 
 		//riw[i]->GetRenderer()->SetActiveCamera(camera);
 
-		riw_[i]->SetInputData(image_);
+		riw_[i]->SetInputData(image_vtk_);
 		riw_[i]->SetSliceOrientation(i);
 
 		//ui->label_dimesion->setText(dimsChar);
@@ -193,16 +207,10 @@ void MainWindow::showImage()
 		riw_[i]->SetColorWindow(range[1] - range[0]);
 		riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
 
-		//cbk->view[i] = riw_[i];
-		//riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::WindowLevelEvent, cbk);
-		//ï¿½ï¿½ï¿½ï¿½ï¿½Â¾ï¿½Îªï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
-		//riw[i]->GetWindowLevel()->SetLookupTable(riw[0]->GetWindowLevel()->GetLookupTable());
-
 		riw_[i]->Render();
-		//Ä¬ï¿½Ï´ï¿½ï¿½ï¿½
-		//riw[i]->GetRenderer()->EraseOn();
-		riw_[i]->GetRenderer()->ResetCamera();   //ï¿½ï¿½Ä¬ï¿½Ïµï¿½render
-		//riw[i]->UpdateDisplayExtent();
+
+		riw_[i]->GetRenderer()->ResetCamera();
+
 	}
 
 	cout << "range:" << range[0] << "---" << range[1] << endl;
@@ -216,7 +224,7 @@ void MainWindow::on_Volume_clicked()
 {
 	vtkSmartPointer<vtkFixedPointVolumeRayCastMapper> volumeMapper =
 		vtkSmartPointer<vtkFixedPointVolumeRayCastMapper>::New();
-	volumeMapper->SetInputData(image_);
+	volumeMapper->SetInputData(image_vtk_);
 
 	//ÉèÖÃ¹âÏß²ÉÑù¾àÀë
 	volumeMapper->SetSampleDistance(volumeMapper->GetSampleDistance() / 4);
@@ -273,7 +281,29 @@ void MainWindow::on_Volume_clicked()
 	ren->ResetCamera();
 	this->ui->view4->GetRenderWindow()->Render();
 
+
+
 }
+
+void MainWindow::image_threshold(vtkImageData* input_image, 
+	vtkImageData* output_image, ThresholdingParams params)
+{
+	vtkSmartPointer<vtkImageThreshold> thresholdFilter = vtkSmartPointer<vtkImageThreshold>::New();
+	
+	thresholdFilter->SetInputData(input_image);
+	thresholdFilter->ThresholdBetween(params.lower_value, params.upper_value);
+	
+	//thresholdFilter->ReplaceInOn();//ãÐÖµÄÚµÄÏñËØÖµÌæ»»
+	thresholdFilter->ReplaceOutOn();//ãÐÖµÍâµÄÏñËØÖµÌæ»»
+
+	thresholdFilter->SetInValue(1);//ãÐÖµÄÚÏñËØÖµÈ«²¿Ìæ»»³É1
+	thresholdFilter->SetOutValue(0);//ãÐÖµÍâÏñËØÖµÈ«²¿Ìæ»»³É0
+
+	thresholdFilter->Update();
+
+	output_image = thresholdFilter->GetOutput();
+}
+
 
 
 void MainWindow::on_pushButton_4_clicked()
@@ -363,9 +393,25 @@ void MainWindow::on_detect_edge_button_clicked()
 
 void MainWindow::on_start_thresholding_button_clicked()
 {
-    ThresholdingParams params;
-    params.thresh_value = ui->in_thresh_0_value->value();
-    params.max_value = ui->in_thresh_1_max_value->value();
-    params.thresh_type = ui->in_thresh_2_type->currentIndex();
-//    TODO
+	ThresholdingParams params;
+	params.lower_value = this->ui->in_lower_value->value();
+	params.upper_value = this->ui->in_upper_value->value();
+
+	vtkSmartPointer<vtkImageData> image_threshold_result;
+
+	image_threshold(image_vtk_, image_threshold_result, params);
+
+	for (int i = 0; i < 3; i++)
+	{
+		riw_[i]->SetSlice(this->dims_[i] / 2);
+		riw_[i]->SetInputData(image_threshold_result);
+		riw_[i]->SetSliceOrientation(i);
+
+		riw_[i]->Render();
+
+		riw_[i]->GetRenderer()->ResetCamera();
+
+	}
+
+
 }

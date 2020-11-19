@@ -627,8 +627,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>208</width>
-                <height>76</height>
+                <width>243</width>
+                <height>77</height>
                </rect>
               </property>
               <attribute name="label">
@@ -675,8 +675,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>157</width>
-                <height>45</height>
+                <width>179</width>
+                <height>46</height>
                </rect>
               </property>
               <attribute name="label">
@@ -710,8 +710,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>298</width>
-                <height>72</height>
+                <width>334</width>
+                <height>85</height>
                </rect>
               </property>
               <attribute name="label">
@@ -794,79 +794,44 @@
            <string>Thresholding</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_14">
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_35">
-             <property name="text">
-              <string>thresh_type</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_34">
-             <property name="text">
-              <string>max_value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="in_thresh_2_type">
-             <item>
-              <property name="text">
-               <string>THRESH_BINARY</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>THRESH_BINARY_INV</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>THRESH_TRUNC</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>THRESH_TOZERO</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>THRESH_OTSU</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>THRESH_TRIANGLE</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_33">
-             <property name="text">
-              <string>thresh_value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2">
+           <item row="2" column="0" colspan="2">
             <widget class="QPushButton" name="start_thresholding_button">
              <property name="text">
               <string>start thresholding</string>
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="in_upper_value">
+             <property name="minimum">
+              <double>-2000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>4000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>100.000000000000000</double>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="in_thresh_0_value">
+            <widget class="QDoubleSpinBox" name="in_lower_value">
              <property name="maximum">
               <double>255.000000000000000</double>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="in_thresh_1_max_value">
-             <property name="maximum">
-              <double>255.000000000000000</double>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_34">
+             <property name="text">
+              <string>upper_value</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>lower_value</string>
              </property>
             </widget>
            </item>
@@ -891,16 +856,16 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QVTKWidget" name="view2"/>
+     <widget class="QVTKWidget" name="view2" native="true"/>
     </item>
     <item row="1" column="0">
-     <widget class="QVTKWidget" name="view3"/>
+     <widget class="QVTKWidget" name="view3" native="true"/>
     </item>
     <item row="1" column="1">
-     <widget class="QVTKWidget" name="view4"/>
+     <widget class="QVTKWidget" name="view4" native="true"/>
     </item>
     <item row="0" column="0">
-     <widget class="QVTKWidget" name="view1"/>
+     <widget class="QVTKWidget" name="view1" native="true"/>
     </item>
    </layout>
   </widget>
@@ -910,7 +875,7 @@
      <x>0</x>
      <y>0</y>
      <width>989</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTool">
