@@ -78,13 +78,26 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-	image_itk_(nullptr)
+	image_itk_(nullptr), image_vtk_(nullptr)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
+
     init_VTKView();
 
-    connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(on_loadImage_clicked()));
-	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(on_Volume_clicked()));
+    connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(load_image()));
+	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(volume_rendering()));
+
+	connect(ui->zoomBtn1, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
+	connect(ui->zoomBtn2, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
+	connect(ui->zoomBtn3, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
+	
+	connect(ui->fullScreenBtn1, SIGNAL(clicked(bool)), this, SLOT(view1_full_screen(bool)));
+	connect(ui->fullScreenBtn2, SIGNAL(clicked(bool)), this, SLOT(view2_full_screen(bool)));
+	connect(ui->fullScreenBtn3, SIGNAL(clicked(bool)), this, SLOT(view3_full_screen(bool)));
+	connect(ui->fullScreenBtn4, SIGNAL(clicked(bool)), this, SLOT(view4_full_screen(bool)));
+
+
+
 
 //    TODO: make sure the number of spinbox/lineedit is legal
 //    AlgorithmParams
@@ -99,10 +112,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+	
 }
 
 void MainWindow::init_VTKView()
 {
+
 	for (int i = 0; i < 3; i++)
 	{
 		riw_[i] = vtkSmartPointer< vtkImageViewer2 >::New();
@@ -110,29 +125,30 @@ void MainWindow::init_VTKView()
 	}
 
 	riw_[0]->SetRenderWindow(this->ui->view1->GetRenderWindow());
+	riw_[1]->SetRenderWindow(this->ui->view2->GetRenderWindow());
+	riw_[2]->SetRenderWindow(this->ui->view3->GetRenderWindow());
+
 	riw_[0]->SetupInteractor(
 		this->ui->view1->GetRenderWindow()->GetInteractor());
-
-	riw_[1]->SetRenderWindow(this->ui->view2->GetRenderWindow());
 	riw_[1]->SetupInteractor(
 		this->ui->view2->GetRenderWindow()->GetInteractor());
-
-	riw_[2]->SetRenderWindow(this->ui->view3->GetRenderWindow());
 	riw_[2]->SetupInteractor(
 		this->ui->view3->GetRenderWindow()->GetInteractor());
 
-	//this->ui->view1->setVisible(true);
+	renderer3D_ = vtkSmartPointer<vtkRenderer>::New();
+	renderer3D_->SetBackground(1, 1, 1);
+	renderer3D_->SetBackground2(0.5, 0.5, 0.5);
+	renderer3D_->SetGradientBackground(1);
 
-	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
-	ren->SetBackground(1, 1, 1);
-	ren->SetBackground2(0.5, 0.5, 0.5);
-	ren->SetGradientBackground(1);
+	this->ui->view4->GetRenderWindow()->AddRenderer(renderer3D_);
 
-	this->ui->view4->GetRenderWindow()->AddRenderer(ren);
+	//this->ui->view1->show();
+	//this->ui->view2->show();
+	//this->ui->view3->show();
 
 }
 
-void MainWindow::on_loadImage_clicked()
+void MainWindow::load_image()
 {
 	QString fileName = QFileDialog::getExistingDirectory(this, QString(tr("Open DICOM Image")));
 
@@ -149,7 +165,7 @@ void MainWindow::on_loadImage_clicked()
 	{
 		QMessageBox::warning(nullptr,
 			tr("Read Image Error"),
-			tr("Read Image Error."),
+			tr("Read image error, Please read the correct Image."),
 			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 
 		return;
@@ -167,10 +183,13 @@ void MainWindow::on_loadImage_clicked()
 	{
 		QMessageBox::warning(nullptr,
 			tr("Read Image Error"),
-			tr("Read Image Error"),
+			tr("Read image error, Please read the correct Image."),
 			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 
 	}
+
+	// clean the current volume
+	this->clean_reconstruction();
 
 	image_vtk_ = filter->GetOutput();
 
@@ -181,61 +200,60 @@ void MainWindow::on_loadImage_clicked()
 
 void MainWindow::showImage()
 {
-	//ui锟斤拷锟斤拷锟斤拷interactor,RenderWindow没锟斤拷interactor
 	//vtkSmartPointer< vtkCamera > camera = vtkSmartPointer< vtkCamera >::New();
 	//vtkSmartPointer<vtkFourViewerCallback> cbk =
 	//	vtkSmartPointer<vtkFourViewerCallback>::New();
 
 	double range[2];
+	int dims[3];
 	image_vtk_->GetScalarRange(range);
-
-	//riw[0]->SetSliceOrientationToXY();
-	//riw[1]->SetSliceOrientationToYZ();
-	//riw[2]->SetSliceOrientationToXZ();
+	image_vtk_->GetDimensions(dims);
 
 	for (int i = 0; i < 3; i++)
 	{
-		riw_[i]->SetSlice(this->dims_[i] / 2);
-
-		//riw[i]->GetRenderer()->SetActiveCamera(camera);
-
 		riw_[i]->SetInputData(image_vtk_);
 		riw_[i]->SetSliceOrientation(i);
-
-		//ui->label_dimesion->setText(dimsChar);
+		riw_[i]->SetSlice(dims[i] / 2);
 
 		riw_[i]->SetColorWindow(range[1] - range[0]);
 		riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
 
-		riw_[i]->Render();
-
-		riw_[i]->GetRenderer()->ResetCamera();
-
 	}
 
-	cout << "range:" << range[0] << "---" << range[1] << endl;
+	//riw_[i]->Render();
+	//riw_[i]->GetRenderer()->ResetCamera();
 
-	//this->ui->view1->show();
-	//this->ui->view2->show();
-	//this->ui->view3->show();
 }
 
-void MainWindow::on_Volume_clicked() 
+void MainWindow::volume_rendering() 
 {
+	if (image_vtk_ == nullptr)
+	{
+		QMessageBox::warning(nullptr,
+			tr("Error"),
+			tr("Please read the image first."),
+			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+		
+		return;
+	}
+
+	if (volume_ == nullptr)
+	{
+		volume_ = vtkSmartPointer<vtkVolume>::New();
+	}
+
 	vtkSmartPointer<vtkFixedPointVolumeRayCastMapper> volumeMapper =
 		vtkSmartPointer<vtkFixedPointVolumeRayCastMapper>::New();
 	volumeMapper->SetInputData(image_vtk_);
 
-	//设置光线采样距离
 	volumeMapper->SetSampleDistance(volumeMapper->GetSampleDistance() / 4);
-	//设置图像采样步长
 	volumeMapper->SetAutoAdjustSampleDistances(0);
 	volumeMapper->SetImageSampleDistance(2);
 
 	vtkSmartPointer<vtkVolumeProperty> volumeProperty =
 		vtkSmartPointer<vtkVolumeProperty>::New();
 	volumeProperty->SetInterpolationTypeToLinear();
-	volumeProperty->ShadeOn();  //打开或者关闭阴影测试
+	volumeProperty->ShadeOn();
 	volumeProperty->SetAmbient(.1);
 	volumeProperty->SetDiffuse(.9);
 	volumeProperty->SetSpecular(.2);
@@ -256,33 +274,113 @@ void MainWindow::on_Volume_clicked()
 	colorFun->AddRGBPoint(641, .90, .82, .56, .5, 0.0);
 	colorFun->AddRGBPoint(3071, 1, 1, 1, .5, 0.0);
 
-	volumeProperty->SetScalarOpacity(compositeOpacity); //设置不透明度传输函数
+	volumeProperty->SetScalarOpacity(compositeOpacity); 
 	volumeProperty->SetColor(colorFun);
 
+	
+	volume_->SetMapper(volumeMapper);
+	volume_->SetProperty(volumeProperty);
 
-
-	vtkSmartPointer<vtkVolume> volume =
-		vtkSmartPointer<vtkVolume>::New();
-	volume->SetMapper(volumeMapper);
-	volume->SetProperty(volumeProperty);
-
-	////这样每次的actor都不会被清除，会叠在一起
-	//vtkSmartPointer<vtkRenderer> ren = 
-	//     this->ui->view4->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
-	//ren->AddVolume(volume);
-
-
-	vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
-	ren->SetBackground(1, 1, 1);
-	ren->SetBackground2(0.5, 0.5, 0.5);
-	ren->SetGradientBackground(1);
-	ren->AddVolume(volume);
-	this->ui->view4->GetRenderWindow()->AddRenderer(ren);
-	ren->ResetCamera();
+	renderer3D_->AddVolume(volume_);
+	renderer3D_->ResetCamera();
 	this->ui->view4->GetRenderWindow()->Render();
+}
+
+
+void MainWindow::clean_reconstruction()
+{
+	if (volume_ != nullptr)
+	{
+		renderer3D_->RemoveVolume(volume_);
+	}
+
+}
+
+void MainWindow::zoom_to_fit()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		riw_[i]->GetRenderer()->ResetCamera();
+		riw_[i]->Render();
+	}
+
+}
+
+void MainWindow::view1_full_screen(bool full_status)
+{
+	if (full_status)
+	{
+		this->ui->view1Widget->show();
+
+		this->ui->view2Widget->hide();
+		this->ui->view3Widget->hide();
+		this->ui->view4Widget->hide();
+	}
+	else {
+		this->ui->view1Widget->show();
+		this->ui->view2Widget->show();
+		this->ui->view3Widget->show();
+		this->ui->view4Widget->show();
+	}
+}
+
+
+void MainWindow::view2_full_screen(bool full_status)
+{
+	if (full_status)
+	{
+		this->ui->view2Widget->show();
+
+		this->ui->view1Widget->hide();
+		this->ui->view3Widget->hide();
+		this->ui->view4Widget->hide();
+	}
+	else {
+		this->ui->view1Widget->show();
+		this->ui->view2Widget->show();
+		this->ui->view3Widget->show();
+		this->ui->view4Widget->show();
+	}
+}
 
 
 
+void MainWindow::view3_full_screen(bool full_status)
+{
+	if (full_status)
+	{
+		this->ui->view3Widget->show();
+
+		this->ui->view2Widget->hide();
+		this->ui->view1Widget->hide();
+		this->ui->view4Widget->hide();
+	}
+	else {
+		this->ui->view1Widget->show();
+		this->ui->view2Widget->show();
+		this->ui->view3Widget->show();
+		this->ui->view4Widget->show();
+	}
+}
+
+
+
+void MainWindow::view4_full_screen(bool full_status)
+{
+	if (full_status)
+	{
+		this->ui->view4Widget->show();
+
+		this->ui->view2Widget->hide();
+		this->ui->view3Widget->hide();
+		this->ui->view1Widget->hide();
+	}
+	else {
+		this->ui->view1Widget->show();
+		this->ui->view2Widget->show();
+		this->ui->view3Widget->show();
+		this->ui->view4Widget->show();
+	}
 }
 
 void MainWindow::image_threshold(vtkImageData* input_image, 
@@ -310,15 +408,15 @@ void MainWindow::on_pushButton_4_clicked()
 {
     // TODO: start fusion
     FusionParams fusion_params;
-    fusion_params.img0 = ui->in_fusion_0_img0->currentText().toStdString();
-    fusion_params.img1 = ui->in_fusion_1_img1->currentText().toStdString();
-    fusion_params.opacity = double(ui->in_fusion_2_opacity->value())/100.0;
-    fusion_params.fused_img_name = ui->in_fusion_3_fused_img_name->text().toStdString();
+    //fusion_params.img0 = ui->in_fusion_0_img0->currentText().toStdString();
+   // fusion_params.img1 = ui->in_fusion_1_img1->currentText().toStdString();
+    //fusion_params.opacity = double(ui->in_fusion_2_opacity->value())/100.0;
+    //fusion_params.fused_img_name = ui->in_fusion_3_fused_img_name->text().toStdString();
 }
 
 void MainWindow::on_in_fusion_2_opacity_valueChanged(int value)
 {
-    ui->out_fusion_0_opacity->setText(QString::number(double(value)/100.0));
+    //ui->out_fusion_0_opacity->setText(QString::number(double(value)/100.0));
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -329,7 +427,7 @@ void MainWindow::on_pushButton_5_clicked()
             tr("open a file."),
             "D:/",
             tr("All files(*.*)"));
-    ui->in_registration_0_fixed_img_name->setText(fileName);
+    //ui->in_registration_0_fixed_img_name->setText(fileName);
 }
 
 void MainWindow::on_pushButton_6_clicked()
@@ -340,17 +438,17 @@ void MainWindow::on_pushButton_6_clicked()
             tr("open a file."),
             "D:/",
             tr("All files(*.*)"));
-    ui->in_registration_1_moving_img_name->setText(fileName);
+    //ui->in_registration_1_moving_img_name->setText(fileName);
 }
 
 void MainWindow::on_pushButton_7_clicked()
 {
 //    TODO: Registration
     RegistrationParams registration_params;
-    registration_params.fixed_img_name = ui->in_registration_0_fixed_img_name->text().toStdString();
+   /* registration_params.fixed_img_name = ui->in_registration_0_fixed_img_name->text().toStdString();
     registration_params.moving_img_name = ui->in_registration_1_moving_img_name->text().toStdString();
     registration_params.registration_type = RegistrationType(ui->in_registration_4_regi_type->currentIndex());
-    registration_params.metrics_type = MetricsType(ui->in_registration_5_metrics_type->currentIndex());
+    registration_params.metrics_type = MetricsType(ui->in_registration_5_metrics_type->currentIndex());*/
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -401,17 +499,17 @@ void MainWindow::on_start_thresholding_button_clicked()
 
 	image_threshold(image_vtk_, image_threshold_result, params);
 
-	for (int i = 0; i < 3; i++)
-	{
-		riw_[i]->SetSlice(this->dims_[i] / 2);
-		riw_[i]->SetInputData(image_threshold_result);
-		riw_[i]->SetSliceOrientation(i);
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	riw_[i]->SetSlice(this->dims[i] / 2);
+	//	riw_[i]->SetInputData(image_threshold_result);
+	//	riw_[i]->SetSliceOrientation(i);
 
-		riw_[i]->Render();
+	//	riw_[i]->Render();
 
-		riw_[i]->GetRenderer()->ResetCamera();
+	//	riw_[i]->GetRenderer()->ResetCamera();
 
-	}
+	//}
 
 
 }

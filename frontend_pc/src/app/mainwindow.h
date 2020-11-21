@@ -9,7 +9,9 @@
 #include <itkImage.h>
 
 class vtkImageViewer2;
+class vtkRenderer;
 class vtkImageData;
+class vtkVolume;
 
 namespace Ui {
 class MainWindow;
@@ -26,10 +28,17 @@ public:
 private:
     void init_VTKView();
     void showImage();
+    void clean_reconstruction();
+
 
 private slots:
-    void on_loadImage_clicked();
-    void on_Volume_clicked();
+    void load_image();
+    void volume_rendering();
+    void zoom_to_fit();
+    void view1_full_screen(bool full_status);
+    void view2_full_screen(bool full_status);
+    void view3_full_screen(bool full_status);
+    void view4_full_screen(bool full_status);
 
     void image_threshold(vtkImageData* input_image, vtkImageData* output_image, ThresholdingParams params);
 
@@ -53,12 +62,13 @@ private slots:
 
 private:
     vtkSmartPointer<vtkImageViewer2> riw_[3];
-
+    vtkSmartPointer<vtkRenderer> renderer3D_;
 
     itk::Image<float, 3>::Pointer image_itk_;
     vtkSmartPointer<vtkImageData> image_vtk_;
+    vtkSmartPointer<vtkVolume> volume_;
 
-    int dims_[3];
+    //int dims_[3];
 
 private:
     Ui::MainWindow *ui;

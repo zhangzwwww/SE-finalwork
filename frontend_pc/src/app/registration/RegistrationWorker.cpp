@@ -164,13 +164,13 @@ itk::Image<float, 3>::Pointer RegistrationWorker::readImageDICOM(const char* DIC
 
 	try
 	{
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 		// UID ( Unique Identifiers ) 唯一标志值，每个病人拥有唯一的标志值
 		using SeriesIdContainer = std::vector< std::string >;
 		const SeriesIdContainer& fixedSeriesUID = fixedNameGenerator->GetSeriesUIDs();
 
-		std::cout << "Contains the following DICOM Series: ";
+		//std::cout << "Contains the following DICOM Series: ";
 		auto seriesItr = fixedSeriesUID.begin();
 		auto seriesEnd = fixedSeriesUID.end();
 
@@ -188,7 +188,7 @@ itk::Image<float, 3>::Pointer RegistrationWorker::readImageDICOM(const char* DIC
 
 		while (seriesItr != seriesEnd)
 		{
-			std::cout << seriesItr->c_str() << std::endl << std::endl << std::endl;
+			//std::cout << seriesItr->c_str() << std::endl << std::endl << std::endl;
 			++seriesItr;
 		}
 
@@ -210,7 +210,11 @@ itk::Image<float, 3>::Pointer RegistrationWorker::readImageDICOM(const char* DIC
 		}
 		catch (itk::ExceptionObject& ex)
 		{
-			std::cout << ex << std::endl;
+			QMessageBox::warning(nullptr,
+				tr("Error"),
+				tr(ex.GetDescription()),
+				QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+
 		}
 
 		return fixedImageReader->GetOutput();
@@ -218,7 +222,10 @@ itk::Image<float, 3>::Pointer RegistrationWorker::readImageDICOM(const char* DIC
 	}
 	catch (itk::ExceptionObject& ex)
 	{
-		std::cout << ex << std::endl;
+		QMessageBox::warning(nullptr,
+			tr("Error"),
+			tr(ex.GetDescription()),
+			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 	}
 
 }
