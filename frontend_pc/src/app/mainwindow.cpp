@@ -82,6 +82,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	//const char* path = ":/qssfile/dark_theme";;
+	//QFile qssfile(path);
+	//qssfile.open(QFile::ReadOnly);
+	//QString qss;
+	//qss = qssfile.readAll();
+	//this->setStyleSheet(qss);
+
+
     init_VTKView();
 
     connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(load_image()));
@@ -220,9 +228,7 @@ void MainWindow::showImage()
 
 	}
 
-	//riw_[i]->Render();
-	//riw_[i]->GetRenderer()->ResetCamera();
-
+	this->zoom_to_fit();
 }
 
 void MainWindow::volume_rendering() 

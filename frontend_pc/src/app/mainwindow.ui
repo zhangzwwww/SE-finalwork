@@ -14,7 +14,12 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QGroupBox {
+   <string notr="true">
+*{font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+}
+
+
+QGroupBox {
 	border-width: 1px; 
 	border-style: solid; 
 	border-color: grey;
@@ -38,6 +43,8 @@ QScrollArea{
 QToolButton{
 	border: 0;
 }
+
+
 
 [mandatoryField=true]{
 	background-color: rgb(255, 150, 150);
@@ -84,13 +91,54 @@ QToolButton{
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="view1" native="true">
+        <widget class="QFrame" name="frame1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-width: 4px;
+border-radius: 5px;
+border-color: rgb(255, 0, 0);
+border-style: solid; 
+
+
+
+
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_16">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QVTKWidget" name="view1" native="true">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -275,7 +323,7 @@ QToolButton{
                      <item>
                       <widget class="QLabel" name="label_fixedname">
                        <property name="text">
-                        <string>Fixed image name  </string>
+                        <string>Fixed image name    </string>
                        </property>
                       </widget>
                      </item>
@@ -1342,8 +1390,8 @@ QToolButton{
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>177</width>
-                <height>44</height>
+                <width>376</width>
+                <height>85</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1512,13 +1560,46 @@ QToolButton{
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="view3" native="true">
+        <widget class="QFrame" name="frame3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-width: 4px;
+border-radius: 5px;
+border-color: rgb(0, 132, 255);
+border-style: solid; 
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QVTKWidget" name="view3" native="true"/>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -1628,13 +1709,46 @@ QToolButton{
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="view4" native="true">
+        <widget class="QFrame" name="frame">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-width: 4px;
+border-radius: 5px;
+border-color: rgb(255, 255, 0);
+border-style: solid; 
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QVTKWidget" name="view4" native="true"/>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -1718,13 +1832,45 @@ QToolButton{
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="view2" native="true">
+        <widget class="QFrame" name="frame2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-width: 4px;
+border-radius: 5px;
+border-color: rgb(0, 194, 12);
+border-style: solid; </string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QVTKWidget" name="view2" native="true"/>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -1855,7 +2001,7 @@ QToolButton{
   <customwidget>
    <class>QVTKWidget</class>
    <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
+   <header location="global">QVTKWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

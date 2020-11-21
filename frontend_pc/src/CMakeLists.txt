@@ -55,7 +55,7 @@ file(GLOB
 )
 
 # QRC
-# set(PROJECT_QRCS src/.qrc)
+#set(PROJECT_QRCS app/mainwindow.qrc)
 
 # UI
 set(PROJECT_UIS app/mainwindow.ui  app/login/loginform.ui)
