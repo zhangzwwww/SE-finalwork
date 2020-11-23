@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "login/loginform.h"
+#include "commu/patient.h"
 
 #include <QApplication>
 #include <QFile>
