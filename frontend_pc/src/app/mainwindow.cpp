@@ -4,6 +4,8 @@
 // QT
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QObject>
+
 
 // VTK
 #include "vtkAutoInit.h"
@@ -61,11 +63,11 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include "vtkPointHandleRepresentation3D.h"
 #include "vtkPointHandleRepresentation2D.h"
 
+//
 #include <vtkImageThreshold.h>
 
 
 #include "struct_define.h"
-
 #include "RegistrationWorker.h"
 
 
@@ -73,6 +75,10 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include <itkImage.h>
 #include <itkImageToVTKImageFilter.h> 
 #include <itkVTKImageToImageFilter.h> 
+
+#include <vtkImageSliceMapper.h>
+#include <vtkImageSlice.h>
+#include <vtkImageStack.h>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -82,6 +88,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	this->ui->view1->hide();
+	this->ui->view2->hide();
+	this->ui->view3->hide();
+
 	//const char* path = ":/qssfile/dark_theme";;
 	//QFile qssfile(path);
 	//qssfile.open(QFile::ReadOnly);
@@ -89,20 +99,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	//qss = qssfile.readAll();
 	//this->setStyleSheet(qss);
 
-
     init_VTKView();
 
     connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(load_image()));
 	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(volume_rendering()));
 
-	connect(ui->zoomBtn1, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
-	connect(ui->zoomBtn2, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
-	connect(ui->zoomBtn3, SIGNAL(clicked()), this, SLOT(zoom_to_fit()));
-	
-	connect(ui->fullScreenBtn1, SIGNAL(clicked(bool)), this, SLOT(view1_full_screen(bool)));
-	connect(ui->fullScreenBtn2, SIGNAL(clicked(bool)), this, SLOT(view2_full_screen(bool)));
-	connect(ui->fullScreenBtn3, SIGNAL(clicked(bool)), this, SLOT(view3_full_screen(bool)));
-	connect(ui->fullScreenBtn4, SIGNAL(clicked(bool)), this, SLOT(view4_full_screen(bool)));
+	connect(ui->zoomBtn1, SIGNAL(clicked()), this, SLOT(view_zoom_to_fit()));
+	connect(ui->zoomBtn2, SIGNAL(clicked()), this, SLOT(view_zoom_to_fit()));
+	connect(ui->zoomBtn3, SIGNAL(clicked()), this, SLOT(view_zoom_to_fit()));
+	connect(ui->fullScreenBtn1, SIGNAL(clicked(bool)), this, SLOT(view_full_screen(bool)));
+	connect(ui->fullScreenBtn2, SIGNAL(clicked(bool)), this, SLOT(view_full_screen(bool)));
+	connect(ui->fullScreenBtn3, SIGNAL(clicked(bool)), this, SLOT(view_full_screen(bool)));
+	connect(ui->fullScreenBtn4, SIGNAL(clicked(bool)), this, SLOT(view_full_screen(bool)));
+	connect(ui->ScrollBar1, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
+	connect(ui->ScrollBar2, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
+	connect(ui->ScrollBar3, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
 
 
 
@@ -143,6 +154,25 @@ void MainWindow::init_VTKView()
 	riw_[2]->SetupInteractor(
 		this->ui->view3->GetRenderWindow()->GetInteractor());
 
+	// Image Stack
+	//for (int crntViewLabel = 0; crntViewLabel < 3; crntViewLabel++)
+	//{
+	//	// vtkImageStack
+	//	m_ImageStack2D[crntViewLabel] = vtkSmartPointer<vtkImageStack>::New();
+	//	// vtkRenderer
+	//	m_Renderer2D[crntViewLabel] = vtkSmartPointer<vtkRenderer>::New();
+	//	m_Renderer2D[crntViewLabel]->AddViewProp(m_ImageStack2D[crntViewLabel]);
+	//	m_Renderer2D[crntViewLabel]->GetActiveCamera()->ParallelProjectionOn(); // 平行投影
+	//	
+	//}
+
+	//this->ui->view1->GetRenderWindow()->AddRenderer(m_Renderer2D[0]);
+	//this->ui->view2->GetRenderWindow()->AddRenderer(m_Renderer2D[1]);
+	//this->ui->view3->GetRenderWindow()->AddRenderer(m_Renderer2D[2]);
+
+
+
+
 	renderer3D_ = vtkSmartPointer<vtkRenderer>::New();
 	renderer3D_->SetBackground(1, 1, 1);
 	renderer3D_->SetBackground2(0.5, 0.5, 0.5);
@@ -150,9 +180,10 @@ void MainWindow::init_VTKView()
 
 	this->ui->view4->GetRenderWindow()->AddRenderer(renderer3D_);
 
-	//this->ui->view1->show();
-	//this->ui->view2->show();
-	//this->ui->view3->show();
+
+	this->ui->view1->show();
+	this->ui->view2->show();
+	this->ui->view3->show();
 
 }
 
@@ -202,7 +233,6 @@ void MainWindow::load_image()
 	image_vtk_ = filter->GetOutput();
 
 	this->showImage();
-	//dataReady = true;
 }
 
 
@@ -217,6 +247,18 @@ void MainWindow::showImage()
 	image_vtk_->GetScalarRange(range);
 	image_vtk_->GetDimensions(dims);
 
+
+	//vtkSmartPointer<vtkImageSliceMapper> imageSliceMapper = 
+	//	vtkSmartPointer<vtkImageSliceMapper>::New();
+	//imageSliceMapper->SetInputData(image_vtk_);
+	//vtkSmartPointer<vtkImageSlice> imageSlice = vtkSmartPointer<vtkImageSlice>::New();
+	//imageSlice->SetMapper(imageSliceMapper);
+	//for (int crntViewLabel = 0; crntViewLabel < 3; crntViewLabel++)
+	//{
+	//	m_ImageStack2D[crntViewLabel]->AddImage(imageSlice);
+	//}
+
+
 	for (int i = 0; i < 3; i++)
 	{
 		riw_[i]->SetInputData(image_vtk_);
@@ -225,10 +267,18 @@ void MainWindow::showImage()
 
 		riw_[i]->SetColorWindow(range[1] - range[0]);
 		riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
-
 	}
 
-	this->zoom_to_fit();
+	this->view_zoom_to_fit();
+
+
+	this->ui->ScrollBar1->setMaximum(dims[0]);
+	this->ui->ScrollBar2->setMaximum(dims[1]);
+	this->ui->ScrollBar3->setMaximum(dims[2]);
+	this->ui->ScrollBar1->setSliderPosition(dims[0] / 2 - 1);
+	this->ui->ScrollBar2->setSliderPosition(dims[1] / 2 - 1);
+	this->ui->ScrollBar3->setSliderPosition(dims[2] / 2 - 1);
+
 }
 
 void MainWindow::volume_rendering() 
@@ -302,7 +352,7 @@ void MainWindow::clean_reconstruction()
 
 }
 
-void MainWindow::zoom_to_fit()
+void MainWindow::view_zoom_to_fit()
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -312,80 +362,114 @@ void MainWindow::zoom_to_fit()
 
 }
 
-void MainWindow::view1_full_screen(bool full_status)
+void MainWindow::view_full_screen(bool full_status)
 {
-	if (full_status)
-	{
-		this->ui->view1Widget->show();
+	QObject* obj = sender();
 
-		this->ui->view2Widget->hide();
-		this->ui->view3Widget->hide();
-		this->ui->view4Widget->hide();
+	if (obj == this->ui->fullScreenBtn1)
+	{
+		if (full_status)
+		{
+			this->ui->view1Widget->show();
+
+			this->ui->view2Widget->hide();
+			this->ui->view3Widget->hide();
+			this->ui->view4Widget->hide();
+		}
+		else {
+			this->ui->view1Widget->show();
+			this->ui->view2Widget->show();
+			this->ui->view3Widget->show();
+			this->ui->view4Widget->show();
+		}
 	}
-	else {
-		this->ui->view1Widget->show();
-		this->ui->view2Widget->show();
-		this->ui->view3Widget->show();
-		this->ui->view4Widget->show();
+	if (obj == this->ui->fullScreenBtn2)
+	{
+		if (full_status)
+		{
+			this->ui->view2Widget->show();
+
+			this->ui->view1Widget->hide();
+			this->ui->view3Widget->hide();
+			this->ui->view4Widget->hide();
+		}
+		else {
+			this->ui->view1Widget->show();
+			this->ui->view2Widget->show();
+			this->ui->view3Widget->show();
+			this->ui->view4Widget->show();
+		}
 	}
+	if (obj == this->ui->fullScreenBtn3)
+	{
+		if (full_status)
+		{
+			this->ui->view3Widget->show();
+
+			this->ui->view2Widget->hide();
+			this->ui->view1Widget->hide();
+			this->ui->view4Widget->hide();
+		}
+		else {
+			this->ui->view1Widget->show();
+			this->ui->view2Widget->show();
+			this->ui->view3Widget->show();
+			this->ui->view4Widget->show();
+		}
+	}
+	if (obj == this->ui->fullScreenBtn4)
+	{
+		if (full_status)
+		{
+			this->ui->view4Widget->show();
+
+			this->ui->view2Widget->hide();
+			this->ui->view3Widget->hide();
+			this->ui->view1Widget->hide();
+		}
+		else {
+			this->ui->view1Widget->show();
+			this->ui->view2Widget->show();
+			this->ui->view3Widget->show();
+			this->ui->view4Widget->show();
+		}
+	}
+
 }
 
 
-void MainWindow::view2_full_screen(bool full_status)
+void MainWindow::view_change_slice()
 {
-	if (full_status)
+	QObject* obj = sender();
+	if (obj == this->ui->ScrollBar1)
 	{
-		this->ui->view2Widget->show();
+		QScrollBar* tempScroll = qobject_cast<QScrollBar*>(obj);
+		riw_[0]->SetSlice(tempScroll->value());
+		riw_[0]->Render();
 
-		this->ui->view1Widget->hide();
-		this->ui->view3Widget->hide();
-		this->ui->view4Widget->hide();
+		//this->ui->label_slicenum1->
+		//	setText(QString::number(tempScroll->value() + 1) + "  of  " + QString::number(dims[2]));
+
 	}
-	else {
-		this->ui->view1Widget->show();
-		this->ui->view2Widget->show();
-		this->ui->view3Widget->show();
-		this->ui->view4Widget->show();
-	}
-}
-
-
-
-void MainWindow::view3_full_screen(bool full_status)
-{
-	if (full_status)
+	if (obj == this->ui->ScrollBar2)
 	{
-		this->ui->view3Widget->show();
+		QScrollBar* tempScroll = qobject_cast<QScrollBar*>(obj);
+		riw_[1]->SetSlice(tempScroll->value());
+		riw_[0]->Render();
 
-		this->ui->view2Widget->hide();
-		this->ui->view1Widget->hide();
-		this->ui->view4Widget->hide();
+		//this->ui->label_slicenum2->
+		//	setText(QString::number(tempScroll->value() + 1) + "  of  " + QString::number(dims[1]));
+	
 	}
-	else {
-		this->ui->view1Widget->show();
-		this->ui->view2Widget->show();
-		this->ui->view3Widget->show();
-		this->ui->view4Widget->show();
-	}
-}
-
-
-
-void MainWindow::view4_full_screen(bool full_status)
-{
-	if (full_status)
+	if (obj == this->ui->ScrollBar3)
 	{
-		this->ui->view4Widget->show();
+		QScrollBar* tempScroll = qobject_cast<QScrollBar*>(obj);
+		riw_[2]->SetSlice(tempScroll->value());
+		riw_[0]->Render();
 
-		this->ui->view2Widget->hide();
-		this->ui->view3Widget->hide();
-		this->ui->view1Widget->hide();
-	}
-	else {
-		this->ui->view1Widget->show();
-		this->ui->view2Widget->show();
-		this->ui->view3Widget->show();
-		this->ui->view4Widget->show();
+		//this->ui->label_slicenum3->
+		//	setText(QString::number(tempScroll->value() + 1) + "  of  " + QString::number(dims[0]));
+	
 	}
 }
 

@@ -18,6 +18,36 @@
 *{font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
 }
 
+QWidget
+{
+background-color: rgb(45, 45, 48);
+}
+
+
+/* 工具栏 */
+#mainToolBar
+ {
+	color: #F0F0F0;
+    border-left: 1px solid #16181c;
+    border-top: 1px solid #16181c;
+    border-bottom: 1px solid #16181c;
+    background-color:rgb(33, 37, 43);
+}
+
+
+/* 状态栏 */
+#statusBar {
+	color: #F0F0F0;
+    background-color:rgb(24, 26, 31);
+    border-right: 1px solid #16181c;
+    border-left: 1px solid #16181c;
+    border-bottom: 1px solid #16181c;
+}
+
+QMenuBar {
+    background-color: #21252B;
+    color: #9DA5B4;
+}
 
 QGroupBox {
 	border-width: 1px; 
@@ -26,22 +56,15 @@ QGroupBox {
 	border-radius: 5px;
 	margin-top: 1ex;
 	margin-bottom: 2.5ex;
+	color: #F0F0F0;
+	background-color: rgb(37, 37, 38);
+
 }
 
 QGroupBox::title {
 	subcontrol-origin: margin;
 	subcontrol-position: top center;
 	padding: 0px 10px;
-}
-
-QScrollArea{
-	border: 0;
-	margin:0;
-	padding:0;
-}
-
-QToolButton{
-	border: 0;
 }
 
 
@@ -56,6 +79,740 @@ QToolButton{
 
 [errorField=true]{
 	background-color: rgb(255, 150, 150);
+}
+
+/* Button */
+QPushButton {
+    background-color: #21252B;
+    border: 1px solid #32414B;
+    color: #F0F0F0;
+    border-radius: 4px;
+    padding: 3px;
+    outline: none;
+}
+
+QPushButton:disabled {
+    background-color: #21252B;
+    border: 1px solid #32414B;
+    color: #787878;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+QPushButton:checked {
+    background-color: #32414B;
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    padding: 3px;
+    outline: none;
+}
+
+QPushButton:checked:disabled {
+    background-color: #19232D;
+    border: 1px solid #32414B;
+    color: #787878;
+    border-radius: 4px;
+    padding: 3px;
+    outline: none;
+}
+
+QPushButton::menu-indicator {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    bottom: 4px;
+}
+
+QPushButton:pressed {
+    background-color: #19232D;
+    border: 1px solid #19232D;
+}
+
+QPushButton:hover,
+QPushButton:checked:hover{
+    border: 1px solid #148CD2;
+    color: #F0F0F0;
+}
+
+QPushButton:selected,
+QPushButton:checked:selected{
+    background: #1464A0;
+    color: #32414B;
+}
+
+/* ScrollBar */
+QScrollBar:horizontal {
+    height: 16px;
+    margin: 2px 16px 2px 16px;
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    background-color: #19232D;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #787878;
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    min-width: 8px;
+
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #148CD2;
+    border: 1px solid #148CD2;
+    border-radius: 4px;
+    min-width: 8px;
+}
+
+QScrollBar::add-line:horizontal {
+    margin: 0px 0px 0px 0px;
+    border-image: url(:/Icon/right_arrow_disabled);
+    width: 10px;
+    height: 10px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    margin: 0px 3px 0px 3px;
+    border-image: url(:/Icon/left_arrow_disabled);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::add-line:horizontal:on {
+    border-image: url(:/Icon/right_arrow);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:on {
+    border-image: url(:/Icon/left_arrow);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:horizontal,
+QScrollBar::down-arrow:horizontal {
+    background: none;
+}
+
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+QScrollBar:vertical {
+    background-color: #19232D;
+    width: 16px;
+    margin: 16px 2px 16px 2px;
+    border: 1px solid #32414B;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #787878;
+    border: 1px solid #32414B;
+    min-height: 8px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #148CD2;
+    border: 1px solid #148CD2;
+    border-radius: 4px;
+    min-height: 8px;
+
+}
+
+QScrollBar::sub-line:vertical {
+    margin: 3px 0px 3px 0px;
+    border-image: url(:/Icon/up_arrow_disabled);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical {
+    margin: 3px 0px 3px 0px;
+    border-image: url(:/Icon/down_arrow_disabled);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical:hover,
+QScrollBar::sub-line:vertical:on {
+    border-image: url(:/Icon/up_arrow);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover,
+QScrollBar::add-line:vertical:on {
+    border-image: url(:/Icon/down_arrow);
+    height: 10px;
+    width: 10px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:vertical,
+QScrollBar::down-arrow:vertical {
+    background: none;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+
+/* 工具条 */
+QToolBar {
+    background-color:rgb(33, 37, 43);
+    padding: 2px;
+    font-weight: bold;
+}
+
+QToolBar QToolButton{
+    background-color:rgb(33, 37, 43);
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+}
+
+QToolBar QToolButton:checked{
+    background-color: #282C34;
+    border: 0px solid #32414B;
+    border-radius: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    outline: none;
+}
+
+QToolBar QToolButton:hover{
+    background-color: #282C34;
+    border: 0px solid #32414B;
+    border-radius: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    outline: none;
+}
+
+
+/* 输入框 */
+QAbstractSpinBox {
+    background-color: #282C34;
+    border: 1px solid #32414B;
+    color: #F0F0F0;
+    padding-top: 2px;     /* This fix  103, 111*/
+    padding-bottom: 2px;  /* This fix  103, 111*/
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 4px;
+    /* min-width: 5px; removed to fix 109 */
+}
+
+QAbstractSpinBox:up-button {
+    background-color: transparent #282C34;
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    border-left: 1px solid #32414B;
+    margin: 1px;
+}
+
+QAbstractSpinBox::up-arrow,
+QAbstractSpinBox::up-arrow:disabled,
+QAbstractSpinBox::up-arrow:off {
+    image: url(:/Icon/up_arrow_disabled);
+    width: 9px;
+    height: 9px;
+}
+
+QAbstractSpinBox::up-arrow:hover {
+    image: url(:/Icon/up_arrow);
+}
+
+QAbstractSpinBox:down-button {
+    background-color: transparent #282C34;
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    border-left: 1px solid #32414B;
+    margin: 1px;
+}
+
+QAbstractSpinBox::down-arrow,
+QAbstractSpinBox::down-arrow:disabled,
+QAbstractSpinBox::down-arrow:off {
+    image: url(:/Icon/down_arrow_disabled);
+    width: 9px;
+    height: 9px;
+}
+
+QAbstractSpinBox::down-arrow:hover {
+    image: url(:/Icon/down_arrow);
+}
+
+QAbstractSpinBox:hover{
+    border: 1px solid #148CD2;
+    color: #F0F0F0;
+}
+
+QAbstractSpinBox:selected {
+    background: #1464A0;
+    color: #32414B;
+}
+
+
+/* 标签 */
+QLabel {
+    border: 0px solid #32414B;
+    margin: 0px;
+    color: #F0F0F0;
+}
+
+QLabel::disabled {
+    border: 0px solid #32414B;
+    color: #787878;
+}
+
+
+/* 复选框 */
+QComboBox {
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    selection-background-color: #1464A0;
+    padding-top: 2px;     /* This fix  #103, #111*/
+    padding-bottom: 2px;  /* This fix  #103, #111*/
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: #21252B;
+    color: #9DA5B4;
+}
+
+QComboBox:disabled {
+    background-color: #19232D;
+    color: #787878;
+}
+
+QComboBox:hover{
+    border: 1px solid #148CD2;
+}
+
+QComboBox:on {
+    selection-background-color: #19232D;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #19232D;
+    border-radius: 4px;
+    border: 1px solid #32414B;
+    color: #9CA3B2;
+    selection-color: #9DA5B4;
+    selection-background-color: #32414B;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 0px;
+    border-left-color: #32414B;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/Icon/down_arrow_disabled);
+}
+
+QComboBox::down-arrow:on,
+QComboBox::down-arrow:hover,
+QComboBox::down-arrow:focus {
+    image: url(:/Icon/down_arrow);
+}
+
+
+/* Tab条 */
+QTabBar {
+    qproperty-drawBase: 0;
+    border-radius: 4px;
+    margin: 0px;
+    padding: 2px;
+    border: 0;
+
+    /* left: 5px; move to the right by 5px - removed for fix */
+    }
+
+QTabBar::close-button {
+    border: 0;
+    margin: 2px;
+    padding: 0;
+    image: url(:/Icon/close);
+}
+
+QTabBar::close-button:hover {
+    image: url(:/Icon/close-hover);
+}
+
+QTabBar::close-button:pressed {
+    image: url(:/Icon/close-pressed);
+}
+
+QTabBar::tab:top:selected:disabled {
+    border-bottom: 3px solid #14506E;
+    color: #787878;
+    background-color: #32414B;
+}
+
+QTabBar::tab:bottom:selected:disabled {
+    border-top: 3px solid #14506E;
+    color: #787878;
+    background-color: #32414B;
+}
+
+QTabBar::tab:left:selected:disabled {
+    border-left: 3px solid #14506E;
+    color: #787878;
+    background-color: #32414B;
+}
+
+QTabBar::tab:right:selected:disabled {
+    border-right: 3px solid #14506E;
+    color: #787878;
+    background-color: #32414B;
+}
+
+QTabBar::tab:top:!selected:disabled {
+    border-bottom: 3px solid #19232D;
+    color: #787878;
+    background-color: #19232D;
+}
+
+QTabBar::tab:bottom:!selected:disabled {
+    border-top: 3px solid #19232D;
+    color: #787878;
+    background-color: #19232D;
+}
+
+QTabBar::tab:left:!selected:disabled {
+    border-right: 3px solid #19232D;
+    color: #787878;
+    background-color: #19232D;
+}
+
+QTabBar::tab:right:!selected:disabled {
+    border-left: 3px solid #19232D;
+    color: #787878;
+    background-color: #19232D;
+}
+
+QTabBar::tab:top:!selected {
+    border-bottom: 2px solid #19232D;
+    margin-top: 2px;
+}
+
+QTabBar::tab:bottom:!selected {
+    border-top: 2px solid #19232D;
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:left:!selected {
+    border-left: 2px solid #19232D;
+    margin-right: 2px;
+}
+
+QTabBar::tab:right:!selected {
+    border-right: 2px solid #19232D;
+    margin-left: 2px;
+}
+
+QTabBar::tab:top {
+    background-color: #21252B;
+    color: #F0F0F0;
+    margin-left: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    min-width: 5px;
+    border-bottom: 3px solid #32414B;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+QTabBar::tab:top:selected {
+    background-color: #282C34;
+    color: #F0F0F0;
+    border-bottom: 1px solid #1464A0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+QTabBar::tab:top:!selected:hover {
+    border: 1px solid #148CD2;
+    border-bottom: 3px solid #148CD2;
+    padding: 0px;
+}
+
+QTabBar::tab:bottom {
+    color: #F0F0F0;
+    border-top: 3px solid #32414B;
+    background-color: #32414B;
+    margin-left: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    min-width: 5px;
+}
+
+QTabBar::tab:bottom:selected {
+    color: #F0F0F0;
+    background-color: #282C34;
+    border-top: 1px solid #1464A0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QTabBar::tab:bottom:!selected:hover {
+    border: 1px solid #148CD2;
+    border-top: 3px solid #148CD2;
+    padding: 0px;
+}
+
+QTabBar::tab:left {
+    color: #F0F0F0;
+    background-color: #32414B;
+    margin-top: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    min-height: 5px;
+}
+
+QTabBar::tab:left:selected {
+    color: #F0F0F0;
+    background-color: #282C34;
+    border-left: 1px solid #1464A0;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QTabBar::tab:left:!selected:hover {
+    border: 1px solid #148CD2;
+    border-left: 3px solid #148CD2;
+    padding: 0px;
+}
+
+QTabBar::tab:right {
+    color: #F0F0F0;
+    background-color: #32414B;
+    margin-top: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    min-height: 5px;
+}
+
+QTabBar::tab:right:selected {
+    color: #F0F0F0;
+    background-color: #505F69;
+    border-right: 1px solid #1464A0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+QTabBar::tab:right:!selected:hover {
+    border: 1px solid #148CD2;
+    border-right: 3px solid #148CD2;
+    padding: 0px;
+}
+
+QTabBar QToolButton::right-arrow:enabled {
+    image: url(:/Icon/right_arrow);
+}
+
+QTabBar QToolButton::left-arrow:enabled {
+    image: url(:/Icon/left_arrow);
+}
+
+QTabBar QToolButton::right-arrow:disabled {
+    image: url(:/Icon/right_arrow_disabled);
+}
+
+QTabBar QToolButton::left-arrow:disabled {
+    image: url(:/Icon/left_arrow_disabled);
+}
+
+
+/* 滑动条 */
+QSlider:disabled {
+    background: #19232D;
+}
+
+QSlider:focus {
+    border: none;
+}
+
+QSlider::groove:horizontal {
+    background: #21252B;
+    border: 0px solid #32414B;
+    height: 4px;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal {
+    background: #1464A0;
+    border: 0px solid #32414B;
+    height: 4px;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal:disabled {
+    background: #14506E;
+}
+
+QSlider::handle:horizontal {
+    background: #787878;
+    border: 0px solid #32414B;
+    width: 8px;
+    height: 8px;
+    margin: -8px 0;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #148CD2;
+    border: 0px solid #148CD2;
+}
+
+QSlider::groove:vertical {
+    background: #21252B;
+    border: 1px solid #32414B;
+    width: 4px;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:vertical {
+    background: #1464A0;
+    border: 0px solid #32414B;
+    width: 4px;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:vertical:disabled {
+    background: #14506E;
+}
+
+QSlider::handle:vertical {
+    background: #787878;
+    border: 0px solid #32414B;
+    width: 8px;
+    height: 8px;
+    margin: 0 -8px;
+    border-radius: 4px;
+}
+
+QSlider::handle:vertical:hover {
+    background: #148CD2;
+    border: 0px solid #148CD2;
+}
+
+
+/* 文本编辑框 */
+QLineEdit {
+    background-color: #282C34;
+    padding-top: 2px;     /* This QLineEdit fix  103, 111 */
+    padding-bottom: 2px;  /* This QLineEdit fix  103, 111 */
+    padding-left: 4px;
+    padding-right: 4px;
+    border-style: solid;
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    color: #F0F0F0;
+}
+
+QLineEdit:disabled {
+    background-color: #282C34;
+    color: #787878;
+}
+
+QLineEdit:hover{
+    border: 1px solid #148CD2;
+    color: #F0F0F0;
+}
+
+QLineEdit:selected{
+    background: #1464A0;
+    color: #32414B;
+}
+
+
+/* 框 */
+QFrame {
+    border-radius: 4px;
+    border: 1px solid #32414B;
+}
+
+QFrame[frameShape=&quot;0&quot;] {
+    border-radius: 4px;
+    border: 1px transparent #32414B;
+}
+
+QFrame[height=&quot;3&quot;],
+QFrame[width=&quot;3&quot;] {
+    background-color: #19232D;
+}
+
+
+/* Tab组件 */
+QTabWidget {
+    padding: 2px;
+    selection-background-color: #32414B;
+}
+
+QTabWidget QFrame{
+    border: 0;
+}
+
+QTabWidget::pane {
+    border: 1px solid #32414B;
+    border-radius: 4px;
+    padding: 2px;
+    margin: 0px;
+}
+
+QTabWidget::pane:selected {
+    background-color: #32414B;
+    border: 1px solid #1464A0;
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -103,7 +860,7 @@ QToolButton{
 border-radius: 5px;
 border-color: rgb(255, 0, 0);
 border-style: solid; 
-
+background-color: rgb(0, 0, 0);
 
 
 
@@ -196,8 +953,11 @@ border-style: solid;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
-             <string>zoom to fit</string>
+             <string> zoom to fit </string>
             </property>
            </widget>
           </item>
@@ -209,8 +969,17 @@ border-style: solid;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
-             <string>Full Screen</string>
+             <string> full screen </string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -223,20 +992,169 @@ border-style: solid;
       </layout>
      </widget>
     </item>
-    <item row="0" column="2" rowspan="4">
+    <item row="0" column="1">
+     <widget class="QWidget" name="view2Widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_13">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-width: 4px;
+border-radius: 5px;
+border-color: rgb(0, 194, 12);
+border-style: solid; 
+background-color: rgb(0, 0, 0);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QVTKWidget" name="view2" native="true"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="view2subWidget" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_19">
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>3</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QScrollBar" name="ScrollBar2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="zoomBtn2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string> zoom to fit </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="fullScreenBtn2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string> full screen </string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
       </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>500</width>
         <height>0</height>
        </size>
       </property>
@@ -282,8 +1200,8 @@ border-style: solid;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>379</width>
-                <height>870</height>
+                <width>456</width>
+                <height>963</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -297,7 +1215,7 @@ border-style: solid;
                    <number>0</number>
                   </property>
                   <property name="topMargin">
-                   <number>15</number>
+                   <number>20</number>
                   </property>
                   <property name="rightMargin">
                    <number>0</number>
@@ -425,6 +1343,15 @@ border-style: solid;
                   <string>Image Selection</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>20</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item>
                    <widget class="QWidget" name="widget" native="true">
                     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -574,19 +1501,6 @@ border-style: solid;
                 </widget>
                </item>
                <item>
-                <widget class="QProgressBar" name="progressBar">
-                 <property name="value">
-                  <number>0</number>
-                 </property>
-                 <property name="textVisible">
-                  <bool>true</bool>
-                 </property>
-                 <property name="invertedAppearance">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QGroupBox" name="groupBox_5">
                  <property name="title">
                   <string>Algorithm Parameters</string>
@@ -596,7 +1510,7 @@ border-style: solid;
                    <number>0</number>
                   </property>
                   <property name="topMargin">
-                   <number>15</number>
+                   <number>20</number>
                   </property>
                   <property name="rightMargin">
                    <number>0</number>
@@ -860,7 +1774,7 @@ border-style: solid;
                    <number>0</number>
                   </property>
                   <property name="topMargin">
-                   <number>11</number>
+                   <number>20</number>
                   </property>
                   <property name="rightMargin">
                    <number>0</number>
@@ -1069,7 +1983,7 @@ border-style: solid;
       </widget>
       <widget class="QWidget" name="tab_mesher">
        <attribute name="title">
-        <string>Processing</string>
+        <string>Mesher</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -1288,7 +2202,7 @@ border-style: solid;
       </widget>
       <widget class="QWidget" name="tab_processing">
        <attribute name="title">
-        <string>General</string>
+        <string>Processing</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
@@ -1297,18 +2211,28 @@ border-style: solid;
            <string>Smoothing</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>11</number>
+           </property>
            <item>
             <widget class="QToolBox" name="smoothing_toolBox">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(240, 240, 240);
+background-color: rgb(45, 45, 48);</string>
+             </property>
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>241</width>
-                <height>73</height>
+                <width>448</width>
+                <height>85</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1355,8 +2279,8 @@ border-style: solid;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>177</width>
-                <height>44</height>
+                <width>176</width>
+                <height>50</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1390,8 +2314,8 @@ border-style: solid;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>376</width>
-                <height>85</height>
+                <width>176</width>
+                <height>50</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1535,7 +2459,7 @@ border-style: solid;
       </widget>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="1" column="0">
      <widget class="QWidget" name="view3Widget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1572,6 +2496,7 @@ border-style: solid;
 border-radius: 5px;
 border-color: rgb(0, 132, 255);
 border-style: solid; 
+background-color: rgb(0, 0, 0);
 </string>
          </property>
          <property name="frameShape">
@@ -1658,7 +2583,7 @@ border-style: solid;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>zoom to fit</string>
+             <string> zoom to fit </string>
             </property>
            </widget>
           </item>
@@ -1671,7 +2596,7 @@ border-style: solid;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Full Screen</string>
+             <string> full screen </string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1684,7 +2609,7 @@ border-style: solid;
       </layout>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="QWidget" name="view4Widget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1794,155 +2719,7 @@ border-style: solid;
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Full Screen</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QWidget" name="view2Widget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_13">
-       <property name="spacing">
-        <number>1</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QFrame" name="frame2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">border-width: 4px;
-border-radius: 5px;
-border-color: rgb(0, 194, 12);
-border-style: solid; </string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_17">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QVTKWidget" name="view2" native="true"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="view2subWidget" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_19">
-          <property name="spacing">
-           <number>4</number>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>3</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QScrollBar" name="ScrollBar2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="zoomBtn2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>zoom to fit</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="fullScreenBtn2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Full Screen</string>
+             <string> full screen </string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1971,6 +2748,7 @@ border-style: solid; </string>
      <string>Tool</string>
     </property>
     <addaction name="actionLoadImage"/>
+    <addaction name="actionVolume_Rendering"/>
    </widget>
    <addaction name="menuTool"/>
   </widget>
@@ -1986,13 +2764,27 @@ border-style: solid; </string>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionLoadImage">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/icon/resources/icon/ToolBar_Open.png</normaloff>:/icon/resources/icon/ToolBar_Open.png</iconset>
+   </property>
    <property name="text">
-    <string>Load Image</string>
+    <string>Open File</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </action>
   <action name="actionVolume_Rendering">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/icon/resources/icon/ToolBar_ImageNavigator_dark.png</normaloff>:/icon/resources/icon/ToolBar_ImageNavigator_dark.png</iconset>
+   </property>
    <property name="text">
     <string>Volume Rendering</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </action>
  </widget>
@@ -2005,6 +2797,8 @@ border-style: solid; </string>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="mainwindow.qrc"/>
+ </resources>
  <connections/>
 </ui>

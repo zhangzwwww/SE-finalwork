@@ -12,6 +12,8 @@ class vtkImageViewer2;
 class vtkRenderer;
 class vtkImageData;
 class vtkVolume;
+class vtkImageStack;
+
 
 namespace Ui {
 class MainWindow;
@@ -34,11 +36,9 @@ private:
 private slots:
     void load_image();
     void volume_rendering();
-    void zoom_to_fit();
-    void view1_full_screen(bool full_status);
-    void view2_full_screen(bool full_status);
-    void view3_full_screen(bool full_status);
-    void view4_full_screen(bool full_status);
+    void view_zoom_to_fit();
+    void view_full_screen(bool full_status);
+    void view_change_slice();
 
     void image_threshold(vtkImageData* input_image, vtkImageData* output_image, ThresholdingParams params);
 
@@ -68,6 +68,8 @@ private:
     vtkSmartPointer<vtkImageData> image_vtk_;
     vtkSmartPointer<vtkVolume> volume_;
 
+    vtkSmartPointer<vtkRenderer> m_Renderer2D[3];
+    vtkSmartPointer<vtkImageStack> m_ImageStack2D[3];
     //int dims_[3];
 
 private:

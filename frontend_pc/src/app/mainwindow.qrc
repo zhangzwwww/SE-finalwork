@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>../resources/icon/ToolBar_ImageNavigator_dark.png</file>
+    <file>../resources/icon/ToolBar_Open.png</file>
+  </qresource>
+</RCC>

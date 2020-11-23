@@ -52,10 +52,11 @@ file(GLOB
      ${PROJECT_SOURCE_DIR}/app/login/*.h
      ${PROJECT_SOURCE_DIR}/app/general_processing/*.cpp
      ${PROJECT_SOURCE_DIR}/app/general_processing/*.h
+     ${PROJECT_SOURCE_DIR}/resources/myapp.rc
 )
 
 # QRC
-#set(PROJECT_QRCS app/mainwindow.qrc)
+set(PROJECT_QRCS app/mainwindow.qrc)
 
 # UI
 set(PROJECT_UIS app/mainwindow.ui  app/login/loginform.ui)
