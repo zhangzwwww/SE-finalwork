@@ -10,11 +10,9 @@ LoginChecker::~LoginChecker() {
 }
 
 ERROR_CODE LoginChecker::SignIn(QString id, QString pwd, communhttp *commu, userinfo *user) {
-//    TODO: check if id exists
     if (id.isEmpty()) {
-        return LOGIN_ID_NOT_FOUND;
+        return PARAM_INVALID;
     }
-//    TODO: check if pwd is correct
     if (pwd.isEmpty()) {
         return LOGIN_ERROR_PWD;
     }
@@ -27,8 +25,18 @@ ERROR_CODE LoginChecker::SignIn(QString id, QString pwd, communhttp *commu, user
     }
 }
 
-ERROR_CODE LoginChecker::SignUp() {
-    return OK;
+ERROR_CODE LoginChecker::SignUp(QString id, QString pwd, communhttp *commu, userinfo *user) {
+    if (id.isEmpty()){
+        return LOGIN_ID_NOT_FOUND;
+    }
+    if (pwd.isEmpty()){
+        return LOGIN_ERROR_PWD;
+    }
+    // try to register in the user
+    if (user->register_user_info(commu, id, pwd)){
+        return OK;
+    }
+    return PARAM_INVALID;
 }
 
 ERROR_CODE LoginChecker::RetrievePwd(QString id) {

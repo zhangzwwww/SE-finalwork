@@ -30,7 +30,7 @@ void LoginForm::on_sign_in_button_clicked()
     ERROR_CODE ret = login_checker.SignIn(id, pwd, this->commnicator, this->user);
     if (ret == OK) {
         accept();
-    } else if (ret == LOGIN_ID_NOT_FOUND) {
+    } else if (ret == PARAM_INVALID) {
         QMessageBox::warning(this, tr("w"), tr("Wrong ID or Password"), QMessageBox::Yes);
 
         ui->id_input->clear();
@@ -48,7 +48,35 @@ void LoginForm::on_sign_in_button_clicked()
 void LoginForm::on_sign_up_button_clicked()
 {
     qDebug("TODO: sign up");
-    login_checker.SignUp();
+    QString id = ui->id_input->text();
+    QString pwd = ui->pwd_input->text();
+    ERROR_CODE ret = login_checker.SignUp(id, pwd, this->commnicator, this->user);
+    if (ret == OK){
+        QMessageBox::information(this, tr("w"), tr("Registration Succeeds!"), QMessageBox::Yes);
+        ui->pwd_input->clear();
+        ui->pwd_input->setFocus();
+    }
+    else if (ret == LOGIN_ID_NOT_FOUND){
+        QMessageBox::warning(this, tr("w"), tr("ID cannot be empty!"), QMessageBox::Yes);
+        ui->pwd_input->clear();
+        ui->id_input->setFocus();
+    }
+    else if (ret == LOGIN_ERROR_PWD){
+        QMessageBox::warning(this, tr("w"), tr("Password cannot be empty!"), QMessageBox::Yes);
+        ui->pwd_input->setFocus();
+    }
+    else if (ret == PARAM_INVALID){
+        QMessageBox::warning(this, tr("w"), tr("ID already exists!"), QMessageBox::Yes);
+        ui->id_input->clear();
+        ui->pwd_input->clear();
+        ui->id_input->setFocus();
+    }
+    else {
+        QMessageBox::warning(this, tr("w"), tr("Registration ERROR!"), QMessageBox::Yes);
+        ui->id_input->clear();
+        ui->pwd_input->clear();
+        ui->id_input->setFocus();
+    }
 }
 
 void LoginForm::on_retrive_button_clicked()

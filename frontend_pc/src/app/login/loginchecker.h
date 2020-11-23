@@ -17,7 +17,7 @@ public:
     ~LoginChecker();
 
     ERROR_CODE SignIn(QString id, QString pwd, communhttp *commu, userinfo *user);
-    ERROR_CODE SignUp();
+    ERROR_CODE SignUp(QString id, QString pwd, communhttp *commu, userinfo *user);
     ERROR_CODE RetrievePwd(QString id);
 };
 
