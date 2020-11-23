@@ -4,6 +4,8 @@
 #include <QDialog>
 
 #include "loginchecker.h"
+#include "commu/communhttp.h"
+#include "commu/userinfo.h"
 
 namespace Ui {
 class LoginForm;
@@ -14,7 +16,11 @@ class LoginForm : public QDialog
     Q_OBJECT
 
 public:
-    explicit LoginForm(QWidget *parent = nullptr);
+    // objects needed for http communicator
+    communhttp *commnicator;
+    userinfo *user;
+
+    explicit LoginForm(communhttp *commu, userinfo *user_info, QWidget *parent = nullptr);
     ~LoginForm();
 
 private slots:

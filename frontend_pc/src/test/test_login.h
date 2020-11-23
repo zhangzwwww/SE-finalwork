@@ -4,6 +4,8 @@
 #include <QTest>
 
 #include "../app/login/loginchecker.h"
+#include "../app/commu/communhttp.h"
+#include "../app/commu/userinfo.h"
 
 class TestLogin : public QObject
 {

@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    LoginForm login_form;
+    LoginForm login_form(&w.communicator, &w.user);
 
 //    TODO: consider style after all functions have done
 //    QFile qss(":/login.qss");
