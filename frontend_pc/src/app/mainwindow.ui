@@ -31,21 +31,21 @@ background-color: rgb(45, 45, 48);
     border-left: 1px solid #16181c;
     border-top: 1px solid #16181c;
     border-bottom: 1px solid #16181c;
-    background-color:rgb(33, 37, 43);
+    background-color:rgb(45, 45, 48);
 }
 
 
 /* 状态栏 */
 #statusBar {
 	color: #F0F0F0;
-    background-color:rgb(24, 26, 31);
+    background-color:rgb(45, 45, 48);
     border-right: 1px solid #16181c;
     border-left: 1px solid #16181c;
     border-bottom: 1px solid #16181c;
 }
 
 QMenuBar {
-    background-color: #21252B;
+    background-color: rgb(45, 45, 48);
     color: #9DA5B4;
 }
 

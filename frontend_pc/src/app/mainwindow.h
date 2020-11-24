@@ -29,7 +29,7 @@ public:
 
 private:
     void init_VTKView();
-    void showImage();
+    void show_image();
     void clean_reconstruction();
 
 

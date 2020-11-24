@@ -81,12 +81,69 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include <vtkImageStack.h>
 
 
+
+class vtkSharedWindowLevelCallback : public vtkCommand
+{
+public:
+	static vtkSharedWindowLevelCallback* New()
+	{
+		return new vtkSharedWindowLevelCallback;
+	}
+
+	void Execute(vtkObject* caller, unsigned long ev, void* callData)
+	{
+		if (ev == vtkCommand::WindowLevelEvent)
+		{
+			vtkInteractorStyleImage* style =
+				dynamic_cast<vtkInteractorStyleImage*>(caller);
+
+			if (style)
+			{
+				if (style == this->view[0]->GetInteractorStyle())
+				{
+					view[1]->SetColorLevel(view[0]->GetColorLevel());
+					view[1]->SetColorWindow(view[0]->GetColorWindow());
+					view[2]->SetColorLevel(view[0]->GetColorLevel());
+					view[2]->SetColorWindow(view[0]->GetColorWindow());
+				}
+				else if (style == this->view[1]->GetInteractorStyle())
+				{
+					view[0]->SetColorLevel(view[1]->GetColorLevel());
+					view[0]->SetColorWindow(view[1]->GetColorWindow());
+					view[2]->SetColorLevel(view[1]->GetColorLevel());
+					view[2]->SetColorWindow(view[1]->GetColorWindow());
+				}
+				else if (style == this->view[2]->GetInteractorStyle())
+				{
+					view[0]->SetColorLevel(view[2]->GetColorLevel());
+					view[0]->SetColorWindow(view[2]->GetColorWindow());
+					view[1]->SetColorLevel(view[2]->GetColorLevel());
+					view[1]->SetColorWindow(view[2]->GetColorWindow());
+				}
+			}
+
+			for (int i = 0; i < 3; i++)
+			{
+				this->view[i]->Render();
+			}
+
+			return;
+		}
+	}
+
+	vtkSharedWindowLevelCallback() {}
+	vtkImageViewer2* view[3];
+};
+
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
 	image_itk_(nullptr), image_vtk_(nullptr)
 {
 	ui->setupUi(this);
+
 
 	this->ui->view1->hide();
 	this->ui->view2->hide();
@@ -185,6 +242,7 @@ void MainWindow::init_VTKView()
 	this->ui->view2->show();
 	this->ui->view3->show();
 
+
 }
 
 void MainWindow::load_image()
@@ -232,15 +290,14 @@ void MainWindow::load_image()
 
 	image_vtk_ = filter->GetOutput();
 
-	this->showImage();
+	this->show_image();
 }
 
 
-void MainWindow::showImage()
+void MainWindow::show_image()
 {
-	//vtkSmartPointer< vtkCamera > camera = vtkSmartPointer< vtkCamera >::New();
-	//vtkSmartPointer<vtkFourViewerCallback> cbk =
-	//	vtkSmartPointer<vtkFourViewerCallback>::New();
+	vtkSmartPointer< vtkSharedWindowLevelCallback > sharedWLcbk =
+		vtkSmartPointer< vtkSharedWindowLevelCallback >::New();
 
 	double range[2];
 	int dims[3];
@@ -267,6 +324,9 @@ void MainWindow::showImage()
 
 		riw_[i]->SetColorWindow(range[1] - range[0]);
 		riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
+
+		sharedWLcbk->view[i] = riw_[i];
+		riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::WindowLevelEvent, sharedWLcbk);
 	}
 
 	this->view_zoom_to_fit();
