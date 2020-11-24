@@ -144,25 +144,152 @@ bool patient::http_create_patient(communhttp *req, QString name, bool gender, QS
     // handle normal case
     if (status == 201){
         reply->deleteLater();
-        // do nothing
+        return true;
     }
-    return true;
+    // other error
+    reply->deleteLater();
+    return false;
 }
 
 // get a patient by id
 // return a patient object if success
 patient patient::http_getPatient_byId(communhttp *req, int id){
-    return patient();
+    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+    // construct the request
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+    request.setRawHeader("X-Auth-Token", token.toUtf8());
+    // send request
+    QNetworkReply* reply = req->http_get(request);
+    // handle the reply
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    if (status == 401){
+        // unauthorized
+        qDebug() << "token unauthorized";
+        reply->deleteLater();
+        return patient();
+    }
+    else if (status == 400){
+        // bad request
+        qDebug() << "Bad request";
+        reply->deleteLater();
+        return patient();
+    }
+    else if (status == 200){
+        // normal case
+        QByteArray resp = reply->readAll();
+        QJsonParseError jerror;
+        QJsonDocument json = QJsonDocument::fromJson(resp, &jerror);
+        if (jerror.error == QJsonParseError::NoError && json.isObject()){
+            int i = json.object()["id"].toInt();
+            patient result(
+                    json.object()["name"].toString(),
+                    json.object()["gender"].toBool(),
+                    json.object()["birth"].toString(),
+                    json.object()["age"].toInt(),
+                    i
+                    );
+            reply->deleteLater();
+            return result;
+        }
+        else {
+            qDebug() << "Response json format error";
+            reply->deleteLater();
+            return patient();
+        }
+    }
+    else {
+        qDebug() << "some error happens";
+        reply->deleteLater();
+        return patient();
+    }
 }
 
 // modify a patient by id
 // return true if success
 bool patient::http_modifyPatient_byId(communhttp *req, int id, QString name, bool gender, QString birth, int age){
-    return true;
+    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+    // construct the request
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    request.setRawHeader("X-Auth-Token", token.toUtf8());
+    // construct body data
+    QJsonObject json_content;
+    QJsonDocument json_doc;
+    json_content.insert("name", name);
+    json_content.insert("gender", gender);
+    json_content.insert("birth", birth);
+    json_content.insert("age", age);
+    json_content.insert("id", id);
+    json_doc.setObject(json_content);
+    QByteArray data = json_doc.toJson(QJsonDocument::Compact);
+
+    // send request
+    QNetworkReply* reply = req->http_put(request, data);
+    // Handle reply sent by server
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    if (status == 400){
+        qDebug() << "Bad request";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 401){
+        qDebug() << "Token unauthorized";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 405){
+        qDebug() << "Undocumented";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 204){
+        // handle normal case
+        reply->deleteLater();
+        return true;
+    }
+    // other error
+    reply->deleteLater();
+    return false;
 }
 
 // delete a patient by id
 // return true if success
 bool patient::http_deletePatient_byId(communhttp *req, int id){
-    return true;
+    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+    // construct the request
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+    request.setRawHeader("X-Auth-Token", token.toUtf8());
+
+    // send the request
+    QNetworkReply* reply = req->http_delete(request);
+    // Handle the reply given by the server
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
+    // Handle error cases
+    if (status == 405){
+        qDebug() << "Not allowed";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 401){
+        qDebug() << "Token unauthorized";
+        reply->deleteLater();
+        return false;
+    }
+    if (status == 400){
+        qDebug() << "Bad request";
+        reply->deleteLater();
+        return false;
+    }
+    // Handle normal case
+    if (status == 204){
+        // delete success
+        reply->deleteLater();
+        return true;
+    }
+    // other error
+    reply->deleteLater();
+    return false;
 }
