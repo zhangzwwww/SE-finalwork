@@ -144,22 +144,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-
 	this->ui->view1->hide();
 	this->ui->view2->hide();
 	this->ui->view3->hide();
 
-	//const char* path = ":/qssfile/dark_theme";;
-	//QFile qssfile(path);
-	//qssfile.open(QFile::ReadOnly);
-	//QString qss;
-	//qss = qssfile.readAll();
-	//this->setStyleSheet(qss);
+    this->init_views();
 
-    init_VTKView();
-
-    connect(ui->actionLoadImage, SIGNAL(triggered()), this, SLOT(load_image()));
-	connect(ui->actionVolume_Rendering, SIGNAL(triggered()), this, SLOT(volume_rendering()));
+    connect(ui->action_open_file, SIGNAL(triggered()), this, SLOT(load_image()));
+	connect(ui->action_visualization, SIGNAL(triggered()), this, SLOT(volume_rendering()));
 
 	connect(ui->zoomBtn1, SIGNAL(clicked()), this, SLOT(view_zoom_to_fit()));
 	connect(ui->zoomBtn2, SIGNAL(clicked()), this, SLOT(view_zoom_to_fit()));
@@ -173,8 +165,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->ScrollBar3, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
 
 
-
-
 //    TODO: make sure the number of spinbox/lineedit is legal
 //    AlgorithmParams
 //    FusionParams
@@ -183,6 +173,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //    MedianFilterParams
 //    GaussianParams
 //    PolygonSmoothingParams
+
+
 }
 
 MainWindow::~MainWindow()
@@ -191,13 +183,14 @@ MainWindow::~MainWindow()
 	
 }
 
-void MainWindow::init_VTKView()
+
+
+void MainWindow::init_views()
 {
 
 	for (int i = 0; i < 3; i++)
 	{
 		riw_[i] = vtkSmartPointer< vtkImageViewer2 >::New();
-		//riw[i]->SetLookupTable(riw[0]->GetLookupTable());
 	}
 
 	riw_[0]->SetRenderWindow(this->ui->view1->GetRenderWindow());
@@ -228,8 +221,6 @@ void MainWindow::init_VTKView()
 	//this->ui->view3->GetRenderWindow()->AddRenderer(m_Renderer2D[2]);
 
 
-
-
 	renderer3D_ = vtkSmartPointer<vtkRenderer>::New();
 	renderer3D_->SetBackground(1, 1, 1);
 	renderer3D_->SetBackground2(0.5, 0.5, 0.5);
@@ -237,11 +228,9 @@ void MainWindow::init_VTKView()
 
 	this->ui->view4->GetRenderWindow()->AddRenderer(renderer3D_);
 
-
 	this->ui->view1->show();
 	this->ui->view2->show();
 	this->ui->view3->show();
-
 
 }
 
@@ -280,16 +269,14 @@ void MainWindow::load_image()
 	{
 		QMessageBox::warning(nullptr,
 			tr("Read Image Error"),
-			tr("Read image error, Please read the correct Image."),
+			tr(error.GetDescription()),
 			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
-
 	}
-
-	// clean the current volume
-	this->clean_reconstruction();
 
 	image_vtk_ = filter->GetOutput();
 
+	// clean the current volume
+	this->clean_view4();
 	this->show_image();
 }
 
@@ -322,15 +309,12 @@ void MainWindow::show_image()
 		riw_[i]->SetSliceOrientation(i);
 		riw_[i]->SetSlice(dims[i] / 2);
 
-		riw_[i]->SetColorWindow(range[1] - range[0]);
+		riw_[i]->SetColorWindow((range[1] - range[0]));
 		riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
 
 		sharedWLcbk->view[i] = riw_[i];
 		riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::WindowLevelEvent, sharedWLcbk);
 	}
-
-	this->view_zoom_to_fit();
-
 
 	this->ui->ScrollBar1->setMaximum(dims[0]);
 	this->ui->ScrollBar2->setMaximum(dims[1]);
@@ -339,6 +323,7 @@ void MainWindow::show_image()
 	this->ui->ScrollBar2->setSliderPosition(dims[1] / 2 - 1);
 	this->ui->ScrollBar3->setSliderPosition(dims[2] / 2 - 1);
 
+	this->view_zoom_to_fit();
 }
 
 void MainWindow::volume_rendering() 
@@ -357,6 +342,8 @@ void MainWindow::volume_rendering()
 	{
 		volume_ = vtkSmartPointer<vtkVolume>::New();
 	}
+
+	ui->action_visualization->setEnabled(0);
 
 	vtkSmartPointer<vtkFixedPointVolumeRayCastMapper> volumeMapper =
 		vtkSmartPointer<vtkFixedPointVolumeRayCastMapper>::New();
@@ -400,10 +387,12 @@ void MainWindow::volume_rendering()
 	renderer3D_->AddVolume(volume_);
 	renderer3D_->ResetCamera();
 	this->ui->view4->GetRenderWindow()->Render();
+
+	ui->action_visualization->setEnabled(1);
 }
 
 
-void MainWindow::clean_reconstruction()
+void MainWindow::clean_view4()
 {
 	if (volume_ != nullptr)
 	{

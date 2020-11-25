@@ -28,10 +28,10 @@ public:
     ~MainWindow();
 
 private:
-    void init_VTKView();
+    void init_views();
     void show_image();
-    void clean_reconstruction();
-
+    void clean_view4();
+    
 
 private slots:
     void load_image();
