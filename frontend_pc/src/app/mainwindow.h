@@ -8,6 +8,9 @@
 #include <vtkSmartPointer.h>
 #include <itkImage.h>
 
+#include "commu/communhttp.h"
+#include "commu/userinfo.h"
+
 class vtkImageViewer2;
 class vtkRenderer;
 class vtkImageData;
@@ -24,6 +27,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    // define a http communicator
+    communhttp communicator;
+    // define the user object
+    userinfo user;
+
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 

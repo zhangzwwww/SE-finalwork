@@ -1,4 +1,4 @@
-#include "tst_testcommun.h"
+#include "test_commun.h"
 
 TestCommun::TestCommun(){
 
@@ -156,7 +156,7 @@ void TestCommun::test_case4(){
     // send request
     QNetworkReply* reply = requester.http_post(request, data);
     int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).value<int>();
-    QVERIFY(status == 400);
+    QVERIFY(status == 409);
     // QString token = reply->rawHeader("X-Auth-Token");
 }
 

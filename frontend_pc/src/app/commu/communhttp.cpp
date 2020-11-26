@@ -57,6 +57,16 @@ QNetworkReply* communhttp::http_post(QNetworkRequest request, QByteArray data){
     return reply;
 }
 
+QNetworkReply* communhttp::http_put(QNetworkRequest request, QByteArray data){
+    QNetworkReply* reply = manager->put(request, data);
+    // loop until put request
+    QEventLoop eventloop;
+    connect(reply, SIGNAL(finished()), &eventloop, SLOT(quit()));
+    eventloop.exec();
+    // request got
+    return reply;
+}
+
 QNetworkReply* communhttp::http_head(QNetworkRequest request){
     QNetworkReply* reply = manager->head(request);
     // loop until get request

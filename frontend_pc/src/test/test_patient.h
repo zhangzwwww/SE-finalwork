@@ -1,23 +1,24 @@
-#ifndef TST_TESTCOMMUN_H
-#define TST_TESTCOMMUN_H
-
-#endif // TST_TESTCOMMUN_H
+#ifndef TEST_PATIENT_H
+#define TEST_PATIENT_H
 
 #include <QTest>
 #include <QCoreApplication>
 #include <QNetworkAccessManager>
 #include <QJsonArray>
+#include <QVector>
 
 #include "../app/commu/communhttp.h"
 #include "../app/commu/userinfo.h"
+#include "../app/commu/patient.h"
 
-class TestCommun : public QObject
+
+class TestPatient : public QObject
 {
     Q_OBJECT
 
 public:
-    TestCommun();
-    ~TestCommun();
+    TestPatient();
+    ~TestPatient();
 
 private slots:
     void initTestCase();
@@ -32,3 +33,5 @@ private:
     communhttp requester;
     userinfo usr;
 };
+
+#endif // TEST_PATIENT_H
