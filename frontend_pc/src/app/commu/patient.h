@@ -14,7 +14,7 @@
 class patient
 {
 private:
-    int id;
+    QString id;
 
     QString name;
     bool gender;
@@ -29,7 +29,7 @@ public:
     patient();
 
     // locally create a patient object with given info
-    patient(QString name, bool gender, QString birth, int age, int id=-1);
+    patient(QString name, bool gender, QString birth, int age, QString id="");
 
     // locally set a patient object with given info
     void set_patient_info(QString name, bool gender, QString birth, int age);
@@ -38,7 +38,7 @@ public:
     static void set_token(QString t);
 
     // get patient information of the patient
-    int _id();
+    QString _id();
     QString _name();
     bool _gender();
     QString _birth();
@@ -56,15 +56,15 @@ public:
 
     // get a patient by id
     // return a patient object if success
-    static patient http_getPatient_byId(communhttp *req, int id);
+    static patient http_getPatient_byId(communhttp *req, QString id);
 
     // modify a patient by id
     // return true if success
-    static bool http_modifyPatient_byId(communhttp *req, int id, QString name, bool gender, QString birth, int age);
+    static bool http_modifyPatient_byId(communhttp *req, QString id, QString name, bool gender, QString birth, int age);
 
     // delete a patient by id
     // return true if success
-    static bool http_deletePatient_byId(communhttp *req, int id);
+    static bool http_deletePatient_byId(communhttp *req, QString id);
 };
 
 #endif // PATIENT_H

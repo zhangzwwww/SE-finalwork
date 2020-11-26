@@ -8,16 +8,16 @@ QString patient::token = "";
 // empty constructor
 patient::patient()
 {
-    id = -1;
+    id = "";
     name = "";
-    gender = 0;
+    gender = false;
     birth = "";
     age = -1;
 }
 
 
 // construct with information given
-patient::patient(QString n, bool g, QString b, int a, int i){
+patient::patient(QString n, bool g, QString b, int a, QString i){
     name = n;
     gender = g;
     birth = b;
@@ -34,7 +34,7 @@ void patient::set_patient_info(QString name, bool gender, QString birth, int age
 }
 
 // get patient information
-int patient::_id(){
+QString patient::_id(){
     return this->id;
 }
 QString patient::_name(){
@@ -58,7 +58,7 @@ void patient::set_token(QString t){
 // get all patient info on the server
 // return a list of patients if success
 QVector<patient> patient::http_get_all_patient(communhttp *req){
-    QString url = urlbase["base"] + urlbase["patient"];
+    QString url = urlbase["base2"] + urlbase["patient"];
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -83,7 +83,7 @@ QVector<patient> patient::http_get_all_patient(communhttp *req){
                         map["gender"].toBool(),
                         map["birth"].toString(),
                         map["age"].toInt(),
-                        map["id"].toInt())
+                        map["id"].toString())
                         );
             }
         }
@@ -111,7 +111,7 @@ QVector<patient> patient::http_get_all_patient(communhttp *req){
 // post a new patient
 // return true if success
 bool patient::http_create_patient(communhttp *req, QString name, bool gender, QString birth, int age){
-    QString url = urlbase["base"] + urlbase["patient"];
+    QString url = urlbase["base2"] + urlbase["patient"];
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -153,8 +153,8 @@ bool patient::http_create_patient(communhttp *req, QString name, bool gender, QS
 
 // get a patient by id
 // return a patient object if success
-patient patient::http_getPatient_byId(communhttp *req, int id){
-    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+patient patient::http_getPatient_byId(communhttp *req, QString id){
+    QString url = urlbase["base2"] + urlbase["patient"] + '/' + id;
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -181,10 +181,10 @@ patient patient::http_getPatient_byId(communhttp *req, int id){
         QJsonParseError jerror;
         QJsonDocument json = QJsonDocument::fromJson(resp, &jerror);
         if (jerror.error == QJsonParseError::NoError && json.isObject()){
-            int i = json.object()["id"].toInt();
+            QString i = json.object()["id"].toString();
             patient result(
                     json.object()["name"].toString(),
-                    json.object()["gender"].toBool(),
+                    json.object()["gender"].toVariant().toBool(),
                     json.object()["birth"].toString(),
                     json.object()["age"].toInt(),
                     i
@@ -207,8 +207,8 @@ patient patient::http_getPatient_byId(communhttp *req, int id){
 
 // modify a patient by id
 // return true if success
-bool patient::http_modifyPatient_byId(communhttp *req, int id, QString name, bool gender, QString birth, int age){
-    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+bool patient::http_modifyPatient_byId(communhttp *req, QString id, QString name, bool gender, QString birth, int age){
+    QString url = urlbase["base2"] + urlbase["patient"] + '/' + id;
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
@@ -256,8 +256,8 @@ bool patient::http_modifyPatient_byId(communhttp *req, int id, QString name, boo
 
 // delete a patient by id
 // return true if success
-bool patient::http_deletePatient_byId(communhttp *req, int id){
-    QString url = urlbase["base"] + urlbase["patient"] + '/' + QString(id);
+bool patient::http_deletePatient_byId(communhttp *req, QString id){
+    QString url = urlbase["base2"] + urlbase["patient"] + '/' + id;
     // construct the request
     QNetworkRequest request;
     request.setUrl(QUrl(url));
