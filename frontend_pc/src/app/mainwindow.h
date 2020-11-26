@@ -40,6 +40,9 @@ private slots:
     void view_full_screen(bool full_status);
     void view_change_slice();
 
+    void generate_surface();
+
+
     void image_threshold(vtkImageData* input_image, vtkImageData* output_image, ThresholdingParams params);
 
     void on_pushButton_4_clicked();

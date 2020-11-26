@@ -65,11 +65,11 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 
 //
 #include <vtkImageThreshold.h>
-
+#include <vtkPolyDataMapper.h>
 
 #include "struct_define.h"
 #include "RegistrationWorker.h"
-
+#include "Voxel2Mesh.h"
 
 // ITK
 #include <itkImage.h>
@@ -164,6 +164,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->ScrollBar2, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
 	connect(ui->ScrollBar3, SIGNAL(valueChanged(int)), this, SLOT(view_change_slice()));
 
+	connect(ui->voxel2meshBtn, SIGNAL(clicked()), this, SLOT(generate_surface()));
+
 
 //    TODO: make sure the number of spinbox/lineedit is legal
 //    AlgorithmParams
@@ -182,7 +184,6 @@ MainWindow::~MainWindow()
     delete ui;
 	
 }
-
 
 
 void MainWindow::init_views()
@@ -487,6 +488,8 @@ void MainWindow::view_full_screen(bool full_status)
 }
 
 
+
+
 void MainWindow::view_change_slice()
 {
 	QObject* obj = sender();
@@ -520,6 +523,57 @@ void MainWindow::view_change_slice()
 		//	setText(QString::number(tempScroll->value() + 1) + "  of  " + QString::number(dims[0]));
 	
 	}
+}
+
+void MainWindow::generate_surface()
+{
+	Voxel2Mesh voxel2mesh_filter;
+
+	voxel2mesh_filter.SetUseGuassianSmoothing(ui->medianGroup->isChecked());
+	voxel2mesh_filter.SetMedianKernelSize(ui->kernelXSpinBox->value(),
+		ui->kernelYSpinBox->value(), ui->kernelZSpinBox->value());
+
+	voxel2mesh_filter.SetUseGuassianSmoothing(ui->gaussGroup->isChecked());
+	voxel2mesh_filter.SetGaussianStandardDeviation(ui->deviationSpinBox->value());
+	voxel2mesh_filter.SetGaussianRadius(ui->radiusSpinBox->value());
+
+	voxel2mesh_filter.SetPolygonSmoothing(ui->smoothingGroup->isChecked());
+	voxel2mesh_filter.SetIteration(ui->iterationSpinBox->value());
+	voxel2mesh_filter.SetRelaxationFactor(ui->relaxationSpinBox->value());
+
+	voxel2mesh_filter.SetIsovalue(ui->isovalueSpinBox->value());
+
+	if (image_vtk_ == nullptr)
+	{
+		QMessageBox::warning(nullptr,
+			tr("Error"),
+			tr("No Image."),
+			QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+
+	}
+
+	voxel2mesh_filter.SetInputData(image_vtk_);
+	voxel2mesh_filter.Update();
+
+	vtkPolyData* mesh = voxel2mesh_filter.GetOutput();
+
+
+	vtkSmartPointer<vtkPolyDataMapper> mapper =
+		vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputData(mesh);
+	mapper->ScalarVisibilityOff();
+
+	vtkSmartPointer<vtkActor> actor =
+		vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+	actor->GetProperty()->SetColor(250 / 250.0, 187 / 250.0, 124 / 250.0);
+	actor->GetProperty()->SetOpacity(0.95);
+
+	renderer3D_->AddActor(actor);
+	renderer3D_->ResetCamera();
+
+	this->ui->view4->GetRenderWindow()->Render();
+
 }
 
 void MainWindow::image_threshold(vtkImageData* input_image, 
@@ -593,30 +647,31 @@ void MainWindow::on_pushButton_7_clicked()
 void MainWindow::on_pushButton_clicked()
 {
 //    TODO: Generated surface
-    ProcessParams process_params;
-    process_params.img_name = ui->in_gray_0_img->currentText().toStdString();
-    process_params.isosurface_value = ui->in_gray_1_isosurface_value->value();
-    process_params.surface_name = ui->in_gray_2_surface_name->text().toStdString();
+    //ProcessParams process_params;
+    //process_params.img_name = ui->in_gray_0_img->currentText().toStdString();
+    //process_params.isosurface_value = ui->in_gray_1_isosurface_value->value();
+    //process_params.surface_name = ui->in_gray_2_surface_name->text().toStdString();
+
 }
 
 void MainWindow::on_start_smoothing_button_clicked()
 {
-    SmoothingParams params;
-    params.smooth_type = ui->smoothing_toolBox->currentIndex();
-    switch (params.smooth_type) {
-    case 0:
-        params.kernel_size = ui->in_smooth_gaussian_0_kernel_size->value();
-        params.sigma_x = ui->in_smooth_gaussian_1_sigma_x->value();
-        break;
-    case 1:
-        params.kernel_size = ui->in_smooth_mean_0_kernel_size->value();
-        break;
-    case 2:
-        params.kernel_size = ui->in_smooth_median_0_kernel_size->value();
-        break;
-    default:
-        break;
-    }
+    //SmoothingParams params;
+    //params.smooth_type = ui->smoothing_toolBox->currentIndex();
+    //switch (params.smooth_type) {
+    //case 0:
+    //    params.kernel_size = ui->in_smooth_gaussian_0_kernel_size->value();
+    //    params.sigma_x = ui->in_smooth_gaussian_1_sigma_x->value();
+    //    break;
+    //case 1:
+    //    params.kernel_size = ui->in_smooth_mean_0_kernel_size->value();
+    //    break;
+    //case 2:
+    //    params.kernel_size = ui->in_smooth_median_0_kernel_size->value();
+    //    break;
+    //default:
+    //    break;
+    //}
 //    TODO
 }
 
