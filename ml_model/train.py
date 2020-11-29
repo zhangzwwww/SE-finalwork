@@ -1,4 +1,4 @@
-import mlModel
+from mlModel import Network
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm # Displays a progress bar
@@ -31,10 +31,11 @@ valloader = DataLoader(FASHION_val, batch_size=64, shuffle=True)
 testloader = DataLoader(FASHION_test, batch_size=64, shuffle=True)
 
 device = "cuda" if torch.cuda.is_available() else "cpu" # Configure device
-model = mlModel.Network().to(device)
+model = Network().to(device)
 # TODO: choose your loss function
 criterion = nn.CrossEntropyLoss()
-
+# Debug
+# print(model)
 # TODO: adjust optimizer, learning rate, weight decay according to your need
 optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
 

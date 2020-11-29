@@ -11,7 +11,7 @@ from torch.utils.data import Dataset, Subset, DataLoader, random_split
 
 
 class Network(nn.Module):
-    def _init_(self):
+    def __init__(self):
         super().__init__()
         # TODO: currently apply simple cnn networks
         # Design and change the module if needed
