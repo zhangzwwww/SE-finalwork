@@ -16,7 +16,7 @@ class Network(nn.Module):
         # TODO: currently apply simple cnn networks
         # Design and change the module if needed
         self.base = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3, 3), stride=1, padding=1),
+            nn.Conv2d(in_channels=3, out_channels=8, kernel_size=(3, 3), stride=1, padding=1),
             nn.ReLU(),
             nn.MaxPool2d(2),
             nn.Conv2d(in_channels=8, out_channels=32, kernel_size=(3, 3), stride=1, padding=1),
@@ -30,7 +30,7 @@ class Network(nn.Module):
             nn.MaxPool2d(2)
         )
         out_channel = 128 # TODO: adjust the output channels of base network if needed
-        pred_channel = 10 # TODO: adjust number of classes you want to predict
+        pred_channel = 4 # TODO: adjust number of classes you want to predict
         self.avgpool = nn.AdaptiveAvgPool2d(1)
         self.fc = nn.Linear(out_channel, pred_channel)
         self.conv = nn.Conv2d(out_channel, pred_channel, 1) # 1x1 conv layer (substitutes fc)
