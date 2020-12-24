@@ -10,6 +10,8 @@ import pymongo
 import json
 import uuid
 
+from model import Mark, MarkService
+
 from app import mongodb
 from app import redis
 
@@ -17,6 +19,45 @@ from app import redis
 def register_image_routes(api, app):
     api.add_resource(ImageController, '/v1/image')
     api.add_resource(ImageDateController, '/v1/image/ctime')
+    api.add_resource(MarkController, '/v1/image/mark')
+
+
+class MarkController(Resource):
+    def get(self):
+        token = request.headers.get('X-Auth-Token')
+        if not existsToken(token):
+            resp = Response(status=401)
+            return resp
+
+        marks = MarkService.getMarkByImageId(request.args['imageId'])
+        markList = []
+        for mark in marks:
+            markList.append(mark.serialize())
+        resp = Response(json.dumps(markList),
+                        status=200, mimetype='applications/json')
+        return resp
+
+    def post(self):
+        token = request.headers.get('X-Auth-Token')
+        if not existsToken(token):
+            resp = Response(status=401)
+            return resp
+
+        topX = request.json.get('topX')
+        topY = request.json.get('topY')
+        bottomX = request.json.get('bottomX')
+        bottomY = request.json.get('bottomY')
+        layer = request.json.get('layer')
+        view = request.json.get('view')
+        imageId = request.json.get('imageId')
+        id = uuid.uuid5(uuid.NAMESPACE_DNS, str(datetime.datetime.now()))
+
+        MarkService.createMark(Mark(id=id, imageId=imageId, topX=topX,
+                                    topY=topY, bottomX=bottomX,
+                                    bottomY=bottomY, layer=layer,
+                                    view=view))
+        resp = Response(status=201, mimetype='application/json')
+        return resp
 
 
 class ImageController(Resource):
@@ -32,7 +73,8 @@ class ImageController(Resource):
         time = args['ctime']
 
         contents = mongodb.files.find({'patientId': patientId, 'ctime': time})
-        data = [{'name': d['name'],
+        data = [{'id': str(d['id']),
+                 'name': d['name'],
                  'content': str(d['content'], encoding='ISO-8859-1'),
                  'ctime': d['ctime'],
                  'patientId': d['patientId']} for d in contents]
