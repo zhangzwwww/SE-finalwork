@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QHttpMultiPart>
 #include <QUrl>
@@ -97,6 +98,10 @@ public:
     // Asynchronously get info and files through http requests
     // INPUT: patientID and ctime needed for searching data
     void getImagesHttp(QString patientID, QString ctime);
+
+    // Upload image folder to the server
+    // INPUT: patientId, ctime, folderpath
+    void uploadFolerImage(QString patientId, QString ctime, QString folderpath);
 
     // Upload image data to the server
     // INPUT: patientId, ctime and Filepath

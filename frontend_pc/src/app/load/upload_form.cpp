@@ -79,12 +79,7 @@ void UploadForm::on_uploadFileBtn_clicked()
     QString image_name = ui->imageNameEdit->text();
 //    if upload succeed
     image_manager_->setFilePath(file_path);
-    QDir dir(file_path);
-    QStringList file_names = dir.entryList(QDir::Files | QDir::Readable);
-    for (QString &file_name : file_names) {
-//        qDebug()<<dir.absoluteFilePath(file_name);
-        image_manager_->uploadImageHttp(patient_id, image_name, dir.absoluteFilePath(file_name));
-    }
+    image_manager_->uploadFolerImage(patient_id, image_name, file_path);
 //    image_manager_->uploadImageHttp(patient_id, image_name, file_path);
     accept();
 }

@@ -156,6 +156,23 @@ void imageInfo::downloadFile(QNetworkReply* reply){
     reply->deleteLater();
 }
 
+void imageInfo::uploadFolerImage(QString patientId, QString ctime, QString folderpath){
+    QDir dir(folderpath);
+    // check if there exists meta file
+    QFile meta(dir.filePath("meta_data"));
+    if (meta.open(QIODevice::ReadOnly)){
+        qDebug() << "Already in backend, will not upload!";
+        QMessageBox::warning(nullptr, "w", "The folder already in backend, will not upload", QMessageBox::Yes);
+        return;
+    }
+    // upload images
+    QStringList file_names = dir.entryList(QDir::Files | QDir::Readable);
+    for (QString &file_name : file_names){
+        this->uploadImageHttp(patientId, ctime, dir.absoluteFilePath(file_name));
+    }
+}
+
+
 void imageInfo::uploadImageHttp(QString patientId, QString ctime, QString filepath){
     QFile afile(filepath);
     if (!afile.exists()){
