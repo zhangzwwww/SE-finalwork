@@ -10,7 +10,6 @@ def predict():
     model.load_state_dict(torch.load('./model_param/model_states.pth'))
 
     img = Image.open('./1.jpg')
-    print(img)
     transform = transforms.Compose([
         transforms.RandomResizedCrop(224),
         transforms.ToTensor(), # Transform from [0,255] uint8 to [0,1] float
