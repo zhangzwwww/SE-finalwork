@@ -1,0 +1,22 @@
+<nz-table #basicTable [nzData]="patients" nzShowPagination="false">
+  <thead>
+    <tr>
+      <th>姓名</th>
+      <th>性别</th>
+      <th>生日</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let patient of patients">
+      <td>{{patient.name}}</td>
+      <td>{{getGender(patient['gender'])}}</td>
+      <td>{{patient['birth']}}</td>
+      <td>
+        <a (click)="deletePatient(patient['id'])">Delete 一 {{patient.name}}</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a>查看文件</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

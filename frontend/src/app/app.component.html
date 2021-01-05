@@ -1,0 +1,31 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar"
+            nzWidth="256px"
+            nzBreakpoint="md">
+    <div class="sidebar-logo">
+        <h1>多模态医学影像配准、分割与可视化系统</h1>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" >
+<!--	  <li nz-menu-item nzMatchRouter>-->
+<!--		<a routerLink="/data">数据管理</a>-->
+<!--	  </li>-->
+	  <li nz-menu-item nzMatchRouter>
+		<a routerLink="/patient">病例管理</a>
+	  </li>
+<!--	  <li nz-menu-item nzMatchRouter>-->
+<!--		<a routerLink="/user">用户管理</a>-->
+<!--	  </li>-->
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
