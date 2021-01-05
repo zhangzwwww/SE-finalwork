@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
@@ -17,6 +17,9 @@ import { AppService } from './app.service';
 import { PatientService } from './pages/patient/patient.service';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 registerLocaleData(en);
 
@@ -25,6 +28,7 @@ registerLocaleData(en);
     AppComponent
   ],
   imports: [
+    NzIconModule,
     CommonModule,
     BrowserModule,
     AppRoutingModule,
@@ -33,7 +37,9 @@ registerLocaleData(en);
     NzMenuModule,
     NzTableModule,
     NzDividerModule,
-    FormsModule,
+    NzInputModule,
+    NzFormModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule
   ],

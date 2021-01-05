@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from './patient.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-patient',
@@ -12,14 +14,23 @@ export class PatientComponent implements OnInit {
   images: any;
   cTimes: any;
   cTime: any;
+  createPatientIsVisible = false;
+  validateForm!: FormGroup;
 
-  constructor(private patientService: PatientService) {
+  constructor(private patientService: PatientService, private fb: FormBuilder, private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
+    this.createPatientIsVisible = false;
     this.token = localStorage.getItem('X-Auth-Token');
     console.log(this.token);
     this.getAllPatient();
+    this.validateForm = this.fb.group({
+      name: [null],
+      gender: [null],
+      birth: [null],
+      age: [null],
+    });
   }
 
   getGender(gender: string): string {
@@ -54,6 +65,24 @@ export class PatientComponent implements OnInit {
   getImages(patientId: string, cTime: string): void {
     this.patientService.getImages(patientId, cTime).subscribe((response) => {
       this.images = response.body;
+    });
+  }
+
+  startCreatePatient(): void {
+    this.createPatientIsVisible = true;
+  }
+
+  handleCreatePatientCancel(): void {
+    this.createPatientIsVisible = false;
+  }
+
+  createPatient(): void {
+    const value = this.validateForm.value;
+    value.birth = this.datePipe.transform(this.validateForm.value.birth, 'yyyy-MM-dd');
+    this.patientService.createPatient(value).subscribe(() => {
+      this.createPatientIsVisible = false;
+      this.validateForm.reset();
+      this.getAllPatient();
     });
   }
 }

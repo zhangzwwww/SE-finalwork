@@ -27,11 +27,16 @@ export class PatientService {
     return this.http.delete<void>('api-patient/v1/patient/' + patient, { headers: { 'X-Auth-Token': token } });
   }
 
+  createPatient(patient: any): Observable<any> {
+    const token: any = this.getToken();
+    return this.http.post<void>('api-patient/v1/patient', patient, { headers: { 'X-Auth-Token': token }, observe: 'response' });
+  }
+
   getCTime(patientId: string): Observable<any> {
     const token: any = this.getToken();
     const p = new HttpParams();
     p.append('patientId', patientId);
-    return this.http.get('api-patient/v1/image/ctime/', { params: p, headers: { 'X-Auth-Token': token }, observe: 'response' });
+    return this.http.get('api-patient/v1/image/ctime', { params: p, headers: { 'X-Auth-Token': token }, observe: 'response' });
   }
 
   getImages(patientId: string, ctime: string): Observable<any> {
@@ -39,6 +44,6 @@ export class PatientService {
     const p = new HttpParams();
     p.append('patientId', patientId);
     p.append('ctime', ctime);
-    return this.http.get('api-patient/v1/images', {params: p, headers: {'X-Auth-Token': token}, observe: 'response'});
+    return this.http.get('api-patient/v1/images', { params: p, headers: { 'X-Auth-Token': token }, observe: 'response' });
   }
 }

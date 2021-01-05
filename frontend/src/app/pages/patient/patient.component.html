@@ -1,3 +1,4 @@
+<button nz-button (click)="startCreatePatient()" nzType="default">创建病例</button>
 <nz-table #basicTable [nzData]="patients" nzShowPagination="false">
   <thead>
     <tr>
@@ -13,10 +14,49 @@
       <td>{{getGender(patient['gender'])}}</td>
       <td>{{patient['birth']}}</td>
       <td>
-        <a (click)="deletePatient(patient['id'])">Delete 一 {{patient.name}}</a>
+        <a (click)="deletePatient(patient['id'])">删除</a>
         <nz-divider nzType="vertical"></nz-divider>
         <a>查看文件</a>
       </td>
     </tr>
   </tbody>
 </nz-table>
+
+<nz-modal
+  [(nzVisible)]="createPatientIsVisible"
+  nzTitle="创建病例"
+  (nzOnCancel)="handleCreatePatientCancel()"
+  (nzOnOk)="createPatient()"
+>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">姓名</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input formControlName="name" id="name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="gender">性别</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-radio-group formControlName="gender" id="gender">
+          <label nz-radio nzValue="0">男</label>
+          <label nz-radio nzValue="1">女</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="birth">生日</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-date-picker formControlName="birth" id="birth" nzPlaceHolder="出生日期"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="age">年龄</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input formControlName="age" id="age" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+
