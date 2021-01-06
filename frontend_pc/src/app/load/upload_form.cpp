@@ -33,7 +33,8 @@ UploadForm::UploadForm(UploadFormParams &params, QWidget *parent) :
     ui->setupUi(this);
     user_info_ = params.user_info;
     patients_ = params.patients;
-    image_manager_.setToken(user_info_._token());
+    image_manager_ = params.image_manager;
+    image_manager_->setToken(user_info_._token());
     if (patients_.empty()) {
         patient::set_token(user_info_._token());
         patients_ = patient::http_get_all_patient(&communicator_);
@@ -77,14 +78,9 @@ void UploadForm::on_uploadFileBtn_clicked()
     QString patient_id = patients_[cur_patient_index]._id();
     QString image_name = ui->imageNameEdit->text();
 //    if upload succeed
-    image_manager_.setFilePath(file_path);
-    QDir dir(file_path);
-    QStringList file_names = dir.entryList(QDir::Files | QDir::Readable);
-    for (QString &file_name : file_names) {
-//        qDebug()<<dir.absoluteFilePath(file_name);
-        image_manager_.uploadImageHttp(patient_id, image_name, dir.absoluteFilePath(file_name));
-    }
-//    image_manager_.uploadImageHttp(patient_id, image_name, file_path);
+    image_manager_->setFilePath(file_path);
+    image_manager_->uploadFolerImage(patient_id, image_name, file_path);
+//    image_manager_->uploadImageHttp(patient_id, image_name, file_path);
     accept();
 }
 

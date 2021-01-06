@@ -87,6 +87,48 @@ paths:
               $ref: "#/definitions/CTime"
         "401":
           description: "Unauthorized"
+  /image/mark:
+    get:
+      tags:
+        - "image"
+      summary: "get all marks"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: True
+        - in: query
+          name: imageId
+          type: "string"
+          requried: True
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Mark"
+        "401":
+          description: "Unauthorized"
+    post:
+      tags:
+        - "image"
+      summary: "create mark"
+      parameters:
+        - in: "header"
+          name: X-Auth-Token
+          type: "string"
+          required: True
+        - in: body
+          name: "mark"
+          required: True
+          schema:
+            $ref: "#/definitions/Mark"
+      responses:
+        '201':
+          description: "Created"
+        '401':
+          description: "Unauthroized"
   /patient:
     get:
       tags:
@@ -235,4 +277,23 @@ definitions:
     type: "object"
     properties:
       ctime:
+        type: "string"
+  Mark:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      layer:
+        type: "number"
+      topX:
+        type: "number"
+      topY:
+        type: "number"
+      bottomX:
+        type: "number" 
+      bottomY:
+        type: "number"
+      view:
+        type: "number"
+      imageId:
         type: "string"

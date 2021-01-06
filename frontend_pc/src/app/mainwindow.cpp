@@ -3,381 +3,6 @@
 
 #include <QTextCodec>
 
-#include <vtkInteractorStyleRubberBand2D.h>
-#include <vtkLineSource.h>
-#include <vtkCoordinate.h>
-
-class vtkPointPickerCallback : public vtkCommand
-{
-public:
-    static vtkPointPickerCallback* New()
-    {
-        return new vtkPointPickerCallback;
-    }
-    vtkPointPickerCallback() {
-        is_drawing = false;
-        is_marking = true;
-        cur_view = -1;
-        for (int i = 0; i < 4; i++) {
-            actors[i] = vtkSmartPointer<vtkActor>::New();
-        }
-    }
-
-    void Execute(vtkObject* caller, unsigned long ev, 
-        void* callData)
-    {
-        if (is_marking == false) {
-            return;
-        }
-        if (!(ev == vtkCommand::RightButtonPressEvent || ev == vtkCommand::RightButtonReleaseEvent ||
-             (ev == vtkCommand::MouseMoveEvent && is_drawing == true))) {
-            return;
-        }
-        vtkInteractorStyleImage* style =
-            dynamic_cast<vtkInteractorStyleImage*>(caller);
-        int display_pos[2];
-
-        if (style) {
-            for (int i = 0; i < 3; i++) {
-                if (style == this->view[i]->GetInteractorStyle()) {
-                    cur_view = i;
-                    cur_slice = this->view[i]->GetSlice();
-                    this->interactor[i]->GetEventPosition(display_pos[0], display_pos[1]);
-                    break;
-                }
-            }
-        }
-        if (ev == vtkCommand::RightButtonPressEvent)
-        {
-            if (vector_displaypos[cur_view].size() > 1)
-            {
-                return;
-            }
-
-            start_pos[0] = display_pos[0];
-            start_pos[1] = display_pos[1];
-            is_drawing = true;
-
-            auto render = this->view[cur_view]->GetRenderer();
-
-            interactor[cur_view]->GetPicker()->Pick(start_pos[0],
-                start_pos[1],
-                0,  // always zero.
-                render);
-
-            double picked[3];
-
-            //interactor[0]->GetPicker()->GetPickPosition(picked);
-
-            double start_position[3] = { double(start_pos[0]), double(start_pos[1]), 0.0 };
-
-            render->SetDisplayPoint(start_position);
-            render->DisplayToWorld();
-            render->GetWorldPoint(picked);
-
-            qDebug() << picked[0] << picked[1] << picked[2];
-
-            
-            //vector_picked[cur_view].push_back({picked[0], picked[1], picked[2]});
-            vector_displaypos[cur_view].push_back({ start_pos[0], start_pos[1]});
-
-            vtkSmartPointer<vtkSphereSource> sphereSource =
-                vtkSmartPointer<vtkSphereSource>::New();
-            sphereSource->Update();
-
-            vtkSmartPointer<vtkPolyDataMapper> mapper =
-                vtkSmartPointer<vtkPolyDataMapper>::New();
-            mapper->SetInputConnection(sphereSource->GetOutputPort());
-            vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-            actor->SetMapper(mapper);
-            actor->SetPosition(picked);
-            actor->SetScale(3);
-            actor->SetDragable(true);
-            actor->SetPickable(true);
-            
-            actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
-            //this->Interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer()->AddActor(actor);
-            //this->Interactor->GetRenderWindow()->GetRenderers()->GetNextRenderer()->AddActor(actor);
-            vtkActorCollection* actorCollection = render->GetActors();
-            int num = actorCollection->GetNumberOfItems();
-            actorCollection->InitTraversal();
-            //vtkActor* actortemp = actorCollection->GetNextActor();
-            for (int i = 0; i < num; ++i)
-            {
-                vtkActor* actortemp = actorCollection->GetNextActor();
-                //render->RemoveActor(actortemp);
-            }
-            render->AddActor(actor);
-
-
-            //for (int i = 0; i < 4; i++) {
-            //    this->view[cur_view]->GetRenderer()->AddActor(actors[i]);
-            //    //actors[i]->GetProperty()-
-            //}
-            qDebug()<<"cur view:"<<cur_view<<",cur index:"<<cur_slice<<
-                                        ",start pos:("<<display_pos[0]<<","<<display_pos[1]<<")";
-        } else if (ev == vtkCommand::MouseMoveEvent) {
-            end_pos[0] = display_pos[0];
-            end_pos[1] = display_pos[1];
-            DrawRect();
-            qDebug()<<"cur view:"<<cur_view<<",cur index:"<<cur_slice<<
-                                        ",end pos:("<<display_pos[0]<<","<<display_pos[1]<<")";
-        } else if (ev == vtkCommand::RightButtonReleaseEvent) {
-            is_drawing = false;
-            //for (int i = 0; i < 4; i++) {
-            //    this->view[cur_view]->GetRenderer()->RemoveActor(actors[i]);
-            //}
-
-            qDebug() << "release:" <<  vector_picked[cur_view].size();
-
-            auto render = this->view[cur_view]->GetRenderer();
-
-            vtkActorCollection* actorCollection = render->GetActors();
-            int num = actorCollection->GetNumberOfItems();
-            actorCollection->InitTraversal();
-            //vtkActor* actortemp = actorCollection->GetNextActor();
-            if (vector_displaypos[cur_view].size() == 2)
-            {
-                /*auto vct_picked_1 = vector_picked[cur_view].at(0);
-                double point1[3];
-                point1[0] = vct_picked_1.at(0); point1[1] = vct_picked_1.at(1); point1[2] = vct_picked_1.at(2);
-
-                auto vct_picked_2 = vector_picked[cur_view].at(1);
-                double point2[3];
-                point2[0] = vct_picked_2.at(0); point2[1] = vct_picked_2.at(1); point2[2] = vct_picked_2.at(2);*/
-
-                auto start_vec = vector_displaypos[cur_view].at(0);
-                double start[2];
-                start[0] = start_vec.at(0); start[1] = start_vec.at(1);
-
-                auto end_vec = vector_displaypos[cur_view].at(1);
-                double end[2];
-                end[0] = end_vec.at(0); end[1] = end_vec.at(1);
-
-
-                double point1[2];
-                double point2[2];
-                double point3[2];
-                double point4[2];
-
-                double left[2];
-                double right[2];
-
-                left[0] = start[0] <= end[0] ? start[0] : end[0];
-                left[1] = start[1] <= end[1] ? start[1] : end[1];
-
-                right[0] = start[0] > end[0] ? start[0] : end[0];
-                right[1] = start[1] > end[1] ? start[1] : end[1];
-
-                point1[0] = left[0];  point1[1] = left[1];  //point1[2] = 0.0;
-                point2[0] = left[0];  point2[1] = right[1]; //point2[2] = 0.0;
-                point3[0] = right[0]; point3[1] = right[1]; //point3[2] = 0.0;
-                point4[0] = right[0]; point4[1] = left[1];  //point4[2] = 0.0;
-
-                //double p1_world[3]; 
-                //double p2_world[3];
-                //double p3_world[3];
-                //double p4_world[3];
-
-                qDebug() << "Right: " << right[0] << right[1];
-                qDebug() << "Left:  " << left[0] << left[1];
-
-                qDebug() << "point1: " << point1[0] << point1[1];
-                qDebug() << "point2:  " << point2[0] << point2[1];
-                qDebug() << "point3: " << point3[0] << point3[1];
-                qDebug() << "point4:  " << point4[0] << point4[1];
-
-                //for (int i = 0; i < 4; i++)
-
-                vtkSmartPointer<vtkCoordinate> pCoorPress1 = vtkSmartPointer<vtkCoordinate>::New();
-                pCoorPress1->SetCoordinateSystemToDisplay();
-                pCoorPress1->SetValue(point1);
-                double* p1_world = pCoorPress1->GetComputedWorldValue(render);
-
-                vtkSmartPointer<vtkCoordinate> pCoorPress2 = vtkSmartPointer<vtkCoordinate>::New();
-                pCoorPress2->SetCoordinateSystemToDisplay();
-                pCoorPress2->SetValue(point2);
-                double* p2_world = pCoorPress2->GetComputedWorldValue(render);
-
-                vtkSmartPointer<vtkCoordinate> pCoorPress3 = vtkSmartPointer<vtkCoordinate>::New();
-                pCoorPress3->SetCoordinateSystemToDisplay();
-                pCoorPress3 ->SetValue(point3);
-                double* p3_world = pCoorPress3->GetComputedWorldValue(render);
-
-
-                vtkSmartPointer<vtkCoordinate> pCoorPress4 = vtkSmartPointer<vtkCoordinate>::New();
-                pCoorPress4->SetCoordinateSystemToDisplay();
-                pCoorPress4->SetValue(point4);
-                double* p4_world = pCoorPress4->GetComputedWorldValue(render);
-
-                //GetScreentPos(point1, p1_world, cur_view);
-
-                //GetScreentPos(point2, p2_world, cur_view);
-
-                //render->SetDisplayPoint(point1);
-                //render->DisplayToWorld();
-                //render->GetWorldPoint(p1_world);
-
-
-                //render->SetDisplayPoint(point2);
-                //render->DisplayToWorld();
-                //render->GetWorldPoint(p2_world);
-                    
-                //render->SetDisplayPoint(point3);
-                //render->DisplayToWorld();
-                //render->GetWorldPoint(p3_world);
-
-                //render->SetDisplayPoint(point4);
-                //render->DisplayToWorld();
-                //render->GetWorldPoint(p4_world);
-
-
-                qDebug() << p1_world[0] << p1_world[1] << p1_world[2];
-                qDebug() << p2_world[0] << p2_world[1] << p2_world[2];
-                qDebug() << p3_world[0] << p3_world[1] << p3_world[2];
-                qDebug() << p4_world[0] << p4_world[1] << p4_world[2];
-
-                
-
-                auto actor1 = this->SetLine(p1_world, p2_world);
-                auto actor2 = this->SetLine(p2_world, p3_world);
-                auto actor3 = this->SetLine(p3_world, p4_world);
-                auto actor4 = this->SetLine(p4_world, p1_world);
-
-                if (actor1 == nullptr)
-                {
-                    return;
-                }
-
-                /*vtkSmartPointer<vtkLineSource> line_source = vtkSmartPointer<vtkLineSource>::New();
-                line_source->SetPoint1(point1);
-                line_source->SetPoint2(point2);
-                line_source->Update();
-
-                vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-                mapper->SetInputConnection(line_source->GetOutputPort());
-                
-                vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-                actor->SetMapper(mapper);
-                actor->GetProperty()->SetLineWidth(2);
-                actor->GetProperty()->SetColor(0.0, 1.0, 0.0);*/
-
-
-                render->AddActor(actor1);
-                render->AddActor(actor2);
-                render->AddActor(actor3);
-                render->AddActor(actor4);
-            }
-
-            
-            this->view[cur_view]->Render();
-        }
-        return;
-    }
-
-    vtkSmartPointer<vtkActor> SetLine(double start_point[], double end_point[]) 
-    {
-        if (cur_view < 0 || cur_view > 2) {
-            return nullptr;
-        }
-
-        vtkSmartPointer<vtkLineSource> line_source = vtkSmartPointer<vtkLineSource>::New();
-        line_source->SetPoint1(start_point);
-        line_source->SetPoint2(end_point);
-        line_source->Update();
-
-        vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper->SetInputConnection(line_source->GetOutputPort());
-        
-        vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-        actor->SetMapper(mapper);
-        actor->GetProperty()->SetLineWidth(2);
-        actor->GetProperty()->SetColor(0.0,1.0,0.0);
-
-        return actor;
-    }
-
-    void DrawRect() {
-        //if (cur_view < 0 || cur_view > 2) {
-        //    return;
-        //}
-        //double start_position[3] = {double(start_pos[0]), double(start_pos[1]), 0.0};
-        //double end_position[3] = {double(end_pos[0]), double(end_pos[1]), 0.0};
-
-        //double start[3];
-        //double end[3];
-        //GetScreentPos(start_position, start, cur_view);
-        //GetScreentPos(end_position, end, cur_view);
-        //qDebug() << "start pos:"<< start[0] << start[1] << start[2]<<",end pos:"<<end[0]<<end[1]<<end[2];
-
-        //double point1[3];
-        //double point2[3];
-        //double point3[3];
-        //double point4[3];
-
-        //double left[2];
-        //double right[2];
-
-        //left[0] = start[0]<=end[0] ? start[0] : end[0];
-        //left[1] = start[1]<=end[1] ? start[1] : end[1];
-
-        //right[0] = start[0]>end[0] ? start[0] : end[0];
-        //right[1] = start[1]>end[1] ? start[1] : end[1];
-
-        //point1[0] = left[0];  point1[1] = left[1];  point1[2] = 0;
-        //point2[0] = left[0];  point2[1] = right[1]; point2[2] = 0;
-        //point3[0] = right[0]; point3[1] = right[1]; point3[2] = 0;
-        //point4[0] = right[0]; point4[1] = left[1];  point4[2] = 0;
-
-        //this->SetLine(point1,point2, actors[0]);
-        //this->SetLine(point2,point3, actors[1]);
-        //this->SetLine(point3,point4, actors[2]);
-        //this->SetLine(point4,point1, actors[3]);
-
-        //this->view[cur_view]->Render();
-    }
-
-    void StartMark() {
-        is_marking = true;
-    }
-
-    void EndMark() {
-        is_marking = false;
-    }
-
-    void GetScreentPos(double displayPos[2], double world[2], int current_view)
-    {
-      vtkSmartPointer<vtkRenderer> renderer = this->view[current_view]->GetRenderer();
-        renderer->SetDisplayPoint(displayPos);
-        renderer->DisplayToWorld();
-        renderer->GetWorldPoint(world);
-
-        //interactor[current_view]->GetPicker()->Pick(displayPos[0],
-        //    displayPos[1],
-        //    0,  // always zero.
-        //    renderer);
-        //interactor[current_view]->GetPicker()->GetPickPosition(world);
-
-    }
-
-
-    vtkImageViewer2* view[3];
-    vtkRenderWindowInteractor* interactor[3];
-    vtkRenderer* render[3];
-    vtkSmartPointer<vtkActor> actors[4];
-
-    vector<vector<double>> vector_picked[3];
-    vector<vector<int>> vector_displaypos[3];
-    int cur_view;
-    int cur_slice;
-    int start_pos[2];
-    int end_pos[2];
-    bool is_drawing;
-    bool is_marking;
-};
-
-
-
 /*--------------------- Definition for subclass ------------------*/
 MainWindow::vtkSharedWindowLevelCallback* MainWindow::vtkSharedWindowLevelCallback::New(){
     return new vtkSharedWindowLevelCallback;
@@ -448,11 +73,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //qss = qssfile.readAll();
     //this->setStyleSheet(qss);
     this->init_views();
+    point_picker_cbk = vtkSmartPointer< vtkPointPickerCallback >::New();
+    add_seed_cbk = vtkSmartPointer< vtkAddSeedCallback >::New();
+
+    point_picker_cbk->image_manager_ = &image_requester;
+    point_picker_cbk->image_manager_->setToken(user._token());
 
     ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     ui->mainToolBar->setFixedHeight(50);
     ui->registration_progressBar->setVisible(false);
     ui->mesher_progressBar->setVisible(false);
+    ui->segmentation_progressBar->setVisible(false);
+
 
     connect(ui->action_open_file, SIGNAL(triggered()), this, SLOT(load_image()));
     connect(ui->action_visualization, SIGNAL(triggered(bool)), this, SLOT(volume_rendering(bool)));
@@ -474,6 +106,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->voxel2meshBtn, SIGNAL(clicked()), this, SLOT(generate_surface()));
     connect(ui->opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slidervalueChanged(int)));
     connect(ui->start_segmentation_btn, SIGNAL(clicked()), this, SLOT(start_segmentation()));
+    connect(ui->add_seed_btn, SIGNAL(clicked()), this, SLOT(start_add_seeds()));
+
+    
 
     connect(ui->clean_actors_btn, SIGNAL(clicked()), this, SLOT(clean_actors()));
     connect(ui->clear_manager_btn, SIGNAL(clicked()), this, SLOT(clear_manager()));
@@ -584,8 +219,8 @@ void MainWindow::show_image()
     vtkSmartPointer< vtkSharedWindowLevelCallback > sharedWLcbk =
         vtkSmartPointer< vtkSharedWindowLevelCallback >::New();
 
-    vtkSmartPointer< vtkPointPickerCallback > point_picker_cbk =
-        vtkSmartPointer< vtkPointPickerCallback >::New();
+//    vtkSmartPointer< vtkPointPickerCallback > point_picker_cbk =
+//        vtkSmartPointer< vtkPointPickerCallback >::New();
 
     point_picker_cbk->interactor[0] = this->ui->view1->GetInteractor();
     point_picker_cbk->interactor[1] = this->ui->view2->GetInteractor();
@@ -610,7 +245,6 @@ void MainWindow::show_image()
             QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
         return;
     }
-
 
     double range[2];
     int dims[3];
@@ -642,12 +276,12 @@ void MainWindow::show_image()
         //riw_[i]->SetColorLevel((range[0] + range[1]) / 2.0);
 
         sharedWLcbk->view[i] = riw_[i];
+
         point_picker_cbk->view[i] = riw_[i];
 
         riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::WindowLevelEvent, sharedWLcbk);
         riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::RightButtonPressEvent, point_picker_cbk);
         riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::RightButtonReleaseEvent, point_picker_cbk);
-        //riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::MouseMoveEvent, point_picker_cbk);
 
     
     }
@@ -660,6 +294,9 @@ void MainWindow::show_image()
     this->ui->ScrollBar3->setSliderPosition(dims[2] / 2 - 1);
     
     this->view_zoom_to_fit();
+    ui->start_mark_btn->setChecked(false);
+    point_picker_cbk->EndMark();
+    point_picker_cbk->SetFolderPath(image_tree_[cur_selected_image_ind_[0]][0].image_path);
 }
 
 void MainWindow::volume_rendering(bool status)
@@ -750,7 +387,6 @@ void MainWindow::volume_rendering(bool status)
 		volumeProperty->SetScalarOpacity(compositeOpacity); 
 		volumeProperty->SetColor(colorFun);
 
-	
 		volume_->SetMapper(volumeMapper);
 		volume_->SetProperty(volumeProperty);
 
@@ -1321,7 +957,7 @@ void MainWindow::start_segmentation()
                     // 获取当前seed的坐标
 
 
-                    SegmentationWorker::IndexType seed1;
+                    /*SegmentationWorker::IndexType seed1;
                     seed1[0] = 369;
                     seed1[1] = 317;
                     seed1[2] = 93;
@@ -1349,16 +985,18 @@ void MainWindow::start_segmentation()
                     SegmentationWorker::IndexType seed6;
                     seed6[0] = 146;
                     seed6[1] = 264;
-                    seed6[2] = 93;
+                    seed6[2] = 93;*/
+
+                    
 
 
-                    std::vector<SegmentationWorker::IndexType> vecseed{ seed1, seed2, seed3, seed4, seed5, seed6 };
+                    //std::vector<SegmentationWorker::IndexType> vecseed{ seed1, seed2, seed3, seed4, seed5, seed6 };
 
                     segmentation_worker.set_lower_value(ui->lower_value_seg->value());
                     segmentation_worker.set_upper_value(ui->upper_value_seg->value());
 
                     segmentation_worker.set_input_image(vtk2itk_filter->GetOutput());
-                    segmentation_worker.set_seeds(vecseed);
+                    segmentation_worker.set_seeds(add_seed_cbk->vector_seeds);
 
                     ui->segmentation_progressBar->setValue(50);
 
@@ -1416,6 +1054,79 @@ void MainWindow::start_segmentation()
                 }
             }
         }
+    }
+
+
+}
+
+void MainWindow::start_add_seeds()
+{
+    if (ui->seg_image_selector->count() == 0)
+    {
+        setMandatoryField(ui->seg_image_selector, true);
+
+        QMessageBox::warning(nullptr,
+            tr("Error"),
+            tr("No Image Selected."),
+            QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+        return;
+    }
+
+    QString current_name = ui->seg_image_selector->currentText();
+
+    for (vector<ImageDataItem>& vec : image_tree_)
+    {
+        for (ImageDataItem& item : vec)
+        {
+            if (current_name == item.image_name)
+            {
+                if (item.image_data == nullptr)
+                {
+                    setMandatoryField(ui->seg_image_selector, true);
+
+                    QMessageBox::warning(nullptr,
+                        tr("Error"),
+                        tr("No Image Selected."),
+                        QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+                    return;
+
+                }
+                else {
+                    setMandatoryField(ui->seg_image_selector, false);
+
+                    double* origin = item.image_data->GetOrigin();
+                    double* spacing = item.image_data->GetSpacing();
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        add_seed_cbk->origin[i] = origin[i];
+                        add_seed_cbk->spacing[i] = spacing[i];
+                    }
+                    
+                    break;
+                }
+            }
+        }
+    }
+
+
+
+
+
+    add_seed_cbk->is_adding = true;
+
+    //ui->start_mark_btn
+    add_seed_cbk->interactor[0] = this->ui->view1->GetInteractor();
+    add_seed_cbk->interactor[1] = this->ui->view2->GetInteractor();
+    add_seed_cbk->interactor[2] = this->ui->view3->GetInteractor();
+
+
+    for (int i = 0; i < 3; i++)
+    {
+        add_seed_cbk->view[i] = riw_[i];
+
+        riw_[i]->GetInteractorStyle()->AddObserver(vtkCommand::RightButtonPressEvent, add_seed_cbk);
+
     }
 
 
@@ -2070,15 +1781,22 @@ void MainWindow::on_action_upload_file_triggered()
     UploadFormParams params;
 //    params.communicator = communicator;
     params.user_info = user;
+    params.image_manager = &image_requester;
 //    params.patients = patients_;
     UploadForm upload_form(params, this);
-    upload_form.exec();
+    int ret = upload_form.exec();
+    if (ret == QDialog::Accepted) {
+        QMessageBox::information(this, "success", "Succeed to upload file!");
+    } else {
+        QMessageBox::warning(this, "error", "Fail to upload file!");
+    }
 }
 
 void MainWindow::on_action_download_file_triggered()
 {
     DownloadFormParams params;
     params.user_info = user;
+    params.image_manager = &image_requester;
 //    params.patients = patients_;
     DownloadForm download_form(params, this);
     download_form.exec();
@@ -2094,16 +1812,16 @@ void MainWindow::on_patientSelector_currentTextChanged(const QString &arg1)
 {
     qDebug()<<"patient selected: "<<arg1;
     image_requester.setToken(user._token());
-    QVector<QString> image_names = image_requester.getCtimeHttp(arg1);
     ui->patientImageSelector->clear();
-    for (QString &name: image_names) {
-        ui->patientImageSelector->addItem(name);
-    }
     int cur_patient_index = ui->patientSelector->currentIndex();
     if (cur_patient_index < 0 || cur_patient_index >= patients_.size()) {
         return;
     }
     auto pat = patients_[cur_patient_index];
+    QVector<QString> image_names = image_requester.getCtimeHttp(pat._id());
+    for (QString &name: image_names) {
+        ui->patientImageSelector->addItem(name);
+    }
     ui->patientGenderLabel->setText(pat._age()?"Female":"Male");
     ui->patientBirthLabel->setText(pat._birth());
     ui->patientAgeLabel->setText(QString::number(pat._age()));
@@ -2139,4 +1857,33 @@ void MainWindow::setQStyleSheetField(QWidget* widget, const char* fieldName, boo
     widget->style()->unpolish(widget); // need to do this since we changed the stylesheet
     widget->style()->polish(widget);
     widget->update();
+}
+
+void MainWindow::on_action_predict_triggered()
+{
+    PredictFormParams params;
+    params.user_info = user;
+    params.image_manager = &image_requester;
+    PredictForm predict_form(params, this);
+    predict_form.exec();
+}
+
+void MainWindow::on_start_mark_btn_clicked()
+{
+    point_picker_cbk->StartMark();
+}
+
+void MainWindow::on_refresh_mark_btn_clicked()
+{
+    point_picker_cbk->RefreshMark();
+}
+
+void MainWindow::on_upload_mark_btn_clicked()
+{
+    if (cur_selected_image_ind_[0] < 0 || cur_selected_image_ind_[0] >= image_tree_.size()) {
+        return;
+    }
+    QString folder_path = image_tree_[cur_selected_image_ind_[0]][0].image_path;
+    qDebug()<<"cur mark image path:"<<folder_path;
+    point_picker_cbk->UploadMark(folder_path);
 }

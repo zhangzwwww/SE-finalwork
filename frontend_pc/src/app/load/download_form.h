@@ -16,6 +16,7 @@ class DownloadForm;
 
 struct DownloadFormParams {
     userinfo user_info;
+    imageInfo *image_manager;
     QVector<patient> patients;
 };
 
@@ -41,7 +42,7 @@ private:
     communhttp communicator_;
     userinfo user_info_;
     QVector<patient> patients_;
-    imageInfo image_manager_;
+    imageInfo *image_manager_;
 };
 
 #endif // UPLOAD_FORM_H

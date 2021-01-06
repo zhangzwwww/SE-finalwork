@@ -1,28 +1,29 @@
 <RCC>
-  <qresource prefix="icon">
-    <file>../resources/icon/segmentation.png</file>
-    <file alias="up_arrow">../resources/icon/up_arrow.png</file>
-    <file alias="down_arrow">../resources/icon/down_arrow.png</file>
-    <file alias="down_arrow_disabled">../resources/icon/down_arrow_disabled.png</file>
-    <file>../resources/icon/download.png</file>
-    <file alias="branch_closed">../resources/icon/branch_closed.png</file>
-    <file alias="branch_closed-on">../resources/icon/branch_closed-on.png</file>
-    <file alias="branch-open">../resources/icon/branch_open.png</file>
-    <file alias="branch_open-on">../resources/icon/branch_open-on.png</file>
-    <file alias="transparent">../resources/icon/transparent.png</file>
-    <file>../resources/icon/data_manager.png</file>
-    <file>../resources/icon/download_file.png</file>
-    <file>../resources/icon/open_folder.png</file>
-    <file>../resources/icon/upload_file.png</file>
-    <file>../resources/icon/processing.png</file>
-    <file>../resources/icon/dicom.png</file>
-    <file>../resources/icon/mesher.png</file>
-    <file>../resources/icon/visualization.png</file>
-    <file>../resources/icon/patient.png</file>
-    <file>../resources/icon/registration.png</file>
-  </qresource>
-  <qresource prefix="qssfile">
-    <file>../resources/qssfile/load_form.qss</file>
-    <file>../resources/qssfile/dark_theme.qss</file>
-  </qresource>
+    <qresource prefix="/icon">
+        <file>../resources/icon/segmentation.png</file>
+        <file alias="up_arrow">../resources/icon/up_arrow.png</file>
+        <file alias="down_arrow">../resources/icon/down_arrow.png</file>
+        <file alias="down_arrow_disabled">../resources/icon/down_arrow_disabled.png</file>
+        <file>../resources/icon/download.png</file>
+        <file alias="branch_closed">../resources/icon/branch_closed.png</file>
+        <file alias="branch_closed-on">../resources/icon/branch_closed-on.png</file>
+        <file alias="branch-open">../resources/icon/branch_open.png</file>
+        <file alias="branch_open-on">../resources/icon/branch_open-on.png</file>
+        <file alias="transparent">../resources/icon/transparent.png</file>
+        <file>../resources/icon/data_manager.png</file>
+        <file>../resources/icon/download_file.png</file>
+        <file>../resources/icon/open_folder.png</file>
+        <file>../resources/icon/upload_file.png</file>
+        <file>../resources/icon/processing.png</file>
+        <file>../resources/icon/dicom.png</file>
+        <file>../resources/icon/mesher.png</file>
+        <file>../resources/icon/visualization.png</file>
+        <file>../resources/icon/patient.png</file>
+        <file>../resources/icon/registration.png</file>
+        <file>../resources/icon/classify.png</file>
+    </qresource>
+    <qresource prefix="/qssfile">
+        <file>../resources/qssfile/load_form.qss</file>
+        <file>../resources/qssfile/dark_theme.qss</file>
+    </qresource>
 </RCC>

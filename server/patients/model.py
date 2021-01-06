@@ -19,31 +19,31 @@ class Patient(db.Model):
             'age': self.age,
         }
 
-# class Image(db.Model):
-    # __tablename__ = 'image'
 
-    # id = db.Column(db.String, unique=True, primary_key=True)
-    # name = db.Column(db.String)
-    # ctime = db.Column(db.DateTime)
+class Mark(db.Model):
+    __tablename__ = 'mark'
 
-    # def serialize(self):
-        # return {
-            # 'id': self.id,
-            # 'name': self.name,
-            # 'ctime': str(self.ctime)
-        # }
+    id = db.Column(db.String, unique=True, primary_key=True)
+    imageId = db.Column(db.String)
+    layer = db.Column(db.Float)
+    view = db.Column(db.Float)
+    topX = db.Column(db.Float)
+    topY = db.Column(db.Float)
+    bottomX = db.Column(db.Float)
+    bottomY = db.Column(db.Float)
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'imageId': self.imageId,
+            'layer': self.layer,
+            'view': self.view,
+            'topX': self.topX,
+            'topY': self.topY,
+            'bottomX': self.bottomX,
+            'bottomY': self.bottomY,
+        }
 
-# class ImageService:
-
-    # def createImage(image):
-        # db.session.add(image)
-        # db.session.commit()
-        # return True
-
-    # def getImage(id):
-        # image = Image.query.filter_by(id=id).first()
-        # return image
 
 class PatientService:
     def createPatient(patient):
@@ -73,3 +73,14 @@ class PatientService:
     def getPatientById(patientId):
         patient = Patient.query.filter_by(id=patientId).first()
         return patient
+
+
+class MarkService:
+    def createMark(mark):
+        db.session.add(mark)
+        db.session.commit()
+        return True
+
+    def getMarkByImageId(imageId):
+        marks = Mark.query.filter_by(imageId=imageId)
+        return marks

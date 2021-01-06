@@ -26,7 +26,7 @@ QString prediction::predictTumor(communhttp* requester, QString filepath){
     afile.close();
 
     // construct the request
-    QUrl url(urlbase["base3"] + urlbase["predict"]);
+    QUrl url(urlbase["base4"] + urlbase["predict"]);
     QNetworkRequest request;
     request.setUrl(url);
     request.setRawHeader("X-Auth-Token", token.toUtf8());

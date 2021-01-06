@@ -33,7 +33,7 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include <vtkRendererCollection.h>
 #include <vtkOrientationMarkerWidget.h>
 #include <vtkAxesActor.h>
-
+#include <vtk_add_seed_callback.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -110,6 +110,8 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include "registration/registration_worker.h"
 #include "voxel2mesh/voxel2mesh.h"
 #include "segmentation/segmentation_worker.h"
+#include "predict/predict_form.h"
+#include "utils/vtk_point_picker_callback.h"
 #endif
 
 #ifdef Q_OS_WIN32   // Define on windows system
@@ -125,6 +127,8 @@ VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 #include "registration_worker.h"
 #include "voxel2mesh.h"
 #include "segmentation_worker.h"
+#include "predict/predict_form.h"
+#include "utils/vtk_point_picker_callback.h"
 #endif
 
 using std::vector;
@@ -199,6 +203,7 @@ private slots:
     void clear_manager();
     void slidervalueChanged(int pos);
     void start_segmentation();
+    void start_add_seeds();
 
     vtkSmartPointer<vtkImageData> image_detect_edge(vtkImageData* input_image);
     vtkSmartPointer<vtkImageData> image_threshold(vtkImageData* input_image, ThresholdingParams params);
@@ -234,6 +239,14 @@ private slots:
 
     void on_patientSelector_currentTextChanged(const QString &arg1);
 
+    void on_action_predict_triggered();
+
+    void on_start_mark_btn_clicked();
+
+    void on_refresh_mark_btn_clicked();
+
+    void on_upload_mark_btn_clicked();
+
 private:
     vtkSmartPointer<vtkImageViewer2> riw_[3];
     vtkSmartPointer<vtkRenderer> renderer3D_;
@@ -248,7 +261,9 @@ private:
     vector<vector<ImageDataItem>> image_tree_;
     int cur_selected_image_ind_[2]{ -1 };
 
-   QVector<patient> patients_;
+    QVector<patient> patients_;
+    vtkSmartPointer< vtkPointPickerCallback > point_picker_cbk;
+    vtkSmartPointer< vtkAddSeedCallback > add_seed_cbk;
 
 private:
     Ui::MainWindow *ui;

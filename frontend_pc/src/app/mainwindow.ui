@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1535</width>
-    <height>869</height>
+    <height>943</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1309,7 +1309,7 @@ background-color: rgb(0, 0, 0);
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1366,8 +1366,8 @@ background-color: rgb(0, 0, 0);
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>290</width>
-                <height>788</height>
+                <width>492</width>
+                <height>794</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -2049,8 +2049,8 @@ background-color: rgb(0, 0, 0);
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>476</width>
-                <height>727</height>
+                <width>492</width>
+                <height>795</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2736,8 +2736,8 @@ background-color: rgb(0, 0, 0);
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>254</width>
-             <height>384</height>
+             <width>492</width>
+             <height>795</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_21">
@@ -2933,14 +2933,7 @@ background-color: rgb(0, 0, 0);
               <property name="text">
                <string>Add Seeds</string>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QProgressBar" name="segmentation_progressBar">
-              <property name="value">
-               <number>0</number>
-              </property>
-              <property name="textVisible">
+              <property name="checkable">
                <bool>true</bool>
               </property>
              </widget>
@@ -2966,6 +2959,68 @@ background-color: rgb(0, 0, 0);
               <property name="text">
                <string>Start Segmentation</string>
               </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="segmentation_progressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="textVisible">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>15</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Image mark</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_30">
+               <property name="topMargin">
+                <number>21</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="start_mark_btn">
+                 <property name="text">
+                  <string>Start mark</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="refresh_mark_btn">
+                 <property name="text">
+                  <string>Refresh mark</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="upload_mark_btn">
+                 <property name="text">
+                  <string>Upload mark</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
@@ -3083,7 +3138,7 @@ background-color: rgb(45, 45, 48);</string>
                   <number>1</number>
                  </property>
                  <property name="maximum">
-                  <number>21</number>
+                  <number>7</number>
                  </property>
                  <property name="singleStep">
                   <number>2</number>
@@ -3152,8 +3207,8 @@ background-color: rgb(45, 45, 48);</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>158</width>
-                <height>50</height>
+                <width>468</width>
+                <height>70</height>
                </rect>
               </property>
               <attribute name="label">
@@ -3173,7 +3228,7 @@ background-color: rgb(45, 45, 48);</string>
                   <number>1</number>
                  </property>
                  <property name="maximum">
-                  <number>21</number>
+                  <number>7</number>
                  </property>
                  <property name="singleStep">
                   <number>2</number>
@@ -3876,6 +3931,7 @@ background-color: rgb(45, 45, 48);</string>
    <addaction name="separator"/>
    <addaction name="action_download_file"/>
    <addaction name="separator"/>
+   <addaction name="action_predict"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_open_file">
@@ -3923,6 +3979,19 @@ background-color: rgb(45, 45, 48);</string>
    </property>
    <property name="text">
     <string>  Download Files</string>
+   </property>
+  </action>
+  <action name="action_predict">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icon/resources/icon/classify.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>  Predict</string>
+   </property>
+   <property name="toolTip">
+    <string>predict if tumor exists </string>
    </property>
   </action>
  </widget>

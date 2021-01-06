@@ -34,6 +34,8 @@ SOURCES += \
         load/download_form.cpp \
         load/upload_form.cpp \
         login/signup_form.cpp \
+    predict/predict_form.cpp \
+    segmentation/segmentation_worker.cpp \
         utils/general_util.cpp \
         login/loginchecker.cpp \
         login/loginform.cpp \
@@ -43,6 +45,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         registration/registration_worker.cpp \
+    utils/vtk_point_picker_callback.cpp \
         voxel2mesh/Voxel2Mesh.cpp
 
 HEADERS += \
@@ -53,6 +56,8 @@ HEADERS += \
         load/download_form.h \
         load/upload_form.h \
         login/signup_form.h \
+        predict/predict_form.h \
+        segmentation/segmentation_worker.h \
         utils/general_util.h \
         login/loginchecker.h \
         login/loginform.h \
@@ -64,6 +69,7 @@ HEADERS += \
         errorcode.h \
         registration/registration_worker.h \
         struct_define.h \
+        utils/vtk_point_picker_callback.h \
         voxel2mesh/Voxel2Mesh.h
 
 FORMS += \
@@ -72,7 +78,8 @@ FORMS += \
         load/upload_form.ui \
         login/loginform.ui \
         login/signup_form.ui \
-        mainwindow.ui
+        mainwindow.ui \
+        predict/predict_form.ui
 
 INCLUDEPATH += /usr/local/include \
            /usr/local/include/vtk-8.2 \

@@ -10,6 +10,7 @@
 #include "../app/commu/userinfo.h"
 #include "../app/commu/patient.h"
 #include "../app/commu/imageinfo.h"
+#include "../app/errorcode.h"
 
 class testImage : public QObject
 {
@@ -22,10 +23,12 @@ public:
 private slots:
     void initTestCase();
     void cleanupTestCase();
-    // void test_case1();
+    void test_case1();
     void test_case2();
     void test_case3();
     void test_case4();
+    void test_case5();
+    void test_case6();
 
 private:
     userinfo usr;
