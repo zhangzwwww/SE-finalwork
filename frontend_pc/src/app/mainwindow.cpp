@@ -1317,6 +1317,10 @@ void MainWindow::start_segmentation()
                         return;
                     }
 
+                    // TODO
+                    // 获取当前seed的坐标
+
+
                     SegmentationWorker::IndexType seed1;
                     seed1[0] = 369;
                     seed1[1] = 317;
@@ -1494,8 +1498,10 @@ void MainWindow::generate_surface()
     vtkSmartPointer<vtkActor> mesh_actor =
         vtkSmartPointer<vtkActor>::New();
     mesh_actor->SetMapper(mesh_mapper);
-    mesh_actor->GetProperty()->SetColor(250 / 250.0, 187 / 250.0, 124 / 250.0);
-    mesh_actor->GetProperty()->SetOpacity(0.9);
+    //mesh_actor->GetProperty()->SetColor(250 / 250.0, 187 / 250.0, 124 / 250.0);
+    //mesh_actor->GetProperty()->SetColor(250 / 250.0, 0.0, 0.0);
+    mesh_actor->GetProperty()->SetColor(1.0, 1.0, 1.0);
+    mesh_actor->GetProperty()->SetOpacity(1);
 
     renderer3D_->AddActor(mesh_actor);
     renderer3D_->ResetCamera();
@@ -1828,7 +1834,7 @@ vtkSmartPointer<vtkImageData> MainWindow::image_threshold(vtkImageData* input_im
     threshold_filter->ThresholdBetween(params.lower_value, params.upper_value);
     threshold_filter->ReplaceInOn();
     threshold_filter->ReplaceOutOn();
-    threshold_filter->SetInValue(1);
+    threshold_filter->SetInValue(255);
     threshold_filter->SetOutValue(0);
     threshold_filter->Update();
 
