@@ -89,13 +89,6 @@ void vtkAddSeedCallback::Execute(vtkObject* caller, unsigned long ev,
         seed[1] = (picked[1] - origin[1]) / spacing[1];
         seed[2] = (picked[2] - origin[2]) / spacing[2];
 
-
-
-        qDebug() << "display: " << picked[0] << picked[1] << picked[2];
-
-        qDebug() << "index: " << seed[0] << seed[1] << seed[2];
-
-
         vector_seeds.push_back(seed);
 
     }

@@ -107,7 +107,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slidervalueChanged(int)));
     connect(ui->start_segmentation_btn, SIGNAL(clicked()), this, SLOT(start_segmentation()));
     connect(ui->add_seed_btn, SIGNAL(clicked()), this, SLOT(start_add_seeds()));
+    connect(ui->seg_image_selector, SIGNAL(currentIndexChanged()), this, SLOT(seg_index_changed()));
 
+
+    
     
 
     connect(ui->clean_actors_btn, SIGNAL(clicked()), this, SLOT(clean_actors()));
@@ -953,45 +956,6 @@ void MainWindow::start_segmentation()
                         return;
                     }
 
-                    // TODO
-                    // 获取当前seed的坐标
-
-
-                    /*SegmentationWorker::IndexType seed1;
-                    seed1[0] = 369;
-                    seed1[1] = 317;
-                    seed1[2] = 93;
-
-                    SegmentationWorker::IndexType seed2;
-                    seed2[0] = 403;
-                    seed2[1] = 236;
-                    seed2[2] = 78;
-
-                    SegmentationWorker::IndexType seed3;
-                    seed3[0] = 404;
-                    seed3[1] = 236;
-                    seed3[2] = 66;
-
-                    SegmentationWorker::IndexType seed4;
-                    seed4[0] = 125;
-                    seed4[1] = 236;
-                    seed4[2] = 71;
-
-                    SegmentationWorker::IndexType seed5;
-                    seed5[0] = 128;
-                    seed5[1] = 268;
-                    seed5[2] = 69;
-
-                    SegmentationWorker::IndexType seed6;
-                    seed6[0] = 146;
-                    seed6[1] = 264;
-                    seed6[2] = 93;*/
-
-                    
-
-
-                    //std::vector<SegmentationWorker::IndexType> vecseed{ seed1, seed2, seed3, seed4, seed5, seed6 };
-
                     segmentation_worker.set_lower_value(ui->lower_value_seg->value());
                     segmentation_worker.set_upper_value(ui->upper_value_seg->value());
 
@@ -1044,7 +1008,7 @@ void MainWindow::start_segmentation()
                         vec.push_back(image_item);
 
                         this->update_data_manager();
-
+                        add_seed_cbk->RefreshSeed();
                     }
 
                     ui->start_segmentation_btn->setVisible(true);
@@ -1055,12 +1019,16 @@ void MainWindow::start_segmentation()
             }
         }
     }
-
-
 }
 
 void MainWindow::start_add_seeds()
 {
+    if (!ui->add_seed_btn->isChecked())
+    {
+        add_seed_cbk->is_adding = false;
+        return;
+    }
+
     if (ui->seg_image_selector->count() == 0)
     {
         setMandatoryField(ui->seg_image_selector, true);
@@ -1109,10 +1077,6 @@ void MainWindow::start_add_seeds()
         }
     }
 
-
-
-
-
     add_seed_cbk->is_adding = true;
 
     //ui->start_mark_btn
@@ -1130,6 +1094,11 @@ void MainWindow::start_add_seeds()
     }
 
 
+}
+
+void MainWindow::seg_index_changed()
+{
+    add_seed_cbk->RefreshSeed();
 }
 
 
