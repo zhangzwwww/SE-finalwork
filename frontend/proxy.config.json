@@ -1,13 +1,13 @@
 {
   "/api-patient": {
-    "target": "http://42.193.8.10:5005",
+    "target": "http://42.193.8.10:5007",
     "secure": false,
     "pathRewrite": {
       "^/api-patient": ""
     }
   },
   "/api": {
-    "target": "http://42.193.8.10:5000",
+    "target": "http://42.193.8.10:5010",
     "secure": false,
     "pathRewrite": {
       "^/api": ""

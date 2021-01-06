@@ -1,4 +1,4 @@
-<button nz-button (click)="startCreatePatient()" nzType="default">创建病例</button>
+<button (click)="startCreatePatient()" nz-button nzType="default">创建病例</button>
 <nz-table #basicTable [nzData]="patients" nzShowPagination="false">
   <thead>
     <tr>
@@ -14,29 +14,59 @@
       <td>{{getGender(patient['gender'])}}</td>
       <td>{{patient['birth']}}</td>
       <td>
-        <a (click)="deletePatient(patient['id'])">删除</a>
+        <a nz-popconfirm nzCancelText="取消" nzPopconfirmTitle="确认删除" (nzOnConfirm)="deletePatient(patient['id'])">删除</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a>查看文件</a>
+        <a (click)="showImageModal(patient['id'])">查看文件</a>
       </td>
     </tr>
   </tbody>
 </nz-table>
 
+<nz-modal (nzOnOk)="fileUpload()" (nzOnCancel)="cancelFileUploadModal()" [(nzVisible)]="fileUploadModalVisible" nzTitle="上传文件">
+  <nz-upload [(nzFileList)]="file" [nzBeforeUpload]="beforeUpload">
+    <button nz-button><i nz-icon nzType="upload"></i>选择文件</button>
+  </nz-upload>
+</nz-modal>
+
+<nz-modal (nzOnCancel)="showImageModelCancel()" [(nzVisible)]="imageIsVisible" nzTitle="用户图片">
+  <nz-select [(ngModel)]="cTime" (ngModelChange)="getImages(chosenPatientId, cTime)" nzPlaceHolder="选择日期">
+    <nz-option *ngFor="let time of cTimes" [nzLabel]="time.ctime" [nzValue]="time.ctime"></nz-option>
+  </nz-select>
+  <button (click)="showFileUploadModal()" nz-button nzType="default">上传文件</button>
+  <nz-table #basicTable [nzData]="images" nzShowPagination="false">
+    <thead>
+      <tr>
+        <th>文件名</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let image of images">
+        <td>{{image.name}}</td>
+        <td>
+          <a nz-popconfirm nzCancelText="取消" nzPopconfirmTitle="确认删除" (nzOnConfirm)="deleteImage(image['id'])">删除</a>
+          <nz-divider nzType="vertical"></nz-divider>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-modal>
+
 <nz-modal
-  [(nzVisible)]="createPatientIsVisible"
-  nzTitle="创建病例"
   (nzOnCancel)="handleCreatePatientCancel()"
   (nzOnOk)="createPatient()"
+  [(nzVisible)]="createPatientIsVisible"
+  nzTitle="创建病例"
 >
-  <form nz-form [formGroup]="validateForm">
+  <form [formGroup]="validateForm" nz-form>
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">姓名</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>姓名</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
-        <input nz-input formControlName="name" id="name" />
+        <input formControlName="name" id="name" nz-input/>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="gender">性别</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="gender" nzRequired>性别</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
         <nz-radio-group formControlName="gender" id="gender">
           <label nz-radio nzValue="0">男</label>
@@ -45,15 +75,15 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="birth">生日</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="birth" nzRequired>生日</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
         <nz-date-picker formControlName="birth" id="birth" nzPlaceHolder="出生日期"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="age">年龄</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="age" nzRequired>年龄</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
-        <input nz-input formControlName="age" id="age" />
+        <input formControlName="age" id="age" nz-input/>
       </nz-form-control>
     </nz-form-item>
   </form>

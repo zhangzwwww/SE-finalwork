@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WelcomeService } from './welcome.service';
 
 @Component({
   selector: 'app-welcome',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor() { }
+  users = [];
 
-  ngOnInit() {
+  constructor(private welcomeService: WelcomeService) {
   }
 
+  ngOnInit(): void {
+    this.welcomeService.getAllUser().subscribe((response) => {
+      this.users = response.body;
+      console.log(this.users);
+    });
+  }
+
+  getAllUsers(): void {
+    this.welcomeService.getAllUser().subscribe((response) => {
+      this.users = response.body;
+    });
+  }
+
+  deleteUser(email): void {
+    this.welcomeService.deleteUser(email).subscribe(() => {
+      this.getAllUsers();
+    });
+  }
 }

@@ -12,9 +12,12 @@
 	  <li nz-menu-item nzMatchRouter>
 		<a routerLink="/patient">病例管理</a>
 	  </li>
-<!--	  <li nz-menu-item nzMatchRouter>-->
-<!--		<a routerLink="/user">用户管理</a>-->
-<!--	  </li>-->
+	  <li nz-menu-item nzMatchRouter>
+		<a routerLink="/user">用户管理</a>
+	  </li>
+      <li nz-menu-item nzMatchRouter>
+        <a (click)="jumpToClient()" target="_blank">客户端下载</a>
+      </li>
     </ul>
   </nz-sider>
   <nz-layout>

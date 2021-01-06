@@ -16,6 +16,22 @@ def register_routes(api, app):
 
     # need to be deleted only for test
     api.add_resource(DeleteUser, '/v1/auth/deleteUser')
+    api.add_resource(UserController, '/v1/user')
+
+
+class UserController(Resource):
+    def get(self):
+        token = request.headers.get('X-Auth-Token')
+        if not existsToken(token):
+            resp = Response(status=401)
+            return resp
+
+        users = UserService.getAllUser()
+        userList = []
+        for user in users:
+            userList.append(user.serialize())
+        resp = Response(json.dumps(userList), status=200, mimetype='applications/json')
+        return resp
 
 
 class AuthToken(Resource):

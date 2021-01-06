@@ -30,6 +30,10 @@ class UserService:
         user = User.query.filter_by(email=email).first()
         return user
 
+    def getAllUser():
+        user = User.query.all()
+        return user
+
     def getUserByEmailAndPassword(email, password):
         user = User.query.filter_by(email=email, password=password).first()
         return user

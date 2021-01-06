@@ -13,6 +13,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   imports: [
@@ -27,6 +30,9 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     NzInputModule,
     NzRadioModule,
     NzDatePickerModule,
+    NzSelectModule,
+    NzPopconfirmModule,
+    NzUploadModule,
     ReactiveFormsModule,
     FormsModule,
   ],

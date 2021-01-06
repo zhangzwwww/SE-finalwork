@@ -15,4 +15,8 @@ export class AppComponent implements OnInit {
       localStorage.setItem('X-Auth-Token', response.headers.get('X-Auth-Token'));
     });
   }
+
+  jumpToClient(): void {
+    window.location.href = 'https://github.com/zhangzwwww/SE-finalwork/releases';
+  }
 }

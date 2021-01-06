@@ -95,6 +95,19 @@ class ImageController(Resource):
         saveFile(f, filename, patientId)
         return 'succeed', 200
 
+    def delete(self):
+        token = request.headers.get('X-Auth-Token')
+        if not existsToken(token):
+            resp = Response(status=401)
+            return resp
+
+        args = request.args
+        id = args['id']
+
+        mongodb.files.delete_one({"id": id})
+
+        return 200
+
 
 class ImageDateController(Resource):
     def get(self):
