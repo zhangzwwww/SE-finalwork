@@ -146,7 +146,7 @@ void MainWindow::init_views()
     renderer3D_->SetBackground2(0.5, 0.5, 0.5);
     renderer3D_->SetGradientBackground(1);
 
-//    this->ui->view4->GetRenderWindow()->AddRenderer(renderer3D_);
+    this->ui->view4->GetRenderWindow()->AddRenderer(renderer3D_);
 
 
 }
@@ -1031,16 +1031,20 @@ void MainWindow::start_segmentation()
             }
         }
     }
+    ui->start_mark_btn->setChecked(false);
+    point_picker_cbk->EndMark();
 }
 
 void MainWindow::start_add_seeds()
 {
+    point_picker_cbk->EndMark();
+    ui->start_mark_btn->setChecked(false);
+
     if (!ui->add_seed_btn->isChecked())
     {
         add_seed_cbk->is_adding = false;
         return;
     }
-    point_picker_cbk->EndMark();
 
     if (ui->seg_image_selector->count() == 0)
     {

@@ -64,22 +64,6 @@ void SegmentationWorker::update()
     
     result_image_ = thresholder_->GetOutput();
 
-
-    using WriterType3D = itk::ImageFileWriter<ImageType>;
-
-    WriterType3D::Pointer writer = WriterType3D::New();
-    writer->SetFileName("output.mha");
-    writer->SetInput(result_image_);
-
-    try
-    {
-        writer->Update();
-    }
-    catch (itk::ExceptionObject& error)
-    {
-        std::cerr << "Error: " << error << std::endl;
-    }
-
 }
 
 SegmentationWorker::ImageType::Pointer SegmentationWorker::get_output_image()

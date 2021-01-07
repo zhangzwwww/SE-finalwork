@@ -78,7 +78,16 @@ void vtkPointPickerCallback::Execute(vtkObject* caller, unsigned long ev,
         render->GetWorldPoint(picked);
 
         //vector_picked[cur_view].push_back({picked[0], picked[1], picked[2]});
-        vector_displaypos[cur_view].push_back({ start_pos[0], start_pos[1] });
+        if (vector_displaypos[cur_view].empty()) {
+            vector_displaypos[cur_view].push_back({ start_pos[0], start_pos[1] });
+        }
+        else {
+            int last_x = int(vector_displaypos[cur_view][0][0]);
+            int last_y = int(vector_displaypos[cur_view][0][1]);
+            if (last_x != int(start_pos[0]) || last_y != start_pos[1]) {
+                vector_displaypos[cur_view].push_back({ start_pos[0], start_pos[1] });
+            }
+        }
 
         vtkSmartPointer<vtkSphereSource> sphereSource =
             vtkSmartPointer<vtkSphereSource>::New();
@@ -106,7 +115,8 @@ void vtkPointPickerCallback::Execute(vtkObject* caller, unsigned long ev,
         //    this->view[cur_view]->GetRenderer()->RemoveActor(actors[i]);
         //}
 
-        // qDebug() << "release:" <<  vector_picked[cur_view].size();
+        //qDebug() << "release:" <<  vector_picked[cur_view].size();
+        qDebug() << "release:" << vector_displaypos[cur_view];
 
         auto render = this->view[cur_view]->GetRenderer();
 
@@ -116,13 +126,13 @@ void vtkPointPickerCallback::Execute(vtkObject* caller, unsigned long ev,
         //vtkActor* actortemp = actorCollection->GetNextActor();
         if (vector_displaypos[cur_view].size() == 2)
         {
-            QMessageBox message_box(QMessageBox::NoIcon, "Upload Mark", "Upload this mark?", QMessageBox::Yes | QMessageBox::No);
-            int choice = message_box.exec();
-            if (choice == QMessageBox::Yes) {
-                UploadMark(folder_path_);
-            } else {
-                RefreshMark();
-            }
+            //QMessageBox message_box(QMessageBox::NoIcon, "Upload Mark", "Upload this mark?", QMessageBox::Yes | QMessageBox::No);
+            //int choice = message_box.exec();
+            //if (choice == QMessageBox::Yes) {
+            //    UploadMark(folder_path_);
+            //} else {
+            //    RefreshMark();
+            //}
         }
     }
     return;
