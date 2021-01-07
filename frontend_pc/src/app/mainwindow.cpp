@@ -3,6 +3,8 @@
 
 #include <QTextCodec>
 
+#include <time.h>
+
 /*--------------------- Definition for subclass ------------------*/
 MainWindow::vtkSharedWindowLevelCallback* MainWindow::vtkSharedWindowLevelCallback::New(){
     return new vtkSharedWindowLevelCallback;
@@ -524,8 +526,6 @@ void MainWindow::clean_actors()
     ui->action_visualization->setChecked(false);
 }
 
-
-
 // Algorithm Function: 
 
 // Registration
@@ -895,6 +895,11 @@ void MainWindow::slidervalueChanged(int pos) {
 
 void MainWindow::start_segmentation()
 {
+    // record time
+    //clock_t start2, end2;
+    //clock_t start1, end1;
+    //start1 = clock();
+
     ui->add_seed_btn->setChecked(false);
 
     if (ui->seg_image_selector->count() == 0)
@@ -961,7 +966,9 @@ void MainWindow::start_segmentation()
 
                     ui->segmentation_progressBar->setValue(50);
 
+                    //start2 = clock();
                     segmentation_worker.update();
+
                     auto result_image_itk = segmentation_worker.get_output_image();
                     ui->segmentation_progressBar->setValue(75);
 
@@ -986,6 +993,7 @@ void MainWindow::start_segmentation()
                         }
 
                         vtkSmartPointer<vtkImageData> result_image_vtk = filter->GetOutput();
+                        //end2 = clock();
 
                         vtk_image_collection_.push_back(result_image_vtk);
                         itk_image_collection_.push_back(result_image_itk);
@@ -1011,6 +1019,12 @@ void MainWindow::start_segmentation()
 
                     ui->start_segmentation_btn->setVisible(true);
                     ui->segmentation_progressBar->setVisible(false);
+
+                    //end1 = clock();
+
+                    //qDebug() << "1: " << (double)(end1 - start1);
+                    //qDebug() << "2: " << (double)(end2 - start2);
+
 
                     break;
                 }

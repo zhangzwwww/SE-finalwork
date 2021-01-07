@@ -1309,7 +1309,7 @@ background-color: rgb(0, 0, 0);
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1577,7 +1577,7 @@ background-color: rgb(0, 0, 0);
                         <number>500</number>
                        </property>
                        <property name="value">
-                        <number>50</number>
+                        <number>20</number>
                        </property>
                       </widget>
                      </item>
