@@ -107,11 +107,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slidervalueChanged(int)));
     connect(ui->start_segmentation_btn, SIGNAL(clicked()), this, SLOT(start_segmentation()));
     connect(ui->add_seed_btn, SIGNAL(clicked()), this, SLOT(start_add_seeds()));
-    connect(ui->seg_image_selector, SIGNAL(currentIndexChanged()), this, SLOT(seg_index_changed()));
-
-
-    
-    
 
     connect(ui->clean_actors_btn, SIGNAL(clicked()), this, SLOT(clean_actors()));
     connect(ui->clear_manager_btn, SIGNAL(clicked()), this, SLOT(clear_manager()));
@@ -900,6 +895,8 @@ void MainWindow::slidervalueChanged(int pos) {
 
 void MainWindow::start_segmentation()
 {
+    ui->add_seed_btn->setChecked(false);
+
     if (ui->seg_image_selector->count() == 0)
     {
         setMandatoryField(ui->seg_image_selector, true);
@@ -1008,7 +1005,8 @@ void MainWindow::start_segmentation()
                         vec.push_back(image_item);
 
                         this->update_data_manager();
-                        add_seed_cbk->RefreshSeed();
+
+                        add_seed_cbk->EndAdd();
                     }
 
                     ui->start_segmentation_btn->setVisible(true);
@@ -1028,6 +1026,7 @@ void MainWindow::start_add_seeds()
         add_seed_cbk->is_adding = false;
         return;
     }
+    point_picker_cbk->EndMark();
 
     if (ui->seg_image_selector->count() == 0)
     {
@@ -1093,12 +1092,6 @@ void MainWindow::start_add_seeds()
 
     }
 
-
-}
-
-void MainWindow::seg_index_changed()
-{
-    add_seed_cbk->RefreshSeed();
 }
 
 
@@ -1839,6 +1832,7 @@ void MainWindow::on_action_predict_triggered()
 
 void MainWindow::on_start_mark_btn_clicked()
 {
+    point_picker_cbk->EndMark();
     point_picker_cbk->StartMark();
 }
 

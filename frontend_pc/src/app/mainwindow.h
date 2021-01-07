@@ -204,7 +204,6 @@ private slots:
     void slidervalueChanged(int pos);
     void start_segmentation();
     void start_add_seeds();
-    void seg_index_changed();
 
     vtkSmartPointer<vtkImageData> image_detect_edge(vtkImageData* input_image);
     vtkSmartPointer<vtkImageData> image_threshold(vtkImageData* input_image, ThresholdingParams params);
